@@ -47,6 +47,8 @@ font-size:0.78rem; font-weight:700; cursor:pointer;
 .aprobar:hover{background:var(--forest-deep);}
 .rechazar{background:#fbe6e2; color:var(--rescue-deep);}
 .rechazar:hover{background:#f6d3cc;}
+.eliminar{background:transparent; color:var(--rescue-deep); border:1.5px solid #f0c4bb;}
+.eliminar:hover{background:#fbe6e2;}
 .vacio{text-align:center; color:var(--text-muted); padding:2.5rem 0; font-size:0.85rem;}
 .bloqueado{
 color:#fff; text-align:center; padding-top:4rem; font-size:0.95rem;
@@ -98,6 +100,7 @@ import {
   getDocs,
   doc,
   updateDoc,
+  deleteDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -153,6 +156,7 @@ async function cargarPendientes() {
       <div class="botones">
         <button class="aprobar" data-id="${docSnap.id}">Aprobar</button>
         <button class="rechazar" data-id="${docSnap.id}">Rechazar</button>
+        <button class="eliminar" data-id="${docSnap.id}" data-correo="${data.email}">Eliminar</button>
       </div>
     `;
     listaPendientes.appendChild(fila);
@@ -163,6 +167,9 @@ async function cargarPendientes() {
   });
   listaPendientes.querySelectorAll('.rechazar').forEach(btn => {
     btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'rechazado'));
+  });
+  listaPendientes.querySelectorAll('.eliminar').forEach(btn => {
+    btn.addEventListener('click', () => eliminarUsuario(btn.dataset.id, btn.dataset.correo, cargarPendientes));
   });
 }
 
@@ -214,9 +221,14 @@ async function cargarAprobados() {
       <div class="permisos">
         ${checkboxesHtml}
         <span class="guardado" data-guardado-de="${docSnap.id}">Guardado ✓</span>
+        <button class="eliminar" data-id="${docSnap.id}" data-correo="${data.email}">Eliminar</button>
       </div>
     `;
     listaAprobados.appendChild(fila);
+  });
+
+  listaAprobados.querySelectorAll('.eliminar').forEach(btn => {
+    btn.addEventListener('click', () => eliminarUsuario(btn.dataset.id, btn.dataset.correo, cargarAprobados));
   });
 
   listaAprobados.querySelectorAll('input[type="checkbox"]').forEach(chk => {
@@ -234,6 +246,17 @@ async function cargarAprobados() {
       }
     });
   });
+}
+
+// ---------- Eliminar usuario (pendiente o aprobado) ----------
+async function eliminarUsuario(uid, correo, recargar) {
+  const confirmado = confirm(
+    `¿Eliminar a ${correo}?\n\nEsto le saca el acceso al panel de inmediato (ya no va a poder entrar). Su cuenta de acceso (usuario/contraseña o Google) sigue existiendo en Firebase Authentication; si querés borrarla por completo, hacelo aparte desde Firebase Console → Authentication → Users.`
+  );
+  if (!confirmado) return;
+
+  await deleteDoc(doc(db, "usuarios", uid));
+  recargar();
 }
 </script>
 </body>
