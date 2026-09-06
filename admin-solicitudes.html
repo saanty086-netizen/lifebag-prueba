@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solicitudes de acceso | Life Bag</title>
+<title>Solicitudes y permisos | Life Bag</title>
 <link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,9 +22,10 @@ background-image:radial-gradient(circle at 15% 15%, rgba(255,255,255,0.06), tran
 radial-gradient(circle at 85% 85%, rgba(255,255,255,0.05), transparent 45%);
 padding:2.5rem 1.2rem; color:var(--text);
 }
-.wrap{max-width:640px; margin:0 auto;}
+.wrap{max-width:720px; margin:0 auto;}
 h1{font-family:'Fraunces', serif; color:#fff; font-size:1.6rem; text-align:center;}
-p.sub{color:var(--cream); opacity:0.85; text-align:center; font-size:0.85rem; margin-top:0.35rem; margin-bottom:1.8rem;}
+p.sub{color:var(--cream); opacity:0.85; text-align:center; font-size:0.85rem; margin-top:0.35rem; margin-bottom:1.6rem;}
+h2{font-family:'Fraunces', serif; color:#fff; font-size:1.1rem; margin:2rem 0 0.8rem; text-align:center;}
 .panel{
 background:var(--surface); border-radius:var(--radius-lg);
 padding:1.5rem; box-shadow:var(--shadow);
@@ -32,6 +33,7 @@ padding:1.5rem; box-shadow:var(--shadow);
 .fila{
 display:flex; align-items:center; justify-content:space-between; gap:12px;
 padding:1rem 0.3rem; border-bottom:1px solid var(--border);
+flex-wrap:wrap;
 }
 .fila:last-child{border-bottom:none;}
 .correo{font-weight:700; color:var(--forest-deep); font-size:0.9rem;}
@@ -50,15 +52,34 @@ font-size:0.78rem; font-weight:700; cursor:pointer;
 color:#fff; text-align:center; padding-top:4rem; font-size:0.95rem;
 }
 .bloqueado a{color:var(--cream);}
+.permisos{
+display:flex; gap:14px; flex-wrap:wrap; flex-shrink:0;
+}
+.permiso-item{
+display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--forest-deep); font-weight:600;
+}
+.permiso-item input{width:16px; height:16px; accent-color:var(--forest); cursor:pointer;}
+.guardado{
+font-size:0.7rem; color:var(--forest); font-weight:700; opacity:0; transition:opacity 0.3s;
+margin-left:6px;
+}
+.guardado.show{opacity:1;}
 </style>
 </head>
 <body>
 
 <div class="wrap" id="app" style="display:none;">
-  <h1>Solicitudes de acceso</h1>
-  <p class="sub">Cuentas pendientes de aprobación para el panel interno de Life Bag</p>
+  <h1>Equipo Life Bag</h1>
+  <p class="sub">Aprobá solicitudes y asigná qué área puede editar cada persona</p>
+
+  <h2>Solicitudes pendientes</h2>
   <div class="panel">
-    <div id="lista"></div>
+    <div id="listaPendientes"></div>
+  </div>
+
+  <h2>Usuarios aprobados</h2>
+  <div class="panel">
+    <div id="listaAprobados"></div>
   </div>
 </div>
 
@@ -80,12 +101,20 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Solo estas cuentas pueden aprobar o rechazar
+// Solo estas cuentas pueden aprobar, rechazar y asignar permisos
 const ADMINS = ["saanty086@gmail.com", "lifebag11@gmail.com"];
+
+// Áreas disponibles: clave interna -> etiqueta visible
+const AREAS = {
+  pedidos: "Lista de espera",
+  produccion: "Producción",
+  finanzas: "Finanzas"
+};
 
 const app = document.getElementById('app');
 const bloqueado = document.getElementById('bloqueado');
-const lista = document.getElementById('lista');
+const listaPendientes = document.getElementById('listaPendientes');
+const listaAprobados = document.getElementById('listaAprobados');
 
 onAuthStateChanged(auth, (user) => {
   if (!user || !ADMINS.includes(user.email)) {
@@ -94,20 +123,22 @@ onAuthStateChanged(auth, (user) => {
   }
   app.style.display = "block";
   cargarPendientes();
+  cargarAprobados();
 });
 
+// ---------- Pendientes ----------
 async function cargarPendientes() {
-  lista.innerHTML = '<div class="vacio">Cargando...</div>';
+  listaPendientes.innerHTML = '<div class="vacio">Cargando...</div>';
 
   const q = query(collection(db, "usuarios"), where("estado", "==", "pendiente"));
   const snap = await getDocs(q);
 
   if (snap.empty) {
-    lista.innerHTML = '<div class="vacio">No hay solicitudes pendientes.</div>';
+    listaPendientes.innerHTML = '<div class="vacio">No hay solicitudes pendientes.</div>';
     return;
   }
 
-  lista.innerHTML = '';
+  listaPendientes.innerHTML = '';
   snap.forEach((docSnap) => {
     const data = docSnap.data();
     const fecha = data.creadoEn ? data.creadoEn.toDate().toLocaleDateString('es-AR') : '';
@@ -124,13 +155,13 @@ async function cargarPendientes() {
         <button class="rechazar" data-id="${docSnap.id}">Rechazar</button>
       </div>
     `;
-    lista.appendChild(fila);
+    listaPendientes.appendChild(fila);
   });
 
-  lista.querySelectorAll('.aprobar').forEach(btn => {
+  listaPendientes.querySelectorAll('.aprobar').forEach(btn => {
     btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'aprobado'));
   });
-  lista.querySelectorAll('.rechazar').forEach(btn => {
+  listaPendientes.querySelectorAll('.rechazar').forEach(btn => {
     btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'rechazado'));
   });
 }
@@ -142,6 +173,67 @@ async function cambiarEstado(uid, estado) {
     revisadoEn: serverTimestamp()
   });
   cargarPendientes();
+  cargarAprobados();
+}
+
+// ---------- Aprobados: asignar permisos por área ----------
+async function cargarAprobados() {
+  listaAprobados.innerHTML = '<div class="vacio">Cargando...</div>';
+
+  const q = query(collection(db, "usuarios"), where("estado", "==", "aprobado"));
+  const snap = await getDocs(q);
+
+  // No mostramos a los admins acá: ya tienen acceso total a todo
+  const usuarios = snap.docs.filter(d => !ADMINS.includes(d.data().email));
+
+  if (usuarios.length === 0) {
+    listaAprobados.innerHTML = '<div class="vacio">Todavía no hay usuarios aprobados (aparte de los administradores).</div>';
+    return;
+  }
+
+  listaAprobados.innerHTML = '';
+  usuarios.forEach((docSnap) => {
+    const data = docSnap.data();
+    const permisos = data.permisos || {};
+
+    const fila = document.createElement('div');
+    fila.className = 'fila';
+
+    const checkboxesHtml = Object.entries(AREAS).map(([clave, etiqueta]) => `
+      <label class="permiso-item">
+        <input type="checkbox" data-uid="${docSnap.id}" data-area="${clave}" ${permisos[clave] ? 'checked' : ''}>
+        ${etiqueta}
+      </label>
+    `).join('');
+
+    fila.innerHTML = `
+      <div>
+        <div class="correo">${data.nombre || data.email}</div>
+        <div class="fecha">${data.nombre ? data.email : ''}</div>
+      </div>
+      <div class="permisos">
+        ${checkboxesHtml}
+        <span class="guardado" data-guardado-de="${docSnap.id}">Guardado ✓</span>
+      </div>
+    `;
+    listaAprobados.appendChild(fila);
+  });
+
+  listaAprobados.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+    chk.addEventListener('change', async () => {
+      const uid = chk.dataset.uid;
+      const area = chk.dataset.area;
+      await updateDoc(doc(db, "usuarios", uid), {
+        [`permisos.${area}`]: chk.checked
+      });
+
+      const aviso = listaAprobados.querySelector(`[data-guardado-de="${uid}"]`);
+      if (aviso) {
+        aviso.classList.add('show');
+        setTimeout(() => aviso.classList.remove('show'), 1500);
+      }
+    });
+  });
 }
 </script>
 </body>
