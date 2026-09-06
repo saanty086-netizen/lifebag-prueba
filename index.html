@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Bag | Kit de Emergencia</title>
+<meta name="description" content="Life Bag: kit de emergencia sostenible hecho por estudiantes. Reservá el tuyo.">
+
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream:#f6f1e6; --cream-deep:#efe6d3;
+    --surface:#ffffff; --forest:#1b4332; --forest-deep:#0f2a1f;
+    --rescue:#c1442c; --rescue-deep:#a8371f;
+    --text:#23291f; --text-muted:#5c6355; --border:#e4dcc6;
+    --radius-lg:26px; --radius-md:16px; --radius-sm:10px;
+    --shadow:0 18px 40px -18px rgba(15,42,31,0.28);
+    --shadow-sm:0 6px 18px -8px rgba(15,42,31,0.18);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Plus Jakarta Sans', sans-serif; background:var(--cream); color:var(--text); line-height:1.55;}
+  img{max-width:100%; display:block;}
+  h1,h2{font-family:'Fraunces', serif; color:var(--forest); font-weight:600; letter-spacing:-0.01em;}
+  .container{max-width:640px; margin:0 auto; padding:0 1.25rem;}
+
+  header.nav{position:sticky; top:0; z-index:50; background:rgba(246,241,230,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--border);}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:0.7rem 1.25rem; max-width:640px; margin:0 auto;}
+  .nav-brand{display:flex; align-items:center; gap:0.5rem; text-decoration:none;}
+  .nav-brand img{height:34px; width:34px; object-fit:contain;}
+  .nav-brand span{font-family:'Fraunces', serif; font-weight:700; font-size:1.05rem; color:var(--forest);}
+  .nav-cta{background:var(--forest); color:#fff; text-decoration:none; padding:0.5rem 1rem; border-radius:50px; font-weight:700; font-size:0.82rem;}
+
+  .hero{padding:2rem 0 1.5rem; text-align:center;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--cream-deep); color:var(--forest); font-size:0.72rem; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; padding:6px 14px; border-radius:50px; border:1px solid var(--border);}
+  .hero h1{font-size:2rem; line-height:1.1; margin-top:0.8rem;}
+  .hero p.lead{color:var(--text-muted); font-size:0.96rem; margin-top:0.7rem;}
+
+  .hero-photo{margin-top:1.4rem; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); aspect-ratio:4/3;}
+  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+
+  .btn-primary{background:var(--rescue); color:#fff; border:none; padding:0.95rem 1.6rem; border-radius:50px; font-weight:700; font-size:0.96rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 10px 24px -8px rgba(193,68,44,0.55); cursor:pointer; margin-top:1.3rem; transition:transform 0.15s ease, background 0.2s; font-family:inherit;}
+  .btn-primary:hover{background:var(--rescue-deep); transform:translateY(-1px);}
+
+  section{padding:2.2rem 0;}
+  .section-head{text-align:center; margin-bottom:1.2rem;}
+  .section-head h2{font-size:1.4rem;}
+
+  .kit-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0.7rem;}
+  @media(min-width:520px){ .kit-grid{grid-template-columns:repeat(3,1fr);} }
+  .kit-item{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.9rem 0.7rem; text-align:center; font-size:0.82rem; font-weight:600;}
+  .kit-item .ic{font-size:1.4rem; display:block; margin-bottom:0.35rem;}
+
+  .order-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.7rem 1.3rem; box-shadow:var(--shadow-sm);}
+  @media(min-width:520px){ .order-card{padding:2rem 1.8rem;} }
+  .order-head{text-align:center; margin-bottom:1.3rem;}
+  .order-head h2{font-size:1.35rem;}
+  .order-head p{color:var(--text-muted); font-size:0.86rem; margin-top:0.35rem;}
+
+  .form-group{margin-bottom:0.9rem;}
+  label{display:block; font-size:0.78rem; font-weight:700; margin-bottom:6px; color:var(--forest-deep);}
+  input{width:100%; padding:0.8rem 1rem; border-radius:var(--radius-sm); border:1.5px solid var(--border); font-size:0.94rem; color:var(--text); outline:none; background:var(--cream); transition:all 0.2s ease; font-family:inherit;}
+  input:focus{border-color:var(--forest); background:#fff; box-shadow:0 0 0 3px rgba(27,67,50,0.12);}
+
+  .btn-submit{width:100%; background:var(--rescue); color:#fff; border:none; padding:1rem; border-radius:50px; font-size:0.96rem; font-weight:700; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; box-shadow:0 10px 24px -8px rgba(193,68,44,0.5); margin-top:0.4rem; transition:all 0.2s ease; font-family:inherit;}
+  .btn-submit:hover{background:var(--rescue-deep); transform:translateY(-1px);}
+  .btn-submit:disabled{opacity:0.65; cursor:not-allowed; transform:none;}
+
+  .success-state{display:none; text-align:center;}
+  .success-state .check{width:56px; height:56px; border-radius:50%; background:var(--cream-deep); display:flex; align-items:center; justify-content:center; margin:0 auto 0.9rem; font-size:1.6rem; color:var(--forest);}
+  .success-state h3{font-family:'Fraunces',serif; color:var(--forest); font-size:1.2rem;}
+  .success-state p{color:var(--text-muted); font-size:0.88rem; margin-top:0.5rem;}
+  .success-state .btn-primary{width:100%; justify-content:center;}
+  .error-note{display:none; background:#fbe6e2; color:var(--rescue-deep); font-size:0.8rem; padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:0.9rem; font-weight:600;}
+
+  footer{padding:2rem 0 2.6rem; text-align:center;}
+  .footer-links{display:flex; justify-content:center; gap:1.3rem; flex-wrap:wrap; margin-bottom:0.7rem;}
+  .footer-links a{text-decoration:none; color:var(--text-muted); font-weight:600; font-size:0.84rem;}
+  .footer-links a:hover{color:var(--forest);}
+  .admin-link{font-size:0.68rem; color:var(--text-muted); opacity:0.55; text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">
+      <img src="assets/logo.png" alt="Life Bag">
+      <span>Life Bag</span>
+    </a>
+    <a href="#reservar" class="nav-cta">Reservar</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">🎓 Proyecto de 5° año</span>
+      <h1>Un kit de emergencia, listo para cuando lo necesites.</h1>
+      <p class="lead">Creado por estudiantes de 5° año como microemprendimiento real. Bolsa reciclada, manta tejida a mano y todo lo esencial para actuar con calma.</p>
+      <a href="#reservar" class="btn-primary">Reservar mi Life Bag →</a>
+      <div class="hero-photo">
+        <img src="assets/kit-foto-1.jpg" alt="Kit Life Bag con botiquín, agua, manta y guía de emergencias">
+      </div>
+    </div>
+  </section>
+
+  <section id="kit">
+    <div class="container">
+      <div class="section-head"><h2>¿Qué incluye?</h2></div>
+      <div class="kit-grid">
+        <div class="kit-item"><span class="ic">💧</span>Agua</div>
+        <div class="kit-item"><span class="ic">🥫</span>Alimentos no perecederos</div>
+        <div class="kit-item"><span class="ic">🩹</span>Botiquín</div>
+        <div class="kit-item"><span class="ic">🔦</span>Linterna</div>
+        <div class="kit-item"><span class="ic">🧶</span>Manta tejida a mano</div>
+        <div class="kit-item"><span class="ic">🕯️</span>Velas y encendedor</div>
+        <div class="kit-item"><span class="ic">📣</span>Silbato</div>
+        <div class="kit-item"><span class="ic">📓</span>Libreta y lapicera</div>
+        <div class="kit-item"><span class="ic">📋</span>Guía de emergencia</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="order-section" id="reservar">
+    <div class="container">
+      <div class="order-card">
+
+        <div id="formView">
+          <div class="order-head">
+            <h2>Reservá tu Life Bag</h2>
+            <p>Dejá tus datos y te contactamos por WhatsApp.</p>
+          </div>
+
+          <div class="error-note" id="errorNote">No pudimos guardar tu reserva, pero te llevamos a WhatsApp igual.</div>
+
+          <form id="orderForm">
+            <div class="form-group">
+              <label for="name">Nombre y apellido</label>
+              <input type="text" id="name" placeholder="Tu nombre completo" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="phone">Número de WhatsApp</label>
+              <input type="tel" id="phone" placeholder="Ej: 2634123456" required autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label for="district">Distrito / localidad</label>
+              <input type="text" id="district" placeholder="Ej: Giagnoni, Junín, Rivadavia" required>
+            </div>
+            <button type="submit" id="submitBtn" class="btn-submit">
+              <span>Reservar mi Life Bag</span>
+            </button>
+          </form>
+        </div>
+
+        <div id="successView" class="success-state">
+          <div class="check">✓</div>
+          <h3 id="successName">¡Listo!</h3>
+          <p>Tu reserva quedó registrada. Te abrimos WhatsApp para confirmar — si no se abrió, tocá el botón.</p>
+          <a href="#" id="waButton" target="_blank" class="btn-primary">Continuar por WhatsApp</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://www.instagram.com/lifebag2026" target="_blank">Instagram</a>
+      <a href="https://wa.me/5492634712606" target="_blank">WhatsApp</a>
+    </div>
+    <p><a class="admin-link" href="login.html">Panel interno</a></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { db } from "./firebase-config.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const form = document.getElementById('orderForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorNote = document.getElementById('errorNote');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+  const successName = document.getElementById('successName');
+  const waButton = document.getElementById('waButton');
+
+  const businessPhone = "5492634712606";
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const district = document.getElementById('district').value.trim();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "<span>Guardando reserva...</span>";
+    errorNote.style.display = "none";
+
+    const waMessage = `¡Hola! Vengo desde la página web de Life Bag.%0A%0A*Quiero reservar mi Life Bag* 🎒%0A👤 *Nombre:* ${encodeURIComponent(name)}%0A📱 *Teléfono:* ${encodeURIComponent(phone)}%0A📍 *Distrito:* ${encodeURIComponent(district)}%0A%0AEstoy interesad@ en el producto, ¿me confirman stock o quedo en lista de espera? 😊`;
+    const waUrl = `https://wa.me/${businessPhone}?text=${waMessage}`;
+
+    let saved = true;
+    try {
+      await addDoc(collection(db, "pedidos_lifebag"), {
+        nombre: name,
+        telefono: phone,
+        distrito: district,
+        fecha: serverTimestamp(),
+        estado: "espera"
+      });
+    } catch (error) {
+      console.error("Error al registrar en Firebase:", error);
+      saved = false;
+    }
+
+    if (!saved) errorNote.style.display = "block";
+
+    formView.style.display = "none";
+    successView.style.display = "block";
+    successName.textContent = `¡Listo, ${name.split(' ')[0]}!`;
+    waButton.href = waUrl;
+
+    window.open(waUrl, "_blank");
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = "<span>Reservar mi Life Bag</span>";
+  });
+</script>
+
+</body>
+</html>
