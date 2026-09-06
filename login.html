@@ -99,8 +99,8 @@ Ingresar con Google
 <button type="submit" id="loginBtn">Ingresar</button>
 </form>
 
-<a href="registro.html" class="crear-cuenta">¿No tenés cuenta? Registrate acá</a>
-<a href="index.html" class="back">← Volver al sitio</a>
+<a href="registro" class="crear-cuenta">¿No tenés cuenta? Registrate acá</a>
+<a href="/" class="back">← Volver al sitio</a>
 </div>
 
 <script type="module">
@@ -154,19 +154,19 @@ async function verificarAccesoYRedirigir(user) {
         rol: "admin",
         creadoEn: serverTimestamp()
       });
-      window.location.href = "admin.html";
+      window.location.href = "admin";
       return;
     }
 
     await signOut(auth);
-    mostrarError('Todavía no formás parte del equipo. <a href="registro.html">Registrate para entrar al equipo de Life Bag</a>.');
+    mostrarError('Todavía no formás parte del equipo. <a href="registro">Registrate para entrar al equipo de Life Bag</a>.');
     return;
   }
 
   const datos = snap.data();
 
   if (datos.estado === "aprobado") {
-    window.location.href = "admin.html";
+    window.location.href = "admin";
     return;
   }
 
