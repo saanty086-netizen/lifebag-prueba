@@ -116,8 +116,8 @@ async function cargarPendientes() {
     fila.className = 'fila';
     fila.innerHTML = `
       <div>
-        <div class="correo">${data.email}</div>
-        <div class="fecha">${fecha}</div>
+        <div class="correo">${data.nombre || data.email}</div>
+        <div class="fecha">${data.nombre ? data.email + ' · ' : ''}${fecha}</div>
       </div>
       <div class="botones">
         <button class="aprobar" data-id="${docSnap.id}">Aprobar</button>
