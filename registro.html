@@ -3,190 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crear cuenta | Panel interno LifeBag</title>
+<title>Crear cuenta | Panel Life Bag</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1f4438;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    padding: 24px;
-  }
-  .card {
-    background: #ffffff;
-    border-radius: 24px;
-    max-width: 440px;
-    width: 100%;
-    padding: 48px 40px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  }
-  .logo {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-  }
-  h1 {
-    font-family: Georgia, 'Times New Roman', serif;
-    color: #1f4438;
-    font-size: 28px;
-    margin: 0 0 8px;
-  }
-  p.subtitle {
-    color: #b98a4e;
-    font-size: 14px;
-    margin: 0 0 24px;
-    line-height: 1.5;
-  }
-  .msg {
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 13px;
-    margin-bottom: 20px;
-    display: none;
-    text-align: left;
-  }
-  .msg.error { background: #fbe2df; color: #a5433a; display: block; }
-  .msg.success { background: #dcefe3; color: #1f6b45; display: block; }
-  label {
-    display: block;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 600;
-    color: #1f4438;
-    margin: 16px 0 6px;
-  }
-  input {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 12px;
-    border: 1px solid #e4e0d8;
-    background: #f4f1ea;
-    font-size: 14px;
-    outline: none;
-  }
-  input:focus { border-color: #b98a4e; }
-  button {
-    width: 100%;
-    margin-top: 24px;
-    padding: 14px;
-    border: none;
-    border-radius: 999px;
-    background: #1f4438;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  button:disabled { opacity: 0.6; cursor: not-allowed; }
-  .back {
-    display: inline-block;
-    margin-top: 20px;
-    color: #b98a4e;
-    font-size: 13px;
-    text-decoration: none;
-  }
+:root{
+--cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
+--rescue:#c1442c; --rescue-deep:#a8371f; --border:#e4dcc6;
+--text:#23291f; --text-muted:#5c6355; --surface:#ffffff;
+--radius-lg:26px; --radius-sm:10px; --shadow:0 18px 40px -18px rgba(15,42,31,0.28);
+}
+*{box-sizing:border-box; margin:0; padding:0; font-family:'Plus Jakarta Sans', sans-serif;}
+body{
+min-height:100vh; background:var(--forest);
+background-image:radial-gradient(circle at 15% 15%, rgba(255,255,255,0.06), transparent 45%),
+radial-gradient(circle at 85% 85%, rgba(255,255,255,0.05), transparent 45%);
+display:flex; align-items:center; justify-content:center; padding:1.5rem; color:var(--text);
+}
+.card{
+background:var(--surface); width:100%; max-width:380px;
+border-radius:var(--radius-lg); padding:2.2rem 1.8rem; box-shadow:var(--shadow);
+text-align:center;
+}
+.card img{height:56px; width:56px; margin:0 auto 0.8rem;}
+h1{font-family:'Fraunces', serif; font-size:1.4rem; color:var(--forest); font-weight:700;}
+p.sub{color:var(--text-muted); font-size:0.85rem; margin-top:0.35rem; margin-bottom:1.6rem; line-height:1.5;}
+.form-group{margin-bottom:1rem; text-align:left;}
+label{display:block; font-size:0.78rem; font-weight:700; margin-bottom:6px; color:var(--forest-deep);}
+input{
+width:100%; padding:0.8rem 1rem; border-radius:var(--radius-sm);
+border:1.5px solid var(--border); font-size:0.94rem; outline:none;
+background:var(--cream); transition:all 0.2s ease;
+}
+input:focus{border-color:var(--forest); background:#fff; box-shadow:0 0 0 3px rgba(27,67,50,0.12);}
+button{
+width:100%; background:var(--forest); color:#fff; border:none;
+padding:0.9rem; border-radius:50px; font-size:0.94rem; font-weight:700;
+cursor:pointer; margin-top:0.5rem; transition:background 0.2s;
+}
+button:hover{background:var(--forest-deep);}
+button:disabled{opacity:0.65; cursor:not-allowed;}
+.error{
+display:none; background:#fbe6e2; color:var(--rescue-deep); font-size:0.8rem;
+padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:1rem; font-weight:600; text-align:left;
+}
+.success{
+display:none; background:#e5efe8; color:var(--forest-deep); font-size:0.8rem;
+padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:1rem; font-weight:600; text-align:left;
+}
+.back{display:inline-block; margin-top:1.4rem; font-size:0.8rem; color:var(--text-muted); text-decoration:none;}
+.back:hover{color:var(--forest);}
 </style>
 </head>
 <body>
+<div class="card">
+<img src="assets/logo.png" alt="Life Bag">
+<h1>Sumate al equipo</h1>
+<p class="sub">Creá tu cuenta con correo y contraseña. Un administrador va a revisar tu solicitud antes de que puedas ingresar al panel.</p>
 
-  <div class="card">
-    <h1>Crear cuenta</h1>
-    <p class="subtitle">Registrate con tu correo. Un administrador va a revisar y aprobar tu acceso antes de que puedas ingresar.</p>
+<div class="error" id="errorMsg"></div>
+<div class="success" id="successMsg"></div>
 
-    <div id="msg" class="msg"></div>
+<form id="registroForm">
+<div class="form-group">
+<label for="email">Correo electrónico</label>
+<input type="email" id="email" placeholder="tu@correo.com" required autocomplete="username">
+</div>
+<div class="form-group">
+<label for="password">Contraseña</label>
+<input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+</div>
+<div class="form-group">
+<label for="password2">Repetir contraseña</label>
+<input type="password" id="password2" placeholder="Repetí la contraseña" required minlength="6" autocomplete="new-password">
+</div>
+<button type="submit" id="registroBtn">Crear cuenta</button>
+</form>
 
-    <form id="form-registro">
-      <label for="email">Correo electrónico</label>
-      <input type="email" id="email" required placeholder="tu@correo.com">
+<a href="login.html" class="back">← Ya tengo cuenta, volver a ingresar</a>
+</div>
 
-      <label for="pass">Contraseña</label>
-      <input type="password" id="pass" required minlength="6" placeholder="Mínimo 6 caracteres">
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import {
+  createUserWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  doc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-      <label for="pass2">Repetir contraseña</label>
-      <input type="password" id="pass2" required minlength="6" placeholder="Repetí la contraseña">
+const errorMsg = document.getElementById('errorMsg');
+const successMsg = document.getElementById('successMsg');
 
-      <button type="submit" id="btn-registro">Crear cuenta</button>
-    </form>
+function mostrarError(texto) {
+  successMsg.style.display = "none";
+  errorMsg.textContent = texto;
+  errorMsg.style.display = "block";
+}
 
-    <a class="back" href="login.html">← Volver a ingresar</a>
-  </div>
+function mostrarExito(texto) {
+  errorMsg.style.display = "none";
+  successMsg.textContent = texto;
+  successMsg.style.display = "block";
+}
 
-  <!-- Firebase SDK (compat, sin build tools) -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+const messages = {
+  'auth/email-already-in-use': 'Ese correo ya tiene una cuenta. Probá ingresar en vez de registrarte.',
+  'auth/invalid-email': 'El correo ingresado no es válido.',
+  'auth/weak-password': 'La contraseña es muy débil, usá al menos 6 caracteres.'
+};
 
-  <script>
-    // Usá la misma config que ya tenés en login.html
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBbXh_Og_ryiBl8Q5VjsU5yH-sk6iSKmI",
-      authDomain: "lifebag-d637e.firebaseapp.com",
-      projectId: "lifebag-d637e",
-      storageBucket: "lifebag-d637e.firebasestorage.app",
-      messagingSenderId: "629327458250",
-      appId: "1:629327458250:web:fdf226fba3895e3fd36933"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+const form = document.getElementById('registroForm');
+const btn = document.getElementById('registroBtn');
 
-    const form = document.getElementById('form-registro');
-    const msg = document.getElementById('msg');
-    const btn = document.getElementById('btn-registro');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    function mostrarMensaje(texto, tipo) {
-      msg.textContent = texto;
-      msg.className = 'msg ' + tipo;
-    }
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const password2 = document.getElementById('password2').value;
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const pass = document.getElementById('pass').value;
-      const pass2 = document.getElementById('pass2').value;
+  if (password !== password2) {
+    mostrarError('Las contraseñas no coinciden.');
+    return;
+  }
 
-      if (pass !== pass2) {
-        mostrarMensaje('Las contraseñas no coinciden.', 'error');
-        return;
-      }
+  btn.disabled = true;
+  btn.textContent = "Creando cuenta...";
 
-      btn.disabled = true;
-      btn.textContent = 'Creando cuenta...';
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-      try {
-        const cred = await auth.createUserWithEmailAndPassword(email, pass);
-
-        // Guardamos el estado "pendiente" en Firestore
-        await db.collection('usuarios').doc(cred.user.uid).set({
-          email: email,
-          estado: 'pendiente',           // pendiente | aprobado | rechazado
-          rol: 'usuario',
-          creadoEn: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        // Cerramos la sesión: no puede usar el panel hasta ser aprobado
-        await auth.signOut();
-
-        mostrarMensaje('¡Listo! Tu cuenta fue creada. Un administrador la va a revisar antes de que puedas ingresar.', 'success');
-        form.reset();
-      } catch (err) {
-        let texto = 'No se pudo crear la cuenta. Probá de nuevo.';
-        if (err.code === 'auth/email-already-in-use') texto = 'Ese correo ya tiene una cuenta.';
-        if (err.code === 'auth/invalid-email') texto = 'El correo no es válido.';
-        if (err.code === 'auth/weak-password') texto = 'La contraseña es muy débil.';
-        mostrarMensaje(texto, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Crear cuenta';
-      }
+    await setDoc(doc(db, "usuarios", cred.user.uid), {
+      email: email,
+      estado: "pendiente",
+      rol: "usuario",
+      creadoEn: serverTimestamp()
     });
-  </script>
 
+    // Cerramos la sesión: no puede entrar al panel hasta ser aprobado
+    await signOut(auth);
+
+    mostrarExito('¡Listo! Tu cuenta fue creada. Un administrador va a revisar tu solicitud antes de darte acceso.');
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    mostrarError(messages[err.code] || "No se pudo crear la cuenta. Probá de nuevo.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Crear cuenta";
+  }
+});
+</script>
 </body>
 </html>
