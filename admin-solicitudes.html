@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitudes de acceso | LifeBag</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #1f4438;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 40px 20px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  p.subtitle {
+    text-align: center;
+    color: #cfe3d8;
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  }
+  .fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .fila:last-child { border-bottom: none; }
+  .correo { font-weight: 600; color: #1f4438; font-size: 14px; }
+  .fecha { font-size: 12px; color: #999; margin-top: 2px; }
+  .botones { display: flex; gap: 8px; flex-shrink: 0; }
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .aprobar { background: #1f4438; color: #fff; }
+  .rechazar { background: #fbe2df; color: #a5433a; }
+  .vacio { text-align: center; color: #999; padding: 40px 0; font-size: 14px; }
+  .bloqueado {
+    color: #fff;
+    text-align: center;
+    padding-top: 100px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap" id="app" style="display:none;">
+    <h1>Solicitudes de acceso</h1>
+    <p class="subtitle">Cuentas pendientes de aprobación para el panel interno</p>
+    <div class="card">
+      <div id="lista"></div>
+    </div>
+  </div>
+
+  <div id="bloqueado" class="bloqueado" style="display:none;">
+    Esta sección es solo para administradores.<br>
+    <a href="login.html" style="color:#cfe3d8;">Volver al inicio</a>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_PROYECTO.firebaseapp.com",
+      projectId: "TU_PROYECTO",
+      storageBucket: "TU_PROYECTO.appspot.com",
+      messagingSenderId: "TU_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Solo estas dos cuentas pueden aprobar
+    const ADMINS = ['saanty086@gmail.com', 'lifebag11@gmail.com'];
+
+    const lista = document.getElementById('lista');
+    const app = document.getElementById('app');
+    const bloqueado = document.getElementById('bloqueado');
+
+    auth.onAuthStateChanged((user) => {
+      if (!user || !ADMINS.includes(user.email)) {
+        bloqueado.style.display = 'block';
+        return;
+      }
+      app.style.display = 'block';
+      cargarPendientes();
+    });
+
+    async function cargarPendientes() {
+      lista.innerHTML = '<div class="vacio">Cargando...</div>';
+      const snap = await db.collection('usuarios').where('estado', '==', 'pendiente').get();
+
+      if (snap.empty) {
+        lista.innerHTML = '<div class="vacio">No hay solicitudes pendientes.</div>';
+        return;
+      }
+
+      lista.innerHTML = '';
+      snap.forEach((doc) => {
+        const data = doc.data();
+        const fecha = data.creadoEn ? data.creadoEn.toDate().toLocaleDateString('es-AR') : '';
+        const fila = document.createElement('div');
+        fila.className = 'fila';
+        fila.innerHTML = `
+          <div>
+            <div class="correo">${data.email}</div>
+            <div class="fecha">${fecha}</div>
+          </div>
+          <div class="botones">
+            <button class="aprobar" data-id="${doc.id}">Aprobar</button>
+            <button class="rechazar" data-id="${doc.id}">Rechazar</button>
+          </div>
+        `;
+        lista.appendChild(fila);
+      });
+
+      lista.querySelectorAll('.aprobar').forEach(btn => {
+        btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'aprobado'));
+      });
+      lista.querySelectorAll('.rechazar').forEach(btn => {
+        btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'rechazado'));
+      });
+    }
+
+    async function cambiarEstado(uid, estado) {
+      await db.collection('usuarios').doc(uid).update({
+        estado: estado,
+        revisadoPor: auth.currentUser.email,
+        revisadoEn: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      cargarPendientes();
+    }
+  </script>
+
+</body>
+</html>
