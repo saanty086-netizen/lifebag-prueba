@@ -41,7 +41,7 @@
   .hero p.lead{color:var(--text-muted); font-size:0.96rem; margin-top:0.7rem;}
 
   .hero-photo{margin-top:1.4rem; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); aspect-ratio:4/3;}
-  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+  .hero-photo img{width:100%; height:100%; object-fit:cover; object-position:center bottom;}
 
   .btn-primary{background:var(--rescue); color:#fff; border:none; padding:0.95rem 1.6rem; border-radius:50px; font-weight:700; font-size:0.96rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 10px 24px -8px rgba(193,68,44,0.55); cursor:pointer; margin-top:1.3rem; transition:transform 0.15s ease, background 0.2s; font-family:inherit;}
   .btn-primary:hover{background:var(--rescue-deep); transform:translateY(-1px);}
@@ -82,6 +82,19 @@
   .footer-links a{text-decoration:none; color:var(--text-muted); font-weight:600; font-size:0.84rem;}
   .footer-links a:hover{color:var(--forest);}
   .admin-link{font-size:0.68rem; color:var(--text-muted); opacity:0.55; text-decoration:none;}
+
+  .cookie-banner{position:fixed; left:0; right:0; bottom:0; z-index:100; background:var(--forest-deep); color:#f6f1e6; padding:1rem 1.1rem; box-shadow:0 -8px 24px -8px rgba(0,0,0,0.35); transform:translateY(120%); transition:transform 0.35s ease;}
+  .cookie-banner.show{transform:translateY(0);}
+  .cookie-inner{max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:0.8rem;}
+  @media(min-width:560px){ .cookie-inner{flex-direction:row; align-items:center; justify-content:space-between; gap:1.4rem;} }
+  .cookie-text{font-size:0.82rem; line-height:1.5; color:#e9e4d6;}
+  .cookie-text a{color:#fff; text-decoration:underline; font-weight:600;}
+  .cookie-actions{display:flex; gap:0.6rem; flex-shrink:0;}
+  .cookie-actions button{font-family:inherit; font-size:0.8rem; font-weight:700; padding:0.6rem 1.1rem; border-radius:50px; border:none; cursor:pointer; white-space:nowrap;}
+  .cookie-accept{background:var(--rescue); color:#fff;}
+  .cookie-accept:hover{background:var(--rescue-deep);}
+  .cookie-decline{background:transparent; color:#e9e4d6; border:1.5px solid rgba(233,228,214,0.4) !important;}
+  .cookie-decline:hover{border-color:#e9e4d6 !important;}
 </style>
 </head>
 <body>
@@ -177,9 +190,45 @@
       <a href="https://www.instagram.com/lifebag2026" target="_blank">Instagram</a>
       <a href="https://wa.me/5492634712606" target="_blank">WhatsApp</a>
     </div>
+    <div class="footer-links">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="privacidad.html#terminos">Términos y condiciones</a>
+    </div>
     <p><a class="admin-link" href="login.html">Panel interno</a></p>
   </div>
 </footer>
+
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies necesarias para que el sitio funcione y recordar tus preferencias. Podés leer más en nuestra <a href="privacidad.html#cookies">política de cookies</a>.</p>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-decline" id="cookieDecline">Rechazar</button>
+      <button type="button" class="cookie-accept" id="cookieAccept">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const banner = document.getElementById('cookieBanner');
+    const accept = document.getElementById('cookieAccept');
+    const decline = document.getElementById('cookieDecline');
+    const KEY = 'lifebag_cookie_consent';
+
+    const saved = localStorage.getItem(KEY);
+    if (!saved) {
+      setTimeout(() => banner.classList.add('show'), 400);
+    }
+
+    function hideBanner(value){
+      localStorage.setItem(KEY, value);
+      banner.classList.remove('show');
+    }
+
+    accept.addEventListener('click', () => hideBanner('accepted'));
+    decline.addEventListener('click', () => hideBanner('declined'));
+  })();
+</script>
 
 <script type="module">
   import { db } from "./firebase-config.js";
@@ -206,7 +255,7 @@
     submitBtn.innerHTML = "<span>Guardando reserva...</span>";
     errorNote.style.display = "none";
 
-    const waMessage = `¡Hola! Vengo desde la página web de Life Bag.%0A%0A*Quiero reservar mi Life Bag* 🎒%0A👤 *Nombre:* ${encodeURIComponent(name)}%0A📱 *Teléfono:* ${encodeURIComponent(phone)}%0A📍 *Distrito:* ${encodeURIComponent(district)}%0A%0AEstoy interesad@ en el producto, ¿me confirman stock o quedo en lista de espera? 😊`;
+    const waMessage = `Hola! Vengo desde la pagina web de Life Bag.%0A%0A*Quiero reservar mi Life Bag*%0ANombre: ${encodeURIComponent(name)}%0ATelefono: ${encodeURIComponent(phone)}%0ADistrito: ${encodeURIComponent(district)}%0A%0AEstoy interesado en el producto, me confirman stock o quedo en lista de espera?`;
     const waUrl = `https://wa.me/${businessPhone}?text=${waMessage}`;
 
     let saved = true;

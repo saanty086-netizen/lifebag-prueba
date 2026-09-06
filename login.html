@@ -9,116 +9,175 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
-    --rescue:#c1442c; --rescue-deep:#a8371f; --border:#e4dcc6;
-    --text:#23291f; --text-muted:#5c6355; --surface:#ffffff;
-    --radius-lg:26px; --radius-sm:10px; --shadow:0 18px 40px -18px rgba(15,42,31,0.28);
-  }
-  *{box-sizing:border-box; margin:0; padding:0; font-family:'Plus Jakarta Sans', sans-serif;}
-  body{
-    min-height:100vh; background:var(--forest);
-    background-image:radial-gradient(circle at 15% 15%, rgba(255,255,255,0.06), transparent 45%),
-                      radial-gradient(circle at 85% 85%, rgba(255,255,255,0.05), transparent 45%);
-    display:flex; align-items:center; justify-content:center; padding:1.5rem; color:var(--text);
-  }
-  .card{
-    background:var(--surface); width:100%; max-width:380px;
-    border-radius:var(--radius-lg); padding:2.2rem 1.8rem; box-shadow:var(--shadow);
-    text-align:center;
-  }
-  .card img{height:56px; width:56px; margin:0 auto 0.8rem;}
-  h1{font-family:'Fraunces', serif; font-size:1.4rem; color:var(--forest); font-weight:700;}
-  p.sub{color:var(--text-muted); font-size:0.85rem; margin-top:0.35rem; margin-bottom:1.6rem;}
-  .form-group{margin-bottom:1rem; text-align:left;}
-  label{display:block; font-size:0.78rem; font-weight:700; margin-bottom:6px; color:var(--forest-deep);}
-  input{
-    width:100%; padding:0.8rem 1rem; border-radius:var(--radius-sm);
-    border:1.5px solid var(--border); font-size:0.94rem; outline:none;
-    background:var(--cream); transition:all 0.2s ease;
-  }
-  input:focus{border-color:var(--forest); background:#fff; box-shadow:0 0 0 3px rgba(27,67,50,0.12);}
-  button{
-    width:100%; background:var(--forest); color:#fff; border:none;
-    padding:0.9rem; border-radius:50px; font-size:0.94rem; font-weight:700;
-    cursor:pointer; margin-top:0.5rem; transition:background 0.2s;
-  }
-  button:hover{background:var(--forest-deep);}
-  button:disabled{opacity:0.65; cursor:not-allowed;}
-  .error{
-    display:none; background:#fbe6e2; color:var(--rescue-deep); font-size:0.8rem;
-    padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:1rem; font-weight:600; text-align:left;
-  }
-  .back{display:inline-block; margin-top:1.4rem; font-size:0.8rem; color:var(--text-muted); text-decoration:none;}
-  .back:hover{color:var(--forest);}
+:root{
+--cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
+--rescue:#c1442c; --rescue-deep:#a8371f; --border:#e4dcc6;
+--text:#23291f; --text-muted:#5c6355; --surface:#ffffff;
+--radius-lg:26px; --radius-sm:10px; --shadow:0 18px 40px -18px rgba(15,42,31,0.28);
+}
+*{box-sizing:border-box; margin:0; padding:0; font-family:'Plus Jakarta Sans', sans-serif;}
+body{
+min-height:100vh; background:var(--forest);
+background-image:radial-gradient(circle at 15% 15%, rgba(255,255,255,0.06), transparent 45%),
+radial-gradient(circle at 85% 85%, rgba(255,255,255,0.05), transparent 45%);
+display:flex; align-items:center; justify-content:center; padding:1.5rem; color:var(--text);
+}
+.card{
+background:var(--surface); width:100%; max-width:380px;
+border-radius:var(--radius-lg); padding:2.2rem 1.8rem; box-shadow:var(--shadow);
+text-align:center;
+}
+.card img{height:56px; width:56px; margin:0 auto 0.8rem;}
+h1{font-family:'Fraunces', serif; font-size:1.4rem; color:var(--forest); font-weight:700;}
+p.sub{color:var(--text-muted); font-size:0.85rem; margin-top:0.35rem; margin-bottom:1.6rem;}
+.form-group{margin-bottom:1rem; text-align:left;}
+label{display:block; font-size:0.78rem; font-weight:700; margin-bottom:6px; color:var(--forest-deep);}
+input{
+width:100%; padding:0.8rem 1rem; border-radius:var(--radius-sm);
+border:1.5px solid var(--border); font-size:0.94rem; outline:none;
+background:var(--cream); transition:all 0.2s ease;
+}
+input:focus{border-color:var(--forest); background:#fff; box-shadow:0 0 0 3px rgba(27,67,50,0.12);}
+button{
+width:100%; background:var(--forest); color:#fff; border:none;
+padding:0.9rem; border-radius:50px; font-size:0.94rem; font-weight:700;
+cursor:pointer; margin-top:0.5rem; transition:background 0.2s;
+}
+button:hover{background:var(--forest-deep);}
+button:disabled{opacity:0.65; cursor:not-allowed;}
+.google-btn{
+background:#fff; color:var(--forest-deep); border:1.5px solid var(--border);
+display:flex; align-items:center; justify-content:center; gap:0.6rem;
+}
+.google-btn:hover{background:var(--cream);}
+.google-btn img{height:18px; width:18px; margin:0;}
+.divider{
+display:flex; align-items:center; gap:0.7rem; margin:1.2rem 0;
+color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em;
+}
+.divider::before, .divider::after{content:""; flex:1; height:1px; background:var(--border);}
+.error{
+display:none; background:#fbe6e2; color:var(--rescue-deep); font-size:0.8rem;
+padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:1rem; font-weight:600; text-align:left;
+}
+.back{display:inline-block; margin-top:1.4rem; font-size:0.8rem; color:var(--text-muted); text-decoration:none;}
+.back:hover{color:var(--forest);}
 </style>
 </head>
 <body>
+<div class="card">
+<img src="assets/logo.png" alt="Life Bag">
+<h1>Panel interno</h1>
+<p class="sub">Ingresá con tu cuenta para ver pedidos y producción.</p>
 
-  <div class="card">
-    <img src="assets/logo.png" alt="Life Bag">
-    <h1>Panel interno</h1>
-    <p class="sub">Ingresá con tu cuenta para ver pedidos y producción.</p>
+<div class="error" id="errorMsg"></div>
 
-    <div class="error" id="errorMsg"></div>
+<button type="button" id="googleBtn" class="google-btn">
+<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+Ingresar con Google
+</button>
 
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" placeholder="admin@lifebag.com" required autocomplete="username">
-      </div>
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-      </div>
-      <button type="submit" id="loginBtn">Ingresar</button>
-    </form>
+<div class="divider">o con tu correo</div>
 
-    <a href="index.html" class="back">← Volver al sitio</a>
-  </div>
+<form id="loginForm">
+<div class="form-group">
+<label for="email">Correo electrónico</label>
+<input type="email" id="email" placeholder="admin@lifebag.com" required autocomplete="username">
+</div>
+<div class="form-group">
+<label for="password">Contraseña</label>
+<input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+</div>
+<button type="submit" id="loginBtn">Ingresar</button>
+</form>
 
-  <script type="module">
-    import { auth } from "./firebase-config.js";
-    import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<a href="index.html" class="back">← Volver al sitio</a>
+</div>
 
-    // Si ya hay una sesión activa, pasar directo al panel
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = "admin.html";
-    });
+<script type="module">
+import { auth } from "./firebase-config.js";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const form = document.getElementById('loginForm');
-    const btn = document.getElementById('loginBtn');
-    const errorMsg = document.getElementById('errorMsg');
+// Correos de Google autorizados a entrar al panel.
+// Agregá o quitá correos según quién deba tener acceso.
+const ADMINS_PERMITIDOS = [
+  "tu-correo@gmail.com"
+];
 
-    const messages = {
-      'auth/invalid-email': 'El correo ingresado no es válido.',
-      'auth/user-not-found': 'No existe una cuenta con ese correo.',
-      'auth/wrong-password': 'La contraseña es incorrecta.',
-      'auth/invalid-credential': 'Correo o contraseña incorrectos.',
-      'auth/too-many-requests': 'Demasiados intentos. Probá de nuevo en unos minutos.'
-    };
+const errorMsg = document.getElementById('errorMsg');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorMsg.style.display = "none";
-      btn.disabled = true;
-      btn.textContent = "Ingresando...";
+// Si ya hay una sesión activa y es de un admin permitido, pasar directo al panel
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    if (user.email && ADMINS_PERMITIDOS.includes(user.email)) {
+      window.location.href = "admin.html";
+    }
+    // Si no está en la lista (por ejemplo, quedó una sesión de Google no autorizada),
+    // no redirige y se queda en login para no entrar en loop.
+  }
+});
 
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+// --- Login con email y contraseña ---
+const form = document.getElementById('loginForm');
+const btn = document.getElementById('loginBtn');
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "admin.html";
-      } catch (err) {
-        console.error(err);
-        errorMsg.textContent = messages[err.code] || "No se pudo iniciar sesión. Intentá de nuevo.";
-        errorMsg.style.display = "block";
-        btn.disabled = false;
-        btn.textContent = "Ingresar";
-      }
-    });
-  </script>
+const messages = {
+  'auth/invalid-email': 'El correo ingresado no es válido.',
+  'auth/user-not-found': 'No existe una cuenta con ese correo.',
+  'auth/wrong-password': 'La contraseña es incorrecta.',
+  'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+  'auth/too-many-requests': 'Demasiados intentos. Probá de nuevo en unos minutos.'
+};
 
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorMsg.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Ingresando...";
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "admin.html";
+  } catch (err) {
+    console.error(err);
+    errorMsg.textContent = messages[err.code] || "No se pudo iniciar sesión. Intentá de nuevo.";
+    errorMsg.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "Ingresar";
+  }
+});
+
+// --- Login con Google ---
+const googleBtn = document.getElementById('googleBtn');
+
+googleBtn.addEventListener('click', async () => {
+  errorMsg.style.display = "none";
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const email = result.user.email;
+    if (!email || !ADMINS_PERMITIDOS.includes(email)) {
+      await signOut(auth);
+      errorMsg.textContent = "Esta cuenta de Google no tiene acceso al panel.";
+      errorMsg.style.display = "block";
+      return;
+    }
+    window.location.href = "admin.html";
+  } catch (err) {
+    console.error(err);
+    errorMsg.textContent = "No se pudo iniciar sesión con Google.";
+    errorMsg.style.display = "block";
+  }
+});
+</script>
 </body>
 </html>

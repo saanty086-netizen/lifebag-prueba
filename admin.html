@@ -157,6 +157,79 @@
   }
   .btn-delete:hover{text-decoration:underline;}
   .empty-row td{text-align:center; color:var(--text-muted); padding:2.5rem;}
+
+  .btn-add-client{
+    display:inline-flex; align-items:center; gap:6px; background:var(--forest); color:#fff;
+    border:none; padding:0.7rem 1.2rem; border-radius:50px; font-weight:700; font-size:0.86rem;
+    cursor:pointer; font-family:inherit;
+  }
+  .btn-add-client:hover{background:var(--forest-deep);}
+  .btn-edit{
+    background:transparent; border:none; color:var(--forest); font-weight:700;
+    cursor:pointer; padding:0.4rem; font-size:0.8rem;
+  }
+  .btn-edit:hover{text-decoration:underline;}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(15,42,31,0.55); z-index:200;
+    align-items:center; justify-content:center; padding:1rem;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{
+    background:var(--surface); border-radius:var(--radius-lg); padding:1.6rem; width:100%; max-width:420px;
+    box-shadow:0 24px 60px -20px rgba(15,42,31,0.4);
+  }
+  .modal-box h3{font-size:1.15rem; margin-bottom:0.3rem;}
+  .modal-box .modal-sub{color:var(--text-muted); font-size:0.82rem; margin-bottom:1.1rem;}
+  .modal-field{margin-bottom:0.9rem;}
+  .modal-field label{display:block; font-size:0.76rem; font-weight:700; margin-bottom:5px; color:var(--forest-deep);}
+  .modal-field input, .modal-field select{
+    width:100%; padding:0.7rem 0.9rem; border-radius:var(--radius-sm); border:1.5px solid var(--border);
+    font-size:0.9rem; outline:none; font-family:inherit; background:var(--cream);
+  }
+  .modal-field input:focus, .modal-field select:focus{border-color:var(--forest); background:#fff;}
+  .modal-actions{display:flex; gap:0.6rem; margin-top:1.3rem;}
+  .modal-actions button{
+    flex:1; padding:0.75rem; border-radius:50px; font-weight:700; font-size:0.86rem;
+    border:none; cursor:pointer; font-family:inherit;
+  }
+  .modal-cancel{background:var(--cream-deep); color:var(--text);}
+  .modal-cancel:hover{background:var(--border);}
+  .modal-save{background:var(--rescue); color:#fff;}
+  .modal-save:hover{background:var(--rescue-deep);}
+  .modal-error{display:none; background:#fbe6e2; color:var(--rescue-deep); font-size:0.78rem; padding:0.6rem 0.8rem; border-radius:var(--radius-sm); margin-bottom:0.8rem; font-weight:600;}
+
+  /* ---------- FINANZAS ---------- */
+  .fin-intro{margin-bottom:1.2rem;}
+  .fin-intro p{color:var(--text-muted); font-size:0.88rem; margin-top:0.3rem;}
+  .fin-toolbar{display:flex; justify-content:flex-end; margin-bottom:1rem;}
+  table.fin-table{min-width:760px;}
+  table.fin-table th{white-space:nowrap;}
+  table.fin-table td{padding:0.5rem 0.7rem;}
+  .fin-input{
+    width:100%; min-width:70px; padding:0.5rem 0.6rem; border:1.5px solid transparent;
+    border-radius:8px; font-size:0.87rem; font-family:inherit; background:transparent; color:var(--text);
+    outline:none; text-align:right;
+  }
+  .fin-input.fin-name{text-align:left;}
+  .fin-input:hover{border-color:var(--border); background:var(--cream);}
+  .fin-input:focus{border-color:var(--forest); background:#fff;}
+  .fin-readonly{
+    display:block; text-align:right; padding:0.5rem 0.6rem; font-weight:700; color:var(--forest-deep);
+    font-variant-numeric:tabular-nums;
+  }
+  .fin-readonly.negativo{color:var(--danger);}
+  .fin-row-actions{text-align:center;}
+  .fin-table tfoot td{
+    background:var(--cream-deep); font-weight:800; color:var(--forest-deep);
+    border-top:2px solid var(--border); border-bottom:none;
+  }
+  .fin-table tfoot .fin-readonly{color:var(--forest-deep);}
+  .fin-table tfoot .fin-readonly.negativo{color:var(--danger);}
+  @media(max-width:700px){
+    .fin-input, .fin-readonly{font-size:0.82rem; min-width:60px;}
+  }
 </style>
 </head>
 <body>
@@ -186,6 +259,7 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="produccion">🧵 Producción</button>
       <button class="tab-btn" data-tab="pedidos">📋 Lista de espera</button>
+      <button class="tab-btn" data-tab="finanzas">💰 Finanzas</button>
     </div>
 
     <main>
@@ -254,6 +328,7 @@
             <option value="entregado">Entregado</option>
             <option value="cancelado">Cancelado</option>
           </select>
+          <button type="button" class="btn-add-client" id="openAddModal">+ Agregar cliente</button>
         </div>
 
         <div class="table-wrap">
@@ -278,7 +353,88 @@
         </div>
       </section>
 
+      <!-- ===================== FINANZAS ===================== -->
+      <section id="view-finanzas" class="view">
+        <div class="fin-intro">
+          <h2>Finanzas</h2>
+          <p>Cargá cantidad, precio de venta y costo unitario de cada producto. El ingreso, costo total y ganancia se calculan solos y se guardan en tiempo real.</p>
+        </div>
+
+        <div class="fin-toolbar">
+          <button type="button" class="btn-add-client" id="finAddRow">+ Agregar producto</button>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table class="fin-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio de venta</th>
+                  <th>Costo unitario</th>
+                  <th>Ingreso</th>
+                  <th>Costo total</th>
+                  <th>Ganancia</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="finTableBody">
+                <tr class="empty-row"><td colspan="8">Cargando finanzas...</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4" style="text-align:right;">Totales</td>
+                  <td><span class="fin-readonly" id="finTotalIngreso">$0</span></td>
+                  <td><span class="fin-readonly" id="finTotalCosto">$0</span></td>
+                  <td><span class="fin-readonly" id="finTotalGanancia">$0</span></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
+  </div>
+
+  <!-- ===================== MODAL AGREGAR / EDITAR CLIENTE ===================== -->
+  <div class="modal-overlay" id="clientModal">
+    <div class="modal-box">
+      <h3 id="modalTitle">Agregar cliente</h3>
+      <p class="modal-sub" id="modalSub">Se suma a la lista de espera igual que una reserva desde la web.</p>
+
+      <div class="modal-error" id="modalError">No se pudo guardar. Intentá de nuevo.</div>
+
+      <form id="clientForm">
+        <div class="modal-field">
+          <label for="modalName">Nombre y apellido</label>
+          <input type="text" id="modalName" required autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="modalPhone">Número de WhatsApp</label>
+          <input type="tel" id="modalPhone" required autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="modalDistrict">Distrito / localidad</label>
+          <input type="text" id="modalDistrict" required autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="modalStatus">Estado</label>
+          <select id="modalStatus">
+            <option value="espera">En espera</option>
+            <option value="entregado">Entregado</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="modalCancel">Cancelar</button>
+          <button type="submit" class="modal-save" id="modalSave">Guardar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script type="module">
@@ -286,7 +442,8 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       collection, onSnapshot, query, orderBy,
-      doc, updateDoc, deleteDoc, setDoc, getDoc, increment
+      doc, updateDoc, deleteDoc, setDoc, getDoc, increment,
+      addDoc, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ---------------- AUTH GUARD ----------------
@@ -325,6 +482,7 @@
       listenersStarted = true;
       startProductionListener();
       startOrdersListener();
+      startFinanzasListener();
     }
 
     // ---------------- PRODUCCIÓN ----------------
@@ -437,6 +595,7 @@
             <td>
               <div style="display:flex; gap:8px; align-items:center;">
                 <a class="btn-wa" href="https://wa.me/${cleanPhone}" target="_blank">Chat</a>
+                <button class="btn-edit" data-id="${order.id}">Editar</button>
                 <button class="btn-delete" data-id="${order.id}">Eliminar</button>
               </div>
             </td>
@@ -450,6 +609,9 @@
       });
       tableBody.querySelectorAll('.btn-delete').forEach(btn => {
         btn.addEventListener('click', (e) => deleteOrder(e.target.dataset.id));
+      });
+      tableBody.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', (e) => openEditModal(e.target.dataset.id));
       });
     }
 
@@ -481,6 +643,223 @@
 
     searchInput.addEventListener("input", applyFilters);
     statusFilter.addEventListener("change", applyFilters);
+
+    // ---------------- FINANZAS ----------------
+    let finCache = [];
+    const finTableBody = document.getElementById("finTableBody");
+    const finAddRow = document.getElementById("finAddRow");
+    const finTotalIngreso = document.getElementById("finTotalIngreso");
+    const finTotalCosto = document.getElementById("finTotalCosto");
+    const finTotalGanancia = document.getElementById("finTotalGanancia");
+    const finDebounceTimers = {};
+
+    function fmtMoney(n) {
+      const val = Number(n) || 0;
+      return "$" + val.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function startFinanzasListener() {
+      const q = query(collection(db, "finanzas_productos"), orderBy("orden", "asc"));
+      onSnapshot(q, (snapshot) => {
+        finCache = [];
+        snapshot.forEach((docSnap) => {
+          finCache.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderFinTable();
+      });
+    }
+
+    function renderFinTable() {
+      if (finCache.length === 0) {
+        finTableBody.innerHTML = `<tr class="empty-row"><td colspan="8">Todavía no hay productos cargados.</td></tr>`;
+        finTotalIngreso.textContent = fmtMoney(0);
+        finTotalCosto.textContent = fmtMoney(0);
+        finTotalGanancia.textContent = fmtMoney(0);
+        return;
+      }
+
+      let totalIngreso = 0, totalCosto = 0, totalGanancia = 0;
+
+      finTableBody.innerHTML = finCache.map(p => {
+        const cantidad = Number(p.cantidad) || 0;
+        const precioVenta = Number(p.precioVenta) || 0;
+        const costoUnitario = Number(p.costoUnitario) || 0;
+        const ingreso = cantidad * precioVenta;
+        const costoTotal = cantidad * costoUnitario;
+        const ganancia = ingreso - costoTotal;
+
+        totalIngreso += ingreso;
+        totalCosto += costoTotal;
+        totalGanancia += ganancia;
+
+        return `
+          <tr data-id="${p.id}">
+            <td><input type="text" class="fin-input fin-name" data-field="nombre" data-id="${p.id}" value="${escapeHtml(p.nombre || '')}" placeholder="Nombre del producto"></td>
+            <td><input type="number" step="1" min="0" class="fin-input" data-field="cantidad" data-id="${p.id}" value="${cantidad}"></td>
+            <td><input type="number" step="0.01" min="0" class="fin-input" data-field="precioVenta" data-id="${p.id}" value="${precioVenta}"></td>
+            <td><input type="number" step="0.01" min="0" class="fin-input" data-field="costoUnitario" data-id="${p.id}" value="${costoUnitario}"></td>
+            <td><span class="fin-readonly">${fmtMoney(ingreso)}</span></td>
+            <td><span class="fin-readonly">${fmtMoney(costoTotal)}</span></td>
+            <td><span class="fin-readonly ${ganancia < 0 ? 'negativo' : ''}">${fmtMoney(ganancia)}</span></td>
+            <td class="fin-row-actions"><button type="button" class="btn-delete" data-id="${p.id}">Eliminar</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      finTotalIngreso.textContent = fmtMoney(totalIngreso);
+      finTotalCosto.textContent = fmtMoney(totalCosto);
+      finTotalGanancia.textContent = fmtMoney(totalGanancia);
+
+      finTableBody.querySelectorAll('.fin-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const id = e.target.dataset.id;
+          const field = e.target.dataset.field;
+          const raw = e.target.value;
+          clearTimeout(finDebounceTimers[id + field]);
+          finDebounceTimers[id + field] = setTimeout(() => {
+            saveFinField(id, field, raw);
+          }, 500);
+        });
+      });
+
+      finTableBody.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => deleteFinRow(e.target.dataset.id));
+      });
+    }
+
+    async function saveFinField(id, field, rawValue) {
+      try {
+        let value;
+        if (field === "nombre") {
+          value = rawValue;
+        } else {
+          value = parseFloat(rawValue);
+          if (isNaN(value) || value < 0) value = 0;
+        }
+        await updateDoc(doc(db, "finanzas_productos", id), { [field]: value });
+      } catch (err) {
+        console.error("Error al guardar finanzas:", err);
+        alert("No se pudo guardar el cambio.");
+      }
+    }
+
+    finAddRow.addEventListener('click', async () => {
+      finAddRow.disabled = true;
+      try {
+        await addDoc(collection(db, "finanzas_productos"), {
+          nombre: "Nuevo producto",
+          cantidad: 0,
+          precioVenta: 0,
+          costoUnitario: 0,
+          orden: Date.now(),
+          fecha: serverTimestamp()
+        });
+      } catch (err) {
+        console.error("Error al agregar producto:", err);
+        alert("No se pudo agregar el producto.");
+      }
+      finAddRow.disabled = false;
+    });
+
+    async function deleteFinRow(id) {
+      if (confirm("¿Eliminar este producto de la tabla de finanzas?")) {
+        try {
+          await deleteDoc(doc(db, "finanzas_productos", id));
+        } catch (err) {
+          console.error("Error al eliminar producto:", err);
+          alert("No se pudo eliminar el producto.");
+        }
+      }
+    }
+
+    // ---------------- MODAL AGREGAR / EDITAR CLIENTE ----------------
+    const clientModal = document.getElementById("clientModal");
+    const clientForm = document.getElementById("clientForm");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSub = document.getElementById("modalSub");
+    const modalError = document.getElementById("modalError");
+    const modalName = document.getElementById("modalName");
+    const modalPhone = document.getElementById("modalPhone");
+    const modalDistrict = document.getElementById("modalDistrict");
+    const modalStatus = document.getElementById("modalStatus");
+    const modalSave = document.getElementById("modalSave");
+
+    let editingId = null; // null = modo "agregar"
+
+    function openAddModal() {
+      editingId = null;
+      modalTitle.textContent = "Agregar cliente";
+      modalSub.textContent = "Se suma a la lista de espera igual que una reserva desde la web.";
+      clientForm.reset();
+      modalStatus.value = "espera";
+      modalError.style.display = "none";
+      clientModal.classList.add("show");
+      modalName.focus();
+    }
+
+    function openEditModal(id) {
+      const order = ordersCache.find(o => o.id === id);
+      if (!order) return;
+      editingId = id;
+      modalTitle.textContent = "Editar cliente";
+      modalSub.textContent = "Actualizá los datos de esta reserva.";
+      modalName.value = order.nombre || "";
+      modalPhone.value = order.telefono || "";
+      modalDistrict.value = order.distrito || "";
+      modalStatus.value = order.estado || "espera";
+      modalError.style.display = "none";
+      clientModal.classList.add("show");
+      modalName.focus();
+    }
+
+    function closeModal() {
+      clientModal.classList.remove("show");
+      editingId = null;
+    }
+
+    document.getElementById("openAddModal").addEventListener("click", openAddModal);
+    document.getElementById("modalCancel").addEventListener("click", closeModal);
+    clientModal.addEventListener("click", (e) => {
+      if (e.target === clientModal) closeModal();
+    });
+
+    clientForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = modalName.value.trim();
+      const phone = modalPhone.value.trim();
+      const district = modalDistrict.value.trim();
+      const status = modalStatus.value;
+
+      modalSave.disabled = true;
+      modalSave.textContent = "Guardando...";
+      modalError.style.display = "none";
+
+      try {
+        if (editingId) {
+          await updateDoc(doc(db, "pedidos_lifebag", editingId), {
+            nombre: name,
+            telefono: phone,
+            distrito: district,
+            estado: status
+          });
+        } else {
+          await addDoc(collection(db, "pedidos_lifebag"), {
+            nombre: name,
+            telefono: phone,
+            distrito: district,
+            estado: status,
+            fecha: serverTimestamp()
+          });
+        }
+        closeModal();
+      } catch (err) {
+        console.error("Error al guardar cliente:", err);
+        modalError.style.display = "block";
+      }
+
+      modalSave.disabled = false;
+      modalSave.textContent = "Guardar";
+    });
   </script>
 
 </body>
