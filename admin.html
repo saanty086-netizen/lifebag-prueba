@@ -100,6 +100,18 @@
     margin-top:1rem; background:none; border:none; color:var(--text-muted);
     font-size:0.74rem; text-decoration:underline; cursor:pointer;
   }
+  .prod-input{
+    width:100%; text-align:center; font-family:'Fraunces',serif; font-size:2rem;
+    font-weight:700; color:var(--forest); border:1.5px solid var(--border);
+    border-radius:var(--radius-sm); padding:0.5rem; background:var(--cream);
+    outline:none; margin:0.4rem 0 1.1rem; font-variant-numeric:tabular-nums;
+  }
+  .prod-input:focus{border-color:var(--forest); background:#fff;}
+  .prod-count-calc{
+    font-family:'Fraunces',serif; font-size:2.8rem; color:var(--olive); font-weight:700;
+    margin:0.4rem 0 1.1rem;
+  }
+  .prod-card.prod-calc{border-color:var(--olive); background:#f8faf3;}
 
   .prod-summary{
     margin-top:1.2rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
@@ -147,6 +159,9 @@
   .status-espera{background:#fdf0d5; color:var(--warning);}
   .status-entregado{background:#dcefe0; color:var(--success);}
   .status-cancelado{background:#fbe6e2; color:var(--danger);}
+  .sync-badge{font-size:0.68rem; margin-top:0.3rem; font-weight:600; white-space:nowrap;}
+  .sync-badge.sync-ok{color:var(--success);}
+  .sync-badge.sync-pending{color:var(--warning);}
   .btn-wa{
     display:inline-flex; align-items:center; gap:4px; background:#25d366; color:#fff;
     text-decoration:none; padding:0.4rem 0.75rem; border-radius:8px; font-weight:700; font-size:0.78rem;
@@ -164,6 +179,10 @@
     cursor:pointer; font-family:inherit;
   }
   .btn-add-client:hover{background:var(--forest-deep);}
+  .btn-armar{background:var(--olive);}
+  .btn-armar:hover{background:#5a6832;}
+  .btn-vender{background:var(--mustard);}
+  .btn-vender:hover{background:#a8721f;}
   .btn-edit{
     background:transparent; border:none; color:var(--forest); font-weight:700;
     cursor:pointer; padding:0.4rem; font-size:0.8rem;
@@ -230,6 +249,60 @@
   @media(max-width:700px){
     .fin-input, .fin-readonly{font-size:0.82rem; min-width:60px;}
   }
+
+  /* ---------- INVENTARIO ---------- */
+  .inv-section{margin-top:2.2rem; padding-top:2.2rem; border-top:1px solid var(--border);}
+  .inv-intro{margin-bottom:1.2rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;}
+  .inv-intro p{color:var(--text-muted); font-size:0.88rem; margin-top:0.3rem; max-width:640px;}
+  .inv-alert{
+    display:none; align-items:flex-start; gap:0.6rem; background:#fdf0d5; color:var(--warning);
+    border:1px solid #f0d9a8; border-radius:var(--radius-md); padding:0.9rem 1.1rem;
+    font-size:0.85rem; font-weight:600; margin-bottom:1.1rem;
+  }
+  .inv-alert.show{display:flex;}
+  .inv-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; gap:0.8rem; flex-wrap:wrap;}
+  .inv-toolbar label{display:flex; align-items:center; gap:0.4rem; font-size:0.82rem; color:var(--text-muted); font-weight:600; cursor:pointer;}
+
+  .cap-grid{display:grid; grid-template-columns:1fr; gap:1rem; margin-bottom:1.2rem;}
+  @media(min-width:720px){ .cap-grid{grid-template-columns:repeat(3,1fr);} }
+  .cap-grid-2{display:grid; grid-template-columns:1fr; gap:1rem; margin-bottom:1.2rem;}
+  @media(min-width:720px){ .cap-grid-2{grid-template-columns:repeat(2,1fr);} }
+  .cap-grid-4{display:grid; grid-template-columns:1fr; gap:1rem; margin-bottom:1.2rem;}
+  @media(min-width:600px){ .cap-grid-4{grid-template-columns:repeat(2,1fr);} }
+  @media(min-width:1000px){ .cap-grid-4{grid-template-columns:repeat(4,1fr);} }
+  .cap-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:1.2rem 1.3rem; box-shadow:var(--shadow-sm);
+  }
+  .cap-card .cap-label{font-size:0.76rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.03em;}
+  .cap-card .cap-value{font-family:'Fraunces',serif; font-size:2.1rem; color:var(--forest); font-weight:700; margin-top:0.3rem;}
+  .cap-card .cap-value.cap-limit{font-size:1.3rem; color:var(--rescue-deep);}
+.cap-card .cap-value.negativo{color:var(--danger);}
+  .cap-card .cap-sub{font-size:0.76rem; color:var(--text-muted); margin-top:0.2rem;}
+  table.inv-table{min-width:900px;}
+  .inv-stock{font-weight:800; color:var(--forest-deep);}
+  .inv-stock.low{color:var(--danger);}
+  .badge-kit{
+    display:inline-block; background:#e7efe0; color:var(--olive); font-size:0.7rem; font-weight:800;
+    padding:0.2rem 0.55rem; border-radius:50px; text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .badge-status{
+    display:inline-block; font-size:0.7rem; font-weight:800; padding:0.25rem 0.6rem; border-radius:50px;
+    text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .badge-status.activo{background:#dcefe0; color:var(--success);}
+  .badge-status.inactivo{background:#ece7dd; color:var(--text-muted);}
+  tr.inv-inactive td{opacity:0.55;}
+  .inv-row-actions{display:flex; gap:0.5rem; flex-wrap:wrap; white-space:nowrap;}
+  .btn-buy{
+    background:transparent; border:none; color:var(--olive); font-weight:700;
+    cursor:pointer; padding:0.4rem; font-size:0.8rem;
+  }
+  .btn-buy:hover{text-decoration:underline;}
+  .checkbox-field{display:flex; align-items:center; gap:0.5rem;}
+  .checkbox-field input{width:auto;}
+  .checkbox-field label{margin-bottom:0;}
+  .modal-box.wide{max-width:480px;}
 </style>
 </head>
 <body>
@@ -260,6 +333,7 @@
       <button class="tab-btn active" data-tab="produccion">🧵 Producción</button>
       <button class="tab-btn" data-tab="pedidos">📋 Lista de espera</button>
       <button class="tab-btn" data-tab="finanzas">💰 Finanzas</button>
+      <button class="tab-btn" data-tab="configuracion">⚙️ Configuración</button>
     </div>
 
     <main>
@@ -268,30 +342,29 @@
       <section id="view-produccion" class="view active">
         <div class="prod-intro">
           <h2>Contadores de producción</h2>
-          <p>Sumá o restá a medida que se van tejiendo cuadraditos, armando mantas y preparando bolsas. Se guarda solo, en tiempo real.</p>
+          <p>Escribí directamente la cantidad de cuadritos, lana y mantas terminadas. Bolsas se sigue sumando con los botones. Todo se guarda solo, en tiempo real.</p>
         </div>
 
         <div class="prod-grid">
           <div class="prod-card">
             <div class="ic">🟪</div>
-            <h3>Cuadraditos</h3>
-            <p class="hint">Tejidos, listos para unir en mantas</p>
-            <div class="prod-count" id="count-cuadraditos">0</div>
-            <div class="prod-buttons">
-              <button class="prod-btn minus" data-field="cuadraditos" data-delta="-1">−</button>
-              <button class="prod-btn plus" data-field="cuadraditos" data-delta="1">+</button>
-            </div>
+            <h3>Cuadritos disponibles</h3>
+            <p class="hint">Tejidos, listos para unir en mantas (la cantidad por manta se configura abajo)</p>
+            <input type="number" class="prod-input" id="input-cuadraditos" min="0" step="1" value="0">
+          </div>
+
+          <div class="prod-card">
+            <div class="ic">🧵</div>
+            <h3>Lana disponible</h3>
+            <p class="hint">En la unidad que uses habitualmente (ovillos, madejas, etc.)</p>
+            <input type="number" class="prod-input" id="input-lanaDisponible" min="0" step="0.01" value="0">
           </div>
 
           <div class="prod-card">
             <div class="ic">🧶</div>
-            <h3>Mantas</h3>
+            <h3>Mantas terminadas</h3>
             <p class="hint">Terminadas y listas para el kit</p>
-            <div class="prod-count" id="count-mantas">0</div>
-            <div class="prod-buttons">
-              <button class="prod-btn minus" data-field="mantas" data-delta="-1">−</button>
-              <button class="prod-btn plus" data-field="mantas" data-delta="1">+</button>
-            </div>
+            <input type="number" class="prod-input" id="input-mantas" min="0" step="1" value="0">
           </div>
 
           <div class="prod-card">
@@ -304,11 +377,97 @@
               <button class="prod-btn plus" data-field="bolsas" data-delta="1">+</button>
             </div>
           </div>
+
+          <div class="prod-card prod-calc">
+            <div class="ic">🧮</div>
+            <h3>Mantas posibles</h3>
+            <p class="hint">El menor entre cuadritos disponibles ÷ 16 y lana disponible ÷ lana por manta</p>
+            <div class="prod-count-calc" id="mantasPosibles">0</div>
+          </div>
         </div>
 
         <div class="prod-summary">
           <span>ℹ️</span>
-          <span>Estos contadores son manuales: reflejan lo que el equipo va cargando a mano, no descuentan stock automáticamente.</span>
+          <span>Cuadritos, lana y mantas terminadas ahora se cargan escribiendo la cantidad. Bolsas sigue siendo manual con botones y no descuenta stock automáticamente.</span>
+        </div>
+
+        <!-- ===================== INVENTARIO ===================== -->
+        <div class="inv-section">
+          <div class="inv-intro">
+            <div>
+              <h2>Inventario de insumos</h2>
+              <p>Cargá los materiales e insumos que usás para producir. El stock se guarda en Firebase y queda disponible para más adelante conectarlo con Finanzas.</p>
+            </div>
+          </div>
+
+          <div class="cap-grid">
+            <div class="cap-card">
+              <div class="cap-label">Bolsas disponibles</div>
+              <div class="cap-value" id="capBolsas">—</div>
+              <div class="cap-sub">Stock del producto "Bolsas" marcado como parte del kit</div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-label">Kits que podés armar</div>
+              <div class="cap-value" id="capKits">—</div>
+              <div class="cap-sub">Según el stock actual de cada insumo del kit</div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-label">Producto que limita</div>
+              <div class="cap-value cap-limit" id="capLimitante">—</div>
+              <div class="cap-sub" id="capLimitanteSub"></div>
+            </div>
+          </div>
+
+          <div class="cap-grid-2">
+            <div class="cap-card">
+              <div class="cap-label">Kits armados disponibles para vender</div>
+              <div class="cap-value" id="kitsDisponibles">0</div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-label">Kits vendidos (acumulado)</div>
+              <div class="cap-value" id="kitsVendidosAcum">0</div>
+            </div>
+          </div>
+          <div class="inv-toolbar">
+            <span></span>
+            <button type="button" class="btn-add-client btn-vender" id="venderKitsBtn">💸 Vender kits</button>
+          </div>
+
+          <div class="inv-alert" id="invLowStockAlert">
+            <span>⚠️</span>
+            <span id="invLowStockText"></span>
+          </div>
+
+          <div class="inv-toolbar">
+            <label><input type="checkbox" id="invShowInactive"> Mostrar desactivados</label>
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <button type="button" class="btn-add-client btn-armar" id="armarKitsBtn">🧰 Armar kits</button>
+              <button type="button" class="btn-add-client" id="invAddBtn">+ Agregar producto</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <div class="table-scroll">
+              <table class="inv-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Marca</th>
+                    <th>Costo unit.</th>
+                    <th>Stock</th>
+                    <th>Mínimo</th>
+                    <th>Unidad</th>
+                    <th>Kit</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="invTableBody">
+                  <tr class="empty-row"><td colspan="9">Cargando inventario...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -341,12 +500,13 @@
                   <th>Cliente</th>
                   <th>Teléfono</th>
                   <th>Distrito</th>
+                  <th>Kits</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="ordersTableBody">
-                <tr class="empty-row"><td colspan="7">Cargando pedidos...</td></tr>
+                <tr class="empty-row"><td colspan="8">Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -357,11 +517,99 @@
       <section id="view-finanzas" class="view">
         <div class="fin-intro">
           <h2>Finanzas</h2>
-          <p>Cargá cantidad, precio de venta y costo unitario de cada producto. El ingreso, costo total y ganancia se calculan solos y se guardan en tiempo real.</p>
+          <p>Usa los mismos productos cargados en Producción → Inventario (sin duplicar stock ni productos). Desde acá podés ajustar el costo unitario, si el producto forma parte del kit, la cantidad por kit y el precio de venta del Life Bag.</p>
         </div>
 
-        <div class="fin-toolbar">
-          <button type="button" class="btn-add-client" id="finAddRow">+ Agregar producto</button>
+        <div class="cap-grid-4">
+          <div class="cap-card">
+            <div class="cap-label">Kits posibles</div>
+            <div class="cap-value" id="finKitsPosibles">—</div>
+            <div class="cap-sub">Según el stock actual de insumos</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Kits armados</div>
+            <div class="cap-value" id="finKitsArmados">0</div>
+            <div class="cap-sub">Total armado (disponibles + vendidos)</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Kits disponibles</div>
+            <div class="cap-value" id="finKitsDisponibles">0</div>
+            <div class="cap-sub">Armados y listos para vender</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Kits vendidos</div>
+            <div class="cap-value" id="finKitsVendidos">0</div>
+            <div class="cap-sub">Acumulado histórico</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Mantas posibles</div>
+            <div class="cap-value" id="finMantasPosibles">0</div>
+            <div class="cap-sub">Según cuadritos y lana disponibles en Producción</div>
+          </div>
+        </div>
+
+        <h3 style="margin:0 0 0.8rem; font-size:0.95rem; color:var(--forest-deep);">Costo de la manta</h3>
+        <div class="cap-grid-4">
+          <div class="cap-card">
+            <div class="cap-label">Costo de la lana</div>
+            <div class="cap-value" id="finCostoLana">$0</div>
+            <div class="cap-sub">Costo de la lana × lana por manta (Configuración)</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Costo de los cuadritos</div>
+            <div class="cap-value" id="finCostoCuadritos">$0</div>
+            <div class="cap-sub">Costo del cuadrito × cuadritos por manta (Configuración)</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Costo total de una manta</div>
+            <div class="cap-value" id="finCostoManta">$0</div>
+            <div class="cap-sub">Lana + cuadritos</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Costo de la bolsa</div>
+            <div class="cap-value" id="finCostoBolsa">$0</div>
+            <div class="cap-sub">Costo unitario del producto "Bolsas" en Inventario</div>
+          </div>
+        </div>
+
+        <h3 style="margin:2rem 0 0.8rem; font-size:0.95rem; color:var(--forest-deep);">Costo y ganancia del Life Bag</h3>
+        <div class="cap-grid-4">
+          <div class="cap-card">
+            <div class="cap-label">Costo total del Life Bag</div>
+            <div class="cap-value" id="finCostoKit">$0</div>
+            <div class="cap-sub">Manta + bolsa + demás insumos del kit</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Precio de venta</div>
+            <input type="number" id="finPrecioVenta" step="0.01" min="0" value="45000"
+              style="width:100%; border:none; background:transparent; outline:none; font-family:'Fraunces',serif;
+              font-size:2rem; font-weight:700; color:var(--forest); margin-top:0.3rem; padding:0;">
+            <div class="cap-sub">Mismo valor que en Configuración</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Ganancia por unidad</div>
+            <div class="cap-value" id="finGananciaKit">$0</div>
+            <div class="cap-sub">Precio de venta − costo total del Life Bag</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Margen de ganancia</div>
+            <div class="cap-value" id="finMargenKit">0%</div>
+            <div class="cap-sub">Ganancia ÷ precio de venta</div>
+          </div>
+        </div>
+
+        <h3 style="margin:2rem 0 0.8rem; font-size:0.95rem; color:var(--forest-deep);">Ingresos y ganancia acumulados</h3>
+        <div class="cap-grid-2">
+          <div class="cap-card">
+            <div class="cap-label">Ingresos totales</div>
+            <div class="cap-value" id="finIngresosTotales">$0</div>
+            <div class="cap-sub">Suma de todas las ventas: pedidos entregados + ventas manuales</div>
+          </div>
+          <div class="cap-card">
+            <div class="cap-label">Ganancia acumulada</div>
+            <div class="cap-value" id="finGananciaAcumulada">$0</div>
+            <div class="cap-sub">Ingresos totales − (costo actual del Life Bag × kits vendidos)</div>
+          </div>
         </div>
 
         <div class="table-wrap">
@@ -370,29 +618,75 @@
               <thead>
                 <tr>
                   <th>Producto</th>
-                  <th>Cantidad</th>
-                  <th>Precio de venta</th>
+                  <th>Stock actual</th>
                   <th>Costo unitario</th>
-                  <th>Ingreso</th>
-                  <th>Costo total</th>
-                  <th>Ganancia</th>
-                  <th></th>
+                  <th>Parte del kit</th>
+                  <th>Cantidad por kit</th>
+                  <th>Costo en el kit</th>
                 </tr>
               </thead>
               <tbody id="finTableBody">
-                <tr class="empty-row"><td colspan="8">Cargando finanzas...</td></tr>
+                <tr class="empty-row"><td colspan="6">Cargando productos...</td></tr>
               </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="4" style="text-align:right;">Totales</td>
-                  <td><span class="fin-readonly" id="finTotalIngreso">$0</span></td>
-                  <td><span class="fin-readonly" id="finTotalCosto">$0</span></td>
-                  <td><span class="fin-readonly" id="finTotalGanancia">$0</span></td>
-                  <td></td>
-                </tr>
-              </tfoot>
             </table>
           </div>
+        </div>
+        <p style="margin-top:0.8rem; font-size:0.78rem; color:var(--text-muted);">
+          Para agregar o eliminar productos usá Producción → Inventario: Finanzas lee esos mismos datos, no crea un inventario aparte.
+        </p>
+      </section>
+
+      <!-- ===================== CONFIGURACIÓN ===================== -->
+      <section id="view-configuracion" class="view">
+        <div class="prod-intro">
+          <h2>Configuración general</h2>
+          <p>Estos valores se usan en todos los cálculos del sistema (mantas posibles, ganancias, alertas de stock). Cambiarlos acá los actualiza en todos lados al instante, sin tocar código.</p>
+        </div>
+
+        <h3 style="margin:0 0 0.8rem; font-size:0.95rem; color:var(--forest-deep);">Precios y costos</h3>
+        <div class="prod-grid">
+          <div class="prod-card">
+            <div class="ic">💵</div>
+            <h3>Precio de venta del Life Bag</h3>
+            <p class="hint">Precio del kit completo al público</p>
+            <input type="number" class="prod-input" id="cfg-precioVentaLifeBag" min="0" step="0.01" value="0">
+          </div>
+
+          <div class="prod-card">
+            <div class="ic">🧵</div>
+            <h3>Costo de la lana</h3>
+            <p class="hint">Costo por unidad de lana (misma unidad que usás en Producción)</p>
+            <input type="number" class="prod-input" id="cfg-costoLana" min="0" step="0.01" value="0">
+          </div>
+
+          <div class="prod-card">
+            <div class="ic">🟪</div>
+            <h3>Costo del cuadrito</h3>
+            <p class="hint">Costo por cada cuadrito tejido (lana, mano de obra, etc.)</p>
+            <input type="number" class="prod-input" id="cfg-costoCuadrito" min="0" step="0.01" value="0">
+          </div>
+        </div>
+
+        <h3 style="margin:2rem 0 0.8rem; font-size:0.95rem; color:var(--forest-deep);">Cantidades para cálculos</h3>
+        <div class="prod-grid">
+          <div class="prod-card">
+            <div class="ic">🟪</div>
+            <h3>Cuadritos por manta</h3>
+            <p class="hint">Cuántos cuadritos tejidos hacen falta para una manta</p>
+            <input type="number" class="prod-input" id="cfg-cuadritosPorManta" min="1" step="1" value="16">
+          </div>
+
+          <div class="prod-card">
+            <div class="ic">🧶</div>
+            <h3>Lana por manta</h3>
+            <p class="hint">Cuánta lana (misma unidad de Producción) usa cada manta</p>
+            <input type="number" class="prod-input" id="cfg-lanaPorManta" min="0" step="0.01" value="0" placeholder="Ej: 150">
+          </div>
+        </div>
+
+        <div class="prod-summary" style="margin-top:2rem;">
+          <span>ℹ️</span>
+          <span>El costo, la cantidad necesaria por kit y el stock mínimo de <strong>cada producto individual</strong> (bolsa, tela, broches, etc.) se configuran directamente en Producción → Inventario, al agregar o editar ese producto. El costo de la bolsa que ves en Finanzas se toma automáticamente de ahí, no se repite acá.</span>
         </div>
       </section>
 
@@ -404,6 +698,9 @@
     <div class="modal-box">
       <h3 id="modalTitle">Agregar cliente</h3>
       <p class="modal-sub" id="modalSub">Se suma a la lista de espera igual que una reserva desde la web.</p>
+      <p class="modal-sub" id="modalVentaHint" style="display:none; color:var(--success); font-weight:600;">
+        💰 Esta venta ya fue registrada en Finanzas (stock e ingresos actualizados). Si cambiás el estado a "En espera" o "Cancelado" se revertirá automáticamente.
+      </p>
 
       <div class="modal-error" id="modalError">No se pudo guardar. Intentá de nuevo.</div>
 
@@ -419,6 +716,10 @@
         <div class="modal-field">
           <label for="modalDistrict">Distrito / localidad</label>
           <input type="text" id="modalDistrict" required autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="modalCantidadKits">Cantidad de kits</label>
+          <input type="number" id="modalCantidadKits" min="1" step="1" value="1" required>
         </div>
         <div class="modal-field">
           <label for="modalStatus">Estado</label>
@@ -437,13 +738,137 @@
     </div>
   </div>
 
+  <!-- ===================== MODAL AGREGAR / EDITAR PRODUCTO (INVENTARIO) ===================== -->
+  <div class="modal-overlay" id="invModal">
+    <div class="modal-box wide">
+      <h3 id="invModalTitle">Agregar producto</h3>
+      <p class="modal-sub">Insumo o material que se usa para producir los kits.</p>
+
+      <div class="modal-error" id="invModalError">No se pudo guardar. Intentá de nuevo.</div>
+
+      <form id="invForm">
+        <div class="modal-field">
+          <label for="invNombre">Nombre del producto</label>
+          <input type="text" id="invNombre" required autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="invMarca">Marca</label>
+          <input type="text" id="invMarca" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label for="invCostoUnitario">Costo unitario</label>
+          <input type="number" id="invCostoUnitario" step="0.01" min="0" value="0">
+        </div>
+        <div class="modal-field">
+          <label for="invStockActual">Stock actual</label>
+          <input type="number" id="invStockActual" step="0.01" min="0" value="0">
+        </div>
+        <div class="modal-field">
+          <label for="invStockMinimo">Stock mínimo</label>
+          <input type="number" id="invStockMinimo" step="0.01" min="0" value="0">
+        </div>
+        <div class="modal-field">
+          <label for="invUnidad">Unidad</label>
+          <select id="invUnidad">
+            <option value="unidades">Unidades</option>
+            <option value="metros">Metros</option>
+            <option value="gramos">Gramos</option>
+            <option value="kg">Kilogramos</option>
+            <option value="litros">Litros</option>
+            <option value="ml">Mililitros</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="modal-field checkbox-field">
+          <input type="checkbox" id="invEsKit">
+          <label for="invEsKit">Forma parte del kit Life Bag</label>
+        </div>
+        <div class="modal-field" id="invCantidadKitField" style="display:none;">
+          <label for="invCantidadPorKit">Cantidad necesaria por kit</label>
+          <input type="number" id="invCantidadPorKit" step="0.01" min="0" value="0">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="invModalCancel">Cancelar</button>
+          <button type="submit" class="modal-save" id="invModalSave">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL REGISTRAR COMPRA ===================== -->
+  <div class="modal-overlay" id="compraModal">
+    <div class="modal-box">
+      <h3>Registrar compra</h3>
+      <p class="modal-sub" id="compraModalSub">Sumá la cantidad comprada al stock actual.</p>
+
+      <div class="modal-error" id="compraModalError">No se pudo registrar la compra.</div>
+
+      <form id="compraForm">
+        <div class="modal-field">
+          <label for="compraCantidad">Cantidad comprada</label>
+          <input type="number" id="compraCantidad" step="0.01" min="0.01" required autocomplete="off">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="compraModalCancel">Cancelar</button>
+          <button type="submit" class="modal-save" id="compraModalSave">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL ARMAR KITS ===================== -->
+  <div class="modal-overlay" id="armarKitsModal">
+    <div class="modal-box">
+      <h3>Armar kits</h3>
+      <p class="modal-sub" id="armarKitsSub">Descuenta del inventario lo necesario para armar los kits e incrementa los kits disponibles para vender.</p>
+
+      <div class="modal-error" id="armarKitsError">No se pudieron armar los kits.</div>
+
+      <form id="armarKitsForm">
+        <div class="modal-field">
+          <label for="armarKitsCantidad">Cantidad de kits a armar</label>
+          <input type="number" id="armarKitsCantidad" step="1" min="1" required autocomplete="off">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="armarKitsCancel">Cancelar</button>
+          <button type="submit" class="modal-save" id="armarKitsSave">Armar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL VENDER KITS ===================== -->
+  <div class="modal-overlay" id="venderKitsModal">
+    <div class="modal-box">
+      <h3>Vender kits</h3>
+      <p class="modal-sub" id="venderKitsSub">Descuenta de los kits armados disponibles y queda registrada la venta con fecha y hora. No vuelve a tocar el inventario de insumos.</p>
+
+      <div class="modal-error" id="venderKitsError">No se pudo registrar la venta.</div>
+
+      <form id="venderKitsForm">
+        <div class="modal-field">
+          <label for="venderKitsCantidad">Cantidad de kits vendidos</label>
+          <input type="number" id="venderKitsCantidad" step="1" min="1" required autocomplete="off">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="venderKitsCancel">Cancelar</button>
+          <button type="submit" class="modal-save" id="venderKitsSave">Vender</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { db, auth } from "./firebase-config.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       collection, onSnapshot, query, orderBy,
       doc, updateDoc, deleteDoc, setDoc, getDoc, increment,
-      addDoc, serverTimestamp
+      addDoc, serverTimestamp, runTransaction
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ---------------- AUTH GUARD ----------------
@@ -480,30 +905,184 @@
     function startListeners() {
       if (listenersStarted) return;
       listenersStarted = true;
+      startConfigListener();
       startProductionListener();
       startOrdersListener();
       startFinanzasListener();
+      startInventoryListener();
+      startVentasListener();
     }
+
+    // ---------------- CONFIGURACIÓN ----------------
+    // Todos los valores usados en cálculos viven acá: nada queda fijo en el código.
+    const configRef = doc(db, "configuracion", "valores");
+    let configCache = {};
+
+    const configInputs = {
+      precioVentaLifeBag: document.getElementById('cfg-precioVentaLifeBag'),
+      costoLana: document.getElementById('cfg-costoLana'),
+      costoCuadrito: document.getElementById('cfg-costoCuadrito'),
+      cuadritosPorManta: document.getElementById('cfg-cuadritosPorManta'),
+      lanaPorManta: document.getElementById('cfg-lanaPorManta')
+    };
+
+    async function startConfigListener() {
+      const snap = await getDoc(configRef);
+      if (!snap.exists()) {
+        // Si ya había una "lana por manta" cargada en Producción (versión anterior),
+        // la migramos acá para no perder el dato.
+        const prodSnap = await getDoc(prodRef);
+        const lanaPorMantaPrevia = prodSnap.exists() ? Number(prodSnap.data().lanaPorManta) || 0 : 0;
+
+        // Si ya había un precio de venta cargado en Finanzas (versión anterior,
+        // guardado en finanzas/configuracion), lo migramos acá para que quede
+        // en un solo lugar y no se dupliquen los datos.
+        const finSnapPrevio = await getDoc(doc(db, "finanzas", "configuracion"));
+        const precioVentaPrevio = finSnapPrevio.exists() ? Number(finSnapPrevio.data().precioVentaKit) || 0 : 0;
+
+        await setDoc(configRef, {
+          precioVentaLifeBag: precioVentaPrevio,
+          costoLana: 0,
+          costoCuadrito: 0,
+          cuadritosPorManta: 16,
+          lanaPorManta: lanaPorMantaPrevia
+        });
+      }
+
+      onSnapshot(configRef, (docSnap) => {
+        configCache = docSnap.data() || {};
+
+        Object.entries(configInputs).forEach(([field, el]) => {
+          if (el && document.activeElement !== el) {
+            el.value = configCache[field] ?? 0;
+          }
+        });
+
+        actualizarMantasPosibles();
+        renderFinTable();
+      });
+    }
+
+    const configDebounce = {};
+    Object.entries(configInputs).forEach(([field, el]) => {
+      if (!el) return;
+      el.addEventListener('input', () => {
+        clearTimeout(configDebounce[field]);
+        configDebounce[field] = setTimeout(async () => {
+          const valor = parseFloat(el.value);
+          try {
+            await setDoc(configRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
+          } catch (err) {
+            console.error("Error al guardar configuración:", err);
+          }
+        }, 500);
+      });
+    });
 
     // ---------------- PRODUCCIÓN ----------------
     const prodRef = doc(db, "produccion", "contadores");
-    const fields = ["cuadraditos", "mantas", "bolsas"];
+    let prodCache = {};
+
+    // Cantidad de mantas que se pueden armar con el stock actual de Producción
+    // (cuadritos y lana disponibles). Única función para este cálculo: la usan
+    // tanto la pestaña Producción como la pestaña Finanzas.
+    function calcMantasPosibles() {
+      const cuadritos = Number(prodCache.cuadraditos) || 0;
+      const lanaDisponible = Number(prodCache.lanaDisponible) || 0;
+      const cuadritosPorManta = Number(configCache.cuadritosPorManta) || 0;
+      const lanaPorManta = Number(configCache.lanaPorManta) || 0;
+
+      const porCuadritos = cuadritosPorManta > 0 ? Math.floor(cuadritos / cuadritosPorManta) : 0;
+      const porLana = lanaPorManta > 0 ? Math.floor(lanaDisponible / lanaPorManta) : 0;
+
+      return Math.max(0, Math.min(porCuadritos, porLana));
+    }
+
+    function actualizarMantasPosibles() {
+      const mantasPosibles = calcMantasPosibles();
+
+      const el = document.getElementById('mantasPosibles');
+      if (el) el.textContent = mantasPosibles;
+
+      const finEl = document.getElementById('finMantasPosibles');
+      if (finEl) finEl.textContent = mantasPosibles;
+    }
+
+    // Campos que se escriben a mano (con debounce) en vez de +/-
+    const prodInputs = {
+      cuadraditos: document.getElementById('input-cuadraditos'),
+      mantas: document.getElementById('input-mantas'),
+      lanaDisponible: document.getElementById('input-lanaDisponible')
+    };
 
     async function startProductionListener() {
-      // Crear el documento si no existe
+      // Crear el documento si no existe, o completar los campos nuevos si faltan
       const snap = await getDoc(prodRef);
       if (!snap.exists()) {
-        await setDoc(prodRef, { cuadraditos: 0, mantas: 0, bolsas: 0 });
+        await setDoc(prodRef, { cuadraditos: 0, mantas: 0, bolsas: 0, lanaDisponible: 0 });
+      } else {
+        const data = snap.data() || {};
+        if (data.lanaDisponible === undefined) {
+          await setDoc(prodRef, { lanaDisponible: 0 }, { merge: true });
+        }
       }
 
       onSnapshot(prodRef, (docSnap) => {
         const data = docSnap.data() || {};
-        fields.forEach(f => {
-          document.getElementById('count-' + f).textContent = data[f] ?? 0;
+        prodCache = data;
+
+        document.getElementById('count-bolsas').textContent = data.bolsas ?? 0;
+
+        // No pisamos el valor mientras la persona está escribiendo en ese campo
+        Object.entries(prodInputs).forEach(([field, el]) => {
+          if (document.activeElement !== el) {
+            el.value = data[field] ?? 0;
+          }
         });
+
+        actualizarMantasPosibles();
+
+        // Ventas de kits: reutiliza el mismo documento de contadores
+        const disponibles = Number(data.bolsas) || 0;
+        const vendidos = Number(data.kitsVendidos) || 0;
+        document.getElementById('kitsDisponibles').textContent = disponibles;
+        document.getElementById('kitsVendidosAcum').textContent = vendidos;
+        latestKitsDisponibles = disponibles;
+
+        // Mismos valores, reflejados también en las tarjetas de Finanzas
+        const finKitsDisponiblesEl = document.getElementById('finKitsDisponibles');
+        const finKitsVendidosEl = document.getElementById('finKitsVendidos');
+        const finKitsArmadosEl = document.getElementById('finKitsArmados');
+        if (finKitsDisponiblesEl) finKitsDisponiblesEl.textContent = disponibles;
+        if (finKitsVendidosEl) finKitsVendidosEl.textContent = vendidos;
+        if (finKitsArmadosEl) finKitsArmadosEl.textContent = disponibles + vendidos;
+
+        // Las mantas terminadas (stock de Producción) también limitan cuántos
+        // kits se pueden armar, así que hay que volver a calcular esa capacidad.
+        renderKitCapacity();
+        renderFinTable();
       });
     }
 
+    let latestKitsDisponibles = 0;
+
+    // Guardado con debounce para los campos numéricos de Producción
+    const prodInputDebounce = {};
+    Object.entries(prodInputs).forEach(([field, el]) => {
+      el.addEventListener('input', () => {
+        clearTimeout(prodInputDebounce[field]);
+        prodInputDebounce[field] = setTimeout(async () => {
+          const valor = parseFloat(el.value);
+          try {
+            await setDoc(prodRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
+          } catch (err) {
+            console.error("Error al guardar producción:", err);
+          }
+        }, 500);
+      });
+    });
+
+    // Bolsas sigue siendo con botones +/-
     document.querySelectorAll('.prod-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const field = btn.dataset.field;
@@ -563,7 +1142,7 @@
       countDelivered.textContent = delivered;
 
       if (orders.length === 0) {
-        tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">No hay pedidos que coincidan con la búsqueda.</td></tr>`;
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="8">No hay pedidos que coincidan con la búsqueda.</td></tr>`;
         return;
       }
 
@@ -577,6 +1156,8 @@
         }) : "Reciente";
 
         const cleanPhone = (order.telefono || "").replace(/\D/g, "");
+        const cantidadKits = Math.max(1, parseInt(order.cantidadKits, 10) || 1);
+        const ventaRegistrada = order.ventaRegistrada === true;
 
         return `
           <tr>
@@ -585,12 +1166,14 @@
             <td style="font-weight:700;">${escapeHtml(order.nombre || 'Sin nombre')}</td>
             <td>${escapeHtml(order.telefono || '-')}</td>
             <td>${escapeHtml(order.distrito || '-')}</td>
+            <td style="text-align:center; font-weight:700;">${cantidadKits}</td>
             <td>
               <select class="status-select status-${estado}" data-id="${order.id}">
                 <option value="espera" ${estado === 'espera' ? 'selected' : ''}>⏳ En espera</option>
                 <option value="entregado" ${estado === 'entregado' ? 'selected' : ''}>✅ Entregado</option>
                 <option value="cancelado" ${estado === 'cancelado' ? 'selected' : ''}>❌ Cancelado</option>
               </select>
+              ${estado === 'entregado' ? `<div class="sync-badge ${ventaRegistrada ? 'sync-ok' : 'sync-pending'}">${ventaRegistrada ? '💰 Venta sincronizada' : '⏳ Aplicando...'}</div>` : ''}
             </td>
             <td>
               <div style="display:flex; gap:8px; align-items:center;">
@@ -621,12 +1204,115 @@
       return div.innerHTML;
     }
 
+    // Cambia el estado de un pedido y, cuando corresponde, aplica (o revierte)
+    // su impacto en Producción y Finanzas dentro de una única transacción de
+    // Firestore. Esto es lo que garantiza que una misma entrega nunca se
+    // registre dos veces, incluso si se recarga la página o se reintenta:
+    // Firestore es la única fuente de verdad y el indicador "ventaRegistrada",
+    // guardado en el propio pedido, es lo que se consulta antes de aplicar algo.
+    async function cambiarEstadoPedido(id, newStatus) {
+      const pedidoRef = doc(db, "pedidos_lifebag", id);
+      // Se genera acá afuera (no cuesta una lectura al servidor) para poder
+      // usarlo tanto en la escritura de la venta como en la del pedido.
+      const ventaRef = doc(collection(db, "ventas_kits"));
+
+      await runTransaction(db, async (transaction) => {
+        // ---- 1) Lecturas (todas antes de cualquier escritura) ----
+        const pedidoSnap = await transaction.get(pedidoRef);
+        if (!pedidoSnap.exists()) {
+          throw new Error("El pedido ya no existe.");
+        }
+        const pedido = pedidoSnap.data();
+        const yaAplicada = pedido.ventaRegistrada === true;
+
+        const prodSnap = await transaction.get(prodRef);
+        const prodData = prodSnap.exists() ? prodSnap.data() : {};
+        const disponibles = Number(prodData.bolsas) || 0;
+        const vendidosActuales = Number(prodData.kitsVendidos) || 0;
+
+        // ---- Caso A: pasa a ENTREGADO y todavía no se le aplicó el impacto ----
+        // (idempotente: si "ventaRegistrada" ya es true, no vuelve a entrar acá)
+        if (newStatus === "entregado" && !yaAplicada) {
+          const configSnap = await transaction.get(configRef);
+          const configData = configSnap.exists() ? configSnap.data() : {};
+          const precioUnitario = Number(configData.precioVentaLifeBag) || 0;
+          const cantidad = Math.max(1, parseInt(pedido.cantidadKits, 10) || 1);
+
+          if (cantidad > disponibles) {
+            throw new Error(
+              `No hay suficientes kits armados para entregar este pedido: hay ${disponibles} disponible(s) y se necesitan ${cantidad}.`
+            );
+          }
+
+          const montoTotal = precioUnitario * cantidad;
+
+          // ---- 2) Escrituras ----
+          transaction.update(prodRef, {
+            bolsas: disponibles - cantidad,
+            kitsVendidos: vendidosActuales + cantidad
+          });
+
+          transaction.set(ventaRef, {
+            origen: "pedido",
+            pedidoId: id,
+            cantidad,
+            precioUnitario,
+            montoTotal,
+            fecha: serverTimestamp()
+          });
+
+          transaction.update(pedidoRef, {
+            estado: newStatus,
+            ventaRegistrada: true,
+            ventaId: ventaRef.id,
+            cantidadKitsVendidos: cantidad,
+            precioVentaUnitario: precioUnitario,
+            montoVenta: montoTotal,
+            fechaVenta: serverTimestamp()
+          });
+          return;
+        }
+
+        // ---- Caso B: estaba ENTREGADO (con venta ya aplicada) y pasa a otro
+        // estado -> se revierte el impacto una sola vez ----
+        if (newStatus !== "entregado" && yaAplicada) {
+          const cantidad = Math.max(1, parseInt(pedido.cantidadKitsVendidos, 10) || parseInt(pedido.cantidadKits, 10) || 1);
+
+          transaction.update(prodRef, {
+            bolsas: disponibles + cantidad,
+            kitsVendidos: Math.max(0, vendidosActuales - cantidad)
+          });
+
+          if (pedido.ventaId) {
+            transaction.update(doc(db, "ventas_kits", pedido.ventaId), {
+              revertida: true,
+              fechaReversion: serverTimestamp()
+            });
+          }
+
+          transaction.update(pedidoRef, {
+            estado: newStatus,
+            ventaRegistrada: false
+          });
+          return;
+        }
+
+        // ---- Caso C: sin impacto financiero que aplicar ni revertir
+        // (espera <-> cancelado, o ya estaba entregado y sigue entregado) ----
+        transaction.update(pedidoRef, { estado: newStatus });
+      });
+    }
+
     async function updateStatus(id, newStatus) {
       try {
-        await updateDoc(doc(db, "pedidos_lifebag", id), { estado: newStatus });
+        await cambiarEstadoPedido(id, newStatus);
       } catch (err) {
-        console.error("Error al actualizar:", err);
-        alert("No se pudo actualizar el estado.");
+        console.error("Error al actualizar estado del pedido:", err);
+        alert(err.message || "No se pudo actualizar el estado.");
+        // La transacción falló, así que el estado no se guardó: volvemos a
+        // pintar la tabla con los datos reales de Firestore para que el
+        // <select> no quede mostrando un estado que en realidad no se aplicó.
+        applyFilters();
       }
     }
 
@@ -645,12 +1331,20 @@
     statusFilter.addEventListener("change", applyFilters);
 
     // ---------------- FINANZAS ----------------
-    let finCache = [];
+    // Finanzas NO tiene colección propia: lee y edita los mismos documentos
+    // de "inventario_productos" (Producción → Inventario), "produccion/contadores"
+    // (stock de cuadritos, lana y mantas) y "configuracion/valores" (precios y
+    // cantidades) que ya usa el resto del panel. Así no se duplica ningún dato:
+    // todo se toma de una única fuente y Finanzas solo lo combina y lo muestra.
     const finTableBody = document.getElementById("finTableBody");
-    const finAddRow = document.getElementById("finAddRow");
-    const finTotalIngreso = document.getElementById("finTotalIngreso");
-    const finTotalCosto = document.getElementById("finTotalCosto");
-    const finTotalGanancia = document.getElementById("finTotalGanancia");
+    const finPrecioVentaInput = document.getElementById("finPrecioVenta");
+    const finCostoKitEl = document.getElementById("finCostoKit");
+    const finGananciaKitEl = document.getElementById("finGananciaKit");
+    const finMargenKitEl = document.getElementById("finMargenKit");
+    const finCostoLanaEl = document.getElementById("finCostoLana");
+    const finCostoCuadritosEl = document.getElementById("finCostoCuadritos");
+    const finCostoMantaEl = document.getElementById("finCostoManta");
+    const finCostoBolsaEl = document.getElementById("finCostoBolsa");
     const finDebounceTimers = {};
 
     function fmtMoney(n) {
@@ -658,57 +1352,172 @@
       return "$" + val.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    // El precio de venta del Life Bag vive en un solo lugar: configuracion/valores
+    // (campo precioVentaLifeBag). El input de Finanzas y el de Configuración
+    // escriben y leen exactamente el mismo campo, así nunca quedan desincronizados.
     function startFinanzasListener() {
-      const q = query(collection(db, "finanzas_productos"), orderBy("orden", "asc"));
+      // Nada que escuchar acá: el precio de venta ya llega vía startConfigListener()
+      // (configCache.precioVentaLifeBag) y ese listener llama a renderFinTable().
+    }
+
+    let finPrecioDebounce = null;
+    finPrecioVentaInput.addEventListener('input', (e) => {
+      const raw = e.target.value;
+      clearTimeout(finPrecioDebounce);
+      finPrecioDebounce = setTimeout(async () => {
+        let value = parseFloat(raw);
+        if (isNaN(value) || value < 0) value = 0;
+        try {
+          await setDoc(configRef, { precioVentaLifeBag: value }, { merge: true });
+        } catch (err) {
+          console.error("Error al guardar el precio de venta:", err);
+          alert("No se pudo guardar el precio de venta.");
+        }
+      }, 500);
+    });
+
+    // ---- Costos derivados (Configuración + Inventario, sin datos propios) ----
+
+    // Costo de la lana usada en 1 manta = costo unitario de la lana × lana por manta
+    function calcCostoLanaPorManta() {
+      return (Number(configCache.costoLana) || 0) * (Number(configCache.lanaPorManta) || 0);
+    }
+
+    // Costo de los cuadritos usados en 1 manta = costo unitario del cuadrito × cuadritos por manta
+    function calcCostoCuadritosPorManta() {
+      return (Number(configCache.costoCuadrito) || 0) * (Number(configCache.cuadritosPorManta) || 0);
+    }
+
+    // Costo total de fabricar 1 manta = lana + cuadritos
+    function calcCostoManta() {
+      return calcCostoLanaPorManta() + calcCostoCuadritosPorManta();
+    }
+
+    // Encuentra el producto "Bolsas" del inventario (mismo criterio que se usa
+    // en la capacidad de armado), para no tener un costo de bolsa aparte.
+    function getBolsaProducto() {
+      return invCache.find(p =>
+        p.activo !== false && p.esKit && (p.nombre || "").trim().toLowerCase() === "bolsas"
+      );
+    }
+
+    function calcCostoBolsa() {
+      const bolsa = getBolsaProducto();
+      return bolsa ? (Number(bolsa.costoUnitario) || 0) * (Number(bolsa.cantidadPorKit) || 1) : 0;
+    }
+
+    // Costo de todos los insumos del inventario marcados "parte del kit"
+    // (incluye la bolsa, ya contada en calcCostoBolsa): suma de
+    // costoUnitario × cantidadPorKit de cada uno.
+    function calcCostoInsumosKit() {
+      return invCache
+        .filter(p => p.activo !== false && p.esKit && Number(p.cantidadPorKit) > 0)
+        .reduce((sum, p) => sum + (Number(p.costoUnitario) || 0) * (Number(p.cantidadPorKit) || 0), 0);
+    }
+
+    // Costo total de un Life Bag = 1 manta (lana + cuadritos) + los insumos
+    // del kit (bolsa y todo lo demás cargado en Producción → Inventario).
+    function calcCostoLifeBag() {
+      return calcCostoManta() + calcCostoInsumosKit();
+    }
+
+    // ---- Ventas reales (manuales + generadas por pedidos entregados) ----
+    // "ventas_kits" es la única colección de ventas: de ahí salen los
+    // ingresos totales y la ganancia acumulada de Finanzas. Una venta
+    // marcada "revertida" (por ejemplo, un pedido que dejó de estar
+    // "entregado") no vuelve a sumar.
+    let ventasCache = [];
+
+    function startVentasListener() {
+      const q = query(collection(db, "ventas_kits"), orderBy("fecha", "desc"));
       onSnapshot(q, (snapshot) => {
-        finCache = [];
+        ventasCache = [];
         snapshot.forEach((docSnap) => {
-          finCache.push({ id: docSnap.id, ...docSnap.data() });
+          ventasCache.push({ id: docSnap.id, ...docSnap.data() });
         });
         renderFinTable();
       });
     }
 
+    function calcIngresosTotales() {
+      return ventasCache
+        .filter(v => v.revertida !== true)
+        .reduce((sum, v) => {
+          const monto = v.montoTotal !== undefined
+            ? Number(v.montoTotal) || 0
+            : (Number(v.precioUnitario) || 0) * (Number(v.cantidad) || 0);
+          return sum + monto;
+        }, 0);
+    }
+
     function renderFinTable() {
-      if (finCache.length === 0) {
-        finTableBody.innerHTML = `<tr class="empty-row"><td colspan="8">Todavía no hay productos cargados.</td></tr>`;
-        finTotalIngreso.textContent = fmtMoney(0);
-        finTotalCosto.textContent = fmtMoney(0);
-        finTotalGanancia.textContent = fmtMoney(0);
+      const precioVenta = Number(configCache.precioVentaLifeBag) || 0;
+      if (document.activeElement !== finPrecioVentaInput) {
+        finPrecioVentaInput.value = precioVenta;
+      }
+
+      const costoLana = calcCostoLanaPorManta();
+      const costoCuadritos = calcCostoCuadritosPorManta();
+      const costoManta = calcCostoManta();
+      const costoBolsa = calcCostoBolsa();
+      const costoKit = calcCostoLifeBag();
+      const ganancia = precioVenta - costoKit;
+      const margen = precioVenta > 0 ? (ganancia / precioVenta) * 100 : 0;
+
+      if (finCostoLanaEl) finCostoLanaEl.textContent = fmtMoney(costoLana);
+      if (finCostoCuadritosEl) finCostoCuadritosEl.textContent = fmtMoney(costoCuadritos);
+      if (finCostoMantaEl) finCostoMantaEl.textContent = fmtMoney(costoManta);
+      if (finCostoBolsaEl) finCostoBolsaEl.textContent = fmtMoney(costoBolsa);
+
+      finCostoKitEl.textContent = fmtMoney(costoKit);
+      finGananciaKitEl.textContent = fmtMoney(ganancia);
+      finGananciaKitEl.classList.toggle('negativo', ganancia < 0);
+      finMargenKitEl.textContent = margen.toFixed(1) + "%";
+      finMargenKitEl.classList.toggle('negativo', margen < 0);
+
+      // Ingresos y ganancia reales acumulados (todas las ventas: manuales +
+      // pedidos entregados), no solo la proyección "por unidad" de arriba.
+      const ingresosTotales = calcIngresosTotales();
+      const kitsVendidosNetos = Number(prodCache.kitsVendidos) || 0;
+      const gananciaAcumulada = ingresosTotales - (costoKit * kitsVendidosNetos);
+
+      const finIngresosTotalesEl = document.getElementById('finIngresosTotales');
+      const finGananciaAcumuladaEl = document.getElementById('finGananciaAcumulada');
+      if (finIngresosTotalesEl) finIngresosTotalesEl.textContent = fmtMoney(ingresosTotales);
+      if (finGananciaAcumuladaEl) {
+        finGananciaAcumuladaEl.textContent = fmtMoney(gananciaAcumulada);
+        finGananciaAcumuladaEl.classList.toggle('negativo', gananciaAcumulada < 0);
+      }
+
+      const productos = invCache.filter(p => p.activo !== false);
+
+      if (productos.length === 0) {
+        finTableBody.innerHTML = `<tr class="empty-row"><td colspan="6">Todavía no hay productos cargados en Producción → Inventario.</td></tr>`;
         return;
       }
 
-      let totalIngreso = 0, totalCosto = 0, totalGanancia = 0;
-
-      finTableBody.innerHTML = finCache.map(p => {
-        const cantidad = Number(p.cantidad) || 0;
-        const precioVenta = Number(p.precioVenta) || 0;
+      finTableBody.innerHTML = productos.map(p => {
+        const stockActual = Number(p.stockActual) || 0;
         const costoUnitario = Number(p.costoUnitario) || 0;
-        const ingreso = cantidad * precioVenta;
-        const costoTotal = cantidad * costoUnitario;
-        const ganancia = ingreso - costoTotal;
-
-        totalIngreso += ingreso;
-        totalCosto += costoTotal;
-        totalGanancia += ganancia;
-
+        const esKit = !!p.esKit;
+        const cantidadPorKit = Number(p.cantidadPorKit) || 0;
+        const costoEnKit = esKit ? costoUnitario * cantidadPorKit : 0;
         return `
           <tr data-id="${p.id}">
-            <td><input type="text" class="fin-input fin-name" data-field="nombre" data-id="${p.id}" value="${escapeHtml(p.nombre || '')}" placeholder="Nombre del producto"></td>
-            <td><input type="number" step="1" min="0" class="fin-input" data-field="cantidad" data-id="${p.id}" value="${cantidad}"></td>
-            <td><input type="number" step="0.01" min="0" class="fin-input" data-field="precioVenta" data-id="${p.id}" value="${precioVenta}"></td>
+            <td style="font-weight:700;">${escapeHtml(p.nombre || '')} <span style="font-weight:400; color:var(--text-muted); font-size:0.78rem;">(${escapeHtml(p.unidad || 'unidades')})</span></td>
+            <td><span class="fin-readonly" style="text-align:left; display:inline;">${stockActual}</span></td>
             <td><input type="number" step="0.01" min="0" class="fin-input" data-field="costoUnitario" data-id="${p.id}" value="${costoUnitario}"></td>
-            <td><span class="fin-readonly">${fmtMoney(ingreso)}</span></td>
-            <td><span class="fin-readonly">${fmtMoney(costoTotal)}</span></td>
-            <td><span class="fin-readonly ${ganancia < 0 ? 'negativo' : ''}">${fmtMoney(ganancia)}</span></td>
-            <td class="fin-row-actions"><button type="button" class="btn-delete" data-id="${p.id}">Eliminar</button></td>
+            <td style="text-align:center;">
+              <input type="checkbox" data-field="esKit" data-id="${p.id}" ${esKit ? 'checked' : ''} style="width:18px; height:18px; cursor:pointer;">
+            </td>
+            <td>
+              <input type="number" step="0.01" min="0" class="fin-input" data-field="cantidadPorKit" data-id="${p.id}"
+                value="${cantidadPorKit}" ${esKit ? '' : 'disabled'} style="${esKit ? '' : 'opacity:0.4;'}">
+            </td>
+            <td><span class="fin-readonly">${fmtMoney(costoEnKit)}</span></td>
           </tr>
         `;
       }).join("");
-
-      finTotalIngreso.textContent = fmtMoney(totalIngreso);
-      finTotalCosto.textContent = fmtMoney(totalCosto);
-      finTotalGanancia.textContent = fmtMoney(totalGanancia);
 
       finTableBody.querySelectorAll('.fin-input').forEach(input => {
         input.addEventListener('input', (e) => {
@@ -722,55 +1531,532 @@
         });
       });
 
-      finTableBody.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', (e) => deleteFinRow(e.target.dataset.id));
+      finTableBody.querySelectorAll('input[type="checkbox"][data-field="esKit"]').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+          saveFinField(e.target.dataset.id, "esKit", e.target.checked);
+        });
       });
     }
 
+    // Guarda los cambios directamente en "inventario_productos" (mismo
+    // documento que usa Producción), para no duplicar datos.
     async function saveFinField(id, field, rawValue) {
       try {
         let value;
-        if (field === "nombre") {
-          value = rawValue;
+        if (field === "esKit") {
+          value = !!rawValue;
         } else {
           value = parseFloat(rawValue);
           if (isNaN(value) || value < 0) value = 0;
         }
-        await updateDoc(doc(db, "finanzas_productos", id), { [field]: value });
+        await updateDoc(doc(db, "inventario_productos", id), { [field]: value });
       } catch (err) {
         console.error("Error al guardar finanzas:", err);
         alert("No se pudo guardar el cambio.");
       }
     }
 
-    finAddRow.addEventListener('click', async () => {
-      finAddRow.disabled = true;
-      try {
-        await addDoc(collection(db, "finanzas_productos"), {
-          nombre: "Nuevo producto",
-          cantidad: 0,
-          precioVenta: 0,
-          costoUnitario: 0,
-          orden: Date.now(),
-          fecha: serverTimestamp()
-        });
-      } catch (err) {
-        console.error("Error al agregar producto:", err);
-        alert("No se pudo agregar el producto.");
-      }
-      finAddRow.disabled = false;
-    });
+    // ---------------- INVENTARIO ----------------
+    let invCache = [];
+    const invTableBody = document.getElementById("invTableBody");
+    const invAddBtn = document.getElementById("invAddBtn");
+    const invShowInactive = document.getElementById("invShowInactive");
+    const invLowStockAlert = document.getElementById("invLowStockAlert");
+    const invLowStockText = document.getElementById("invLowStockText");
 
-    async function deleteFinRow(id) {
-      if (confirm("¿Eliminar este producto de la tabla de finanzas?")) {
+    function startInventoryListener() {
+      const q = query(collection(db, "inventario_productos"), orderBy("orden", "asc"));
+      onSnapshot(q, (snapshot) => {
+        invCache = [];
+        snapshot.forEach((docSnap) => {
+          invCache.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderInvTable();
+        renderFinTable();
+      });
+    }
+
+    const capBolsas = document.getElementById("capBolsas");
+    const capKits = document.getElementById("capKits");
+    const capLimitante = document.getElementById("capLimitante");
+    const capLimitanteSub = document.getElementById("capLimitanteSub");
+
+    function renderKitCapacity() {
+      // Solo productos activos, marcados como parte del kit, con cantidad por kit válida
+      const kitProducts = invCache.filter(p =>
+        p.activo !== false && p.esKit && Number(p.cantidadPorKit) > 0
+      );
+
+      const finKitsPosiblesEl = document.getElementById('finKitsPosibles');
+
+      if (kitProducts.length === 0) {
+        capBolsas.textContent = "—";
+        capKits.textContent = "—";
+        capLimitante.textContent = "—";
+        capLimitanteSub.textContent = "Marcá productos como \"parte del kit\" para ver este cálculo.";
+        if (finKitsPosiblesEl) finKitsPosiblesEl.textContent = "—";
+        return;
+      }
+
+      let kits = Infinity;
+      let limitanteNombre = null;
+      let limitanteSub = "";
+      kitProducts.forEach(p => {
+        const posibles = Math.floor((Number(p.stockActual) || 0) / Number(p.cantidadPorKit));
+        if (posibles < kits) {
+          kits = posibles;
+          limitanteNombre = p.nombre;
+          limitanteSub = `Stock: ${Number(p.stockActual) || 0} ${p.unidad || ''} · alcanza para ${kits} kit(s)`;
+        }
+      });
+
+      // Cada Life Bag lleva 1 manta terminada: el stock de mantas (dato de
+      // Producción) también limita cuántos kits se pueden armar hoy.
+      const mantasTerminadas = Number(prodCache.mantas) || 0;
+      if (mantasTerminadas < kits) {
+        kits = mantasTerminadas;
+        limitanteNombre = "Mantas terminadas";
+        limitanteSub = `Stock: ${mantasTerminadas} manta(s) · alcanza para ${kits} kit(s)`;
+      }
+
+      const bolsasProd = kitProducts.find(p => (p.nombre || "").trim().toLowerCase() === "bolsas");
+      capBolsas.textContent = bolsasProd ? (Number(bolsasProd.stockActual) || 0) : "—";
+      capKits.textContent = kits;
+      capLimitante.textContent = limitanteNombre || "—";
+      capLimitanteSub.textContent = limitanteSub;
+      if (finKitsPosiblesEl) finKitsPosiblesEl.textContent = kits;
+    }
+
+    function renderInvTable() {
+      renderKitCapacity();
+
+      const showInactive = invShowInactive.checked;
+      const visible = invCache.filter(p => showInactive || p.activo !== false);
+
+      // Alerta de stock bajo (solo sobre productos activos)
+      const lowStock = invCache.filter(p => p.activo !== false && Number(p.stockActual) <= Number(p.stockMinimo || 0));
+      if (lowStock.length > 0) {
+        invLowStockText.textContent = `${lowStock.length} producto(s) con stock bajo: ${lowStock.map(p => p.nombre).join(", ")}`;
+        invLowStockAlert.classList.add("show");
+      } else {
+        invLowStockAlert.classList.remove("show");
+      }
+
+      if (visible.length === 0) {
+        invTableBody.innerHTML = `<tr class="empty-row"><td colspan="9">Todavía no hay productos cargados.</td></tr>`;
+        return;
+      }
+
+      invTableBody.innerHTML = visible.map(p => {
+        const stockActual = Number(p.stockActual) || 0;
+        const stockMinimo = Number(p.stockMinimo) || 0;
+        const isLow = stockActual <= stockMinimo;
+        const activo = p.activo !== false;
+        return `
+          <tr data-id="${p.id}" class="${activo ? '' : 'inv-inactive'}">
+            <td>${escapeHtml(p.nombre || '')}</td>
+            <td>${escapeHtml(p.marca || '-')}</td>
+            <td>${fmtMoney(p.costoUnitario)}</td>
+            <td><span class="inv-stock ${isLow ? 'low' : ''}">${stockActual}</span></td>
+            <td>${stockMinimo}</td>
+            <td>${escapeHtml(p.unidad || 'unidades')}</td>
+            <td>${p.esKit ? `<span class="badge-kit">Kit x${Number(p.cantidadPorKit) || 0}</span>` : '-'}</td>
+            <td><span class="badge-status ${activo ? 'activo' : 'inactivo'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
+            <td class="inv-row-actions">
+              <button type="button" class="btn-buy" data-id="${p.id}">Comprar</button>
+              <button type="button" class="btn-edit" data-id="${p.id}">Editar</button>
+              <button type="button" class="btn-edit" data-id="${p.id}" data-toggle="1">${activo ? 'Desactivar' : 'Activar'}</button>
+              <button type="button" class="btn-delete" data-id="${p.id}">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      invTableBody.querySelectorAll('.btn-buy').forEach(btn => {
+        btn.addEventListener('click', (e) => openCompraModal(e.target.dataset.id));
+      });
+      invTableBody.querySelectorAll('.btn-edit[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', (e) => toggleInvActivo(e.target.dataset.id));
+      });
+      invTableBody.querySelectorAll('.btn-edit:not([data-toggle])').forEach(btn => {
+        btn.addEventListener('click', (e) => openInvModal(e.target.dataset.id));
+      });
+      invTableBody.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => deleteInvProduct(e.target.dataset.id));
+      });
+    }
+
+    invShowInactive.addEventListener('change', renderInvTable);
+
+    async function toggleInvActivo(id) {
+      const p = invCache.find(p => p.id === id);
+      if (!p) return;
+      try {
+        await updateDoc(doc(db, "inventario_productos", id), { activo: !(p.activo !== false) });
+      } catch (err) {
+        console.error("Error al cambiar estado del producto:", err);
+        alert("No se pudo cambiar el estado del producto.");
+      }
+    }
+
+    async function deleteInvProduct(id) {
+      if (confirm("¿Eliminar este producto del inventario? Esta acción no se puede deshacer.")) {
         try {
-          await deleteDoc(doc(db, "finanzas_productos", id));
+          await deleteDoc(doc(db, "inventario_productos", id));
         } catch (err) {
           console.error("Error al eliminar producto:", err);
           alert("No se pudo eliminar el producto.");
         }
       }
     }
+
+    // ---- Modal agregar / editar producto ----
+    const invModal = document.getElementById("invModal");
+    const invForm = document.getElementById("invForm");
+    const invModalTitle = document.getElementById("invModalTitle");
+    const invModalError = document.getElementById("invModalError");
+    const invNombre = document.getElementById("invNombre");
+    const invMarca = document.getElementById("invMarca");
+    const invCostoUnitario = document.getElementById("invCostoUnitario");
+    const invStockActual = document.getElementById("invStockActual");
+    const invStockMinimo = document.getElementById("invStockMinimo");
+    const invUnidad = document.getElementById("invUnidad");
+    const invEsKit = document.getElementById("invEsKit");
+    const invCantidadKitField = document.getElementById("invCantidadKitField");
+    const invCantidadPorKit = document.getElementById("invCantidadPorKit");
+    const invModalSave = document.getElementById("invModalSave");
+
+    let invEditingId = null;
+
+    function toggleCantidadKitField() {
+      invCantidadKitField.style.display = invEsKit.checked ? "block" : "none";
+    }
+    invEsKit.addEventListener('change', toggleCantidadKitField);
+
+    function openInvModal(id) {
+      invModalError.style.display = "none";
+      if (id) {
+        const p = invCache.find(p => p.id === id);
+        if (!p) return;
+        invEditingId = id;
+        invModalTitle.textContent = "Editar producto";
+        invNombre.value = p.nombre || "";
+        invMarca.value = p.marca || "";
+        invCostoUnitario.value = Number(p.costoUnitario) || 0;
+        invStockActual.value = Number(p.stockActual) || 0;
+        invStockMinimo.value = Number(p.stockMinimo) || 0;
+        invUnidad.value = p.unidad || "unidades";
+        invEsKit.checked = !!p.esKit;
+        invCantidadPorKit.value = Number(p.cantidadPorKit) || 0;
+      } else {
+        invEditingId = null;
+        invModalTitle.textContent = "Agregar producto";
+        invForm.reset();
+        invCostoUnitario.value = 0;
+        invStockActual.value = 0;
+        invStockMinimo.value = 0;
+        invUnidad.value = "unidades";
+        invCantidadPorKit.value = 0;
+      }
+      toggleCantidadKitField();
+      invModal.classList.add("show");
+      invNombre.focus();
+    }
+
+    function closeInvModal() {
+      invModal.classList.remove("show");
+      invEditingId = null;
+    }
+
+    invAddBtn.addEventListener('click', () => openInvModal(null));
+    document.getElementById("invModalCancel").addEventListener('click', closeInvModal);
+    invModal.addEventListener('click', (e) => { if (e.target === invModal) closeInvModal(); });
+
+    invForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        nombre: invNombre.value.trim(),
+        marca: invMarca.value.trim(),
+        costoUnitario: parseFloat(invCostoUnitario.value) || 0,
+        stockActual: parseFloat(invStockActual.value) || 0,
+        stockMinimo: parseFloat(invStockMinimo.value) || 0,
+        unidad: invUnidad.value,
+        esKit: invEsKit.checked,
+        cantidadPorKit: invEsKit.checked ? (parseFloat(invCantidadPorKit.value) || 0) : 0
+      };
+
+      invModalSave.disabled = true;
+      invModalSave.textContent = "Guardando...";
+      invModalError.style.display = "none";
+
+      try {
+        if (invEditingId) {
+          await updateDoc(doc(db, "inventario_productos", invEditingId), payload);
+        } else {
+          await addDoc(collection(db, "inventario_productos"), {
+            ...payload,
+            activo: true,
+            orden: Date.now(),
+            fecha: serverTimestamp()
+          });
+        }
+        closeInvModal();
+      } catch (err) {
+        console.error("Error al guardar producto:", err);
+        invModalError.textContent = "No se pudo guardar (" + (err.code || err.message) + ").";
+        invModalError.style.display = "block";
+      }
+
+      invModalSave.disabled = false;
+      invModalSave.textContent = "Guardar";
+    });
+
+    // ---- Modal registrar compra ----
+    const compraModal = document.getElementById("compraModal");
+    const compraForm = document.getElementById("compraForm");
+    const compraModalSub = document.getElementById("compraModalSub");
+    const compraModalError = document.getElementById("compraModalError");
+    const compraCantidad = document.getElementById("compraCantidad");
+    const compraModalSave = document.getElementById("compraModalSave");
+
+    let compraProductoId = null;
+
+    function openCompraModal(id) {
+      const p = invCache.find(p => p.id === id);
+      if (!p) return;
+      compraProductoId = id;
+      compraModalSub.textContent = `Sumar cantidad comprada al stock de "${p.nombre}" (stock actual: ${Number(p.stockActual) || 0} ${p.unidad || ''}).`;
+      compraForm.reset();
+      compraModalError.style.display = "none";
+      compraModal.classList.add("show");
+      compraCantidad.focus();
+    }
+
+    function closeCompraModal() {
+      compraModal.classList.remove("show");
+      compraProductoId = null;
+    }
+
+    document.getElementById("compraModalCancel").addEventListener('click', closeCompraModal);
+    compraModal.addEventListener('click', (e) => { if (e.target === compraModal) closeCompraModal(); });
+
+    compraForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cantidad = parseFloat(compraCantidad.value);
+      if (isNaN(cantidad) || cantidad <= 0) return;
+
+      compraModalSave.disabled = true;
+      compraModalSave.textContent = "Registrando...";
+      compraModalError.style.display = "none";
+
+      try {
+        await updateDoc(doc(db, "inventario_productos", compraProductoId), {
+          stockActual: increment(cantidad)
+        });
+        closeCompraModal();
+      } catch (err) {
+        console.error("Error al registrar compra:", err);
+        compraModalError.style.display = "block";
+      }
+
+      compraModalSave.disabled = false;
+      compraModalSave.textContent = "Registrar";
+    });
+
+    // ---- Armar kits (descuenta inventario + suma kits disponibles, todo atómico) ----
+    const armarKitsModal = document.getElementById("armarKitsModal");
+    const armarKitsForm = document.getElementById("armarKitsForm");
+    const armarKitsSub = document.getElementById("armarKitsSub");
+    const armarKitsError = document.getElementById("armarKitsError");
+    const armarKitsCantidad = document.getElementById("armarKitsCantidad");
+    const armarKitsSave = document.getElementById("armarKitsSave");
+    const armarKitsBtn = document.getElementById("armarKitsBtn");
+
+    function getKitProducts() {
+      // Mismo criterio que el cálculo de capacidad: activos, parte del kit, con cantidad por kit válida
+      return invCache.filter(p => p.activo !== false && p.esKit && Number(p.cantidadPorKit) > 0);
+    }
+
+    function openArmarKitsModal() {
+      const kitProducts = getKitProducts();
+      armarKitsError.style.display = "none";
+      armarKitsForm.reset();
+      if (kitProducts.length === 0) {
+        armarKitsSub.textContent = "Todavía no marcaste ningún producto como \"parte del kit\".";
+        armarKitsCantidad.disabled = true;
+      } else {
+        let maxKits = Infinity;
+        kitProducts.forEach(p => {
+          const posibles = Math.floor((Number(p.stockActual) || 0) / Number(p.cantidadPorKit));
+          if (posibles < maxKits) maxKits = posibles;
+        });
+        armarKitsSub.textContent = `Ahora mismo podés armar hasta ${maxKits} kit(s) con el stock disponible.`;
+        armarKitsCantidad.disabled = false;
+        armarKitsCantidad.max = maxKits;
+      }
+      armarKitsModal.classList.add("show");
+      armarKitsCantidad.focus();
+    }
+
+    function closeArmarKitsModal() {
+      armarKitsModal.classList.remove("show");
+    }
+
+    armarKitsBtn.addEventListener('click', openArmarKitsModal);
+    document.getElementById("armarKitsCancel").addEventListener('click', closeArmarKitsModal);
+    armarKitsModal.addEventListener('click', (e) => { if (e.target === armarKitsModal) closeArmarKitsModal(); });
+
+    async function armarKits(cantidad) {
+      const kitProducts = getKitProducts();
+      if (kitProducts.length === 0) {
+        throw new Error("No hay productos marcados como parte del kit.");
+      }
+      const items = kitProducts.map(p => ({
+        ref: doc(db, "inventario_productos", p.id),
+        nombreFallback: p.nombre,
+        cantidadPorKitFallback: Number(p.cantidadPorKit)
+      }));
+
+      await runTransaction(db, async (transaction) => {
+        // 1) Todas las lecturas primero (requisito de Firestore para transacciones)
+        const reads = [];
+        for (const item of items) {
+          const snap = await transaction.get(item.ref);
+          if (!snap.exists()) {
+            throw new Error(`El producto "${item.nombreFallback}" ya no existe.`);
+          }
+          const data = snap.data();
+          reads.push({
+            ref: item.ref,
+            nombre: data.nombre || item.nombreFallback,
+            stockActual: Number(data.stockActual) || 0,
+            cantidadPorKit: Number(data.cantidadPorKit) || item.cantidadPorKitFallback
+          });
+        }
+        const prodSnap = await transaction.get(prodRef);
+        const bolsasActuales = prodSnap.exists() ? (Number(prodSnap.data().bolsas) || 0) : 0;
+
+        // 2) Validar que alcance el stock de TODOS los productos antes de tocar nada
+        for (const r of reads) {
+          const requerido = r.cantidadPorKit * cantidad;
+          if (r.stockActual < requerido) {
+            throw new Error(`Stock insuficiente de "${r.nombre}": hay ${r.stockActual}, se necesitan ${requerido}.`);
+          }
+        }
+
+        // 3) Recién ahora, escrituras: descontar cada insumo y sumar kits disponibles
+        reads.forEach(r => {
+          const requerido = r.cantidadPorKit * cantidad;
+          transaction.update(r.ref, { stockActual: r.stockActual - requerido });
+        });
+
+        if (prodSnap.exists()) {
+          transaction.update(prodRef, { bolsas: bolsasActuales + cantidad });
+        } else {
+          transaction.set(prodRef, { cuadraditos: 0, mantas: 0, bolsas: cantidad });
+        }
+      });
+    }
+
+    armarKitsForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cantidad = parseInt(armarKitsCantidad.value, 10);
+      if (isNaN(cantidad) || cantidad <= 0) return;
+
+      armarKitsSave.disabled = true;
+      armarKitsSave.textContent = "Armando...";
+      armarKitsError.style.display = "none";
+
+      try {
+        await armarKits(cantidad);
+        closeArmarKitsModal();
+      } catch (err) {
+        console.error("Error al armar kits:", err);
+        armarKitsError.textContent = err.message || "No se pudieron armar los kits.";
+        armarKitsError.style.display = "block";
+      }
+
+      armarKitsSave.disabled = false;
+      armarKitsSave.textContent = "Armar";
+    });
+
+    // ---- Vender kits (descuenta kits armados + registra la venta, sin tocar inventario) ----
+    const venderKitsModal = document.getElementById("venderKitsModal");
+    const venderKitsForm = document.getElementById("venderKitsForm");
+    const venderKitsSub = document.getElementById("venderKitsSub");
+    const venderKitsError = document.getElementById("venderKitsError");
+    const venderKitsCantidad = document.getElementById("venderKitsCantidad");
+    const venderKitsSave = document.getElementById("venderKitsSave");
+    const venderKitsBtn = document.getElementById("venderKitsBtn");
+
+    function openVenderKitsModal() {
+      venderKitsError.style.display = "none";
+      venderKitsForm.reset();
+      venderKitsSub.textContent = `Hay ${latestKitsDisponibles} kit(s) armados disponibles para vender ahora mismo.`;
+      venderKitsCantidad.max = latestKitsDisponibles;
+      venderKitsModal.classList.add("show");
+      venderKitsCantidad.focus();
+    }
+
+    function closeVenderKitsModal() {
+      venderKitsModal.classList.remove("show");
+    }
+
+    venderKitsBtn.addEventListener('click', openVenderKitsModal);
+    document.getElementById("venderKitsCancel").addEventListener('click', closeVenderKitsModal);
+    venderKitsModal.addEventListener('click', (e) => { if (e.target === venderKitsModal) closeVenderKitsModal(); });
+
+    async function venderKits(cantidad) {
+      const ventaRef = doc(collection(db, "ventas_kits"));
+      await runTransaction(db, async (transaction) => {
+        // 1) Lectura
+        const prodSnap = await transaction.get(prodRef);
+        const configSnap = await transaction.get(configRef);
+        const disponibles = prodSnap.exists() ? (Number(prodSnap.data().bolsas) || 0) : 0;
+        const vendidosActuales = prodSnap.exists() ? (Number(prodSnap.data().kitsVendidos) || 0) : 0;
+        const precioUnitario = configSnap.exists() ? (Number(configSnap.data().precioVentaLifeBag) || 0) : 0;
+
+        // 2) Validar
+        if (cantidad > disponibles) {
+          throw new Error(`No hay suficientes kits armados: hay ${disponibles} disponibles.`);
+        }
+
+        // 3) Escrituras: descontar disponibles, sumar acumulado, registrar la venta
+        transaction.update(prodRef, {
+          bolsas: disponibles - cantidad,
+          kitsVendidos: vendidosActuales + cantidad
+        });
+        transaction.set(ventaRef, {
+          origen: "manual",
+          cantidad: cantidad,
+          precioUnitario,
+          montoTotal: precioUnitario * cantidad,
+          fecha: serverTimestamp()
+        });
+      });
+    }
+
+    venderKitsForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cantidad = parseInt(venderKitsCantidad.value, 10);
+      if (isNaN(cantidad) || cantidad <= 0) return;
+
+      venderKitsSave.disabled = true;
+      venderKitsSave.textContent = "Registrando...";
+      venderKitsError.style.display = "none";
+
+      try {
+        await venderKits(cantidad);
+        closeVenderKitsModal();
+      } catch (err) {
+        console.error("Error al vender kits:", err);
+        venderKitsError.textContent = err.message || "No se pudo registrar la venta.";
+        venderKitsError.style.display = "block";
+      }
+
+      venderKitsSave.disabled = false;
+      venderKitsSave.textContent = "Vender";
+    });
 
     // ---------------- MODAL AGREGAR / EDITAR CLIENTE ----------------
     const clientModal = document.getElementById("clientModal");
@@ -783,6 +2069,8 @@
     const modalDistrict = document.getElementById("modalDistrict");
     const modalStatus = document.getElementById("modalStatus");
     const modalSave = document.getElementById("modalSave");
+    const modalCantidadKits = document.getElementById("modalCantidadKits");
+    const modalVentaHint = document.getElementById("modalVentaHint");
 
     let editingId = null; // null = modo "agregar"
 
@@ -790,8 +2078,11 @@
       editingId = null;
       modalTitle.textContent = "Agregar cliente";
       modalSub.textContent = "Se suma a la lista de espera igual que una reserva desde la web.";
+      modalSub.style.display = "block";
+      modalVentaHint.style.display = "none";
       clientForm.reset();
       modalStatus.value = "espera";
+      modalCantidadKits.value = 1;
       modalError.style.display = "none";
       clientModal.classList.add("show");
       modalName.focus();
@@ -806,7 +2097,13 @@
       modalName.value = order.nombre || "";
       modalPhone.value = order.telefono || "";
       modalDistrict.value = order.distrito || "";
+      modalCantidadKits.value = Math.max(1, parseInt(order.cantidadKits, 10) || 1);
       modalStatus.value = order.estado || "espera";
+
+      const ventaRegistrada = order.ventaRegistrada === true;
+      modalSub.style.display = ventaRegistrada ? "none" : "block";
+      modalVentaHint.style.display = ventaRegistrada ? "block" : "none";
+
       modalError.style.display = "none";
       clientModal.classList.add("show");
       modalName.focus();
@@ -829,6 +2126,7 @@
       const phone = modalPhone.value.trim();
       const district = modalDistrict.value.trim();
       const status = modalStatus.value;
+      const cantidadKits = Math.max(1, parseInt(modalCantidadKits.value, 10) || 1);
 
       modalSave.disabled = true;
       modalSave.textContent = "Guardando...";
@@ -836,24 +2134,44 @@
 
       try {
         if (editingId) {
+          // Datos básicos del pedido: esto nunca toca stock ni ingresos.
           await updateDoc(doc(db, "pedidos_lifebag", editingId), {
             nombre: name,
             telefono: phone,
             distrito: district,
-            estado: status
+            cantidadKits
           });
+
+          // El cambio de estado (si lo hubo) pasa por la misma función
+          // transaccional que usa el selector de la tabla, así nunca se
+          // duplica ni se pierde el registro de una venta.
+          const order = ordersCache.find(o => o.id === editingId);
+          const estadoActual = order ? (order.estado || "espera") : "espera";
+          if (status !== estadoActual) {
+            await cambiarEstadoPedido(editingId, status);
+          }
         } else {
-          await addDoc(collection(db, "pedidos_lifebag"), {
+          const newRef = doc(collection(db, "pedidos_lifebag"));
+          await setDoc(newRef, {
             nombre: name,
             telefono: phone,
             distrito: district,
-            estado: status,
+            cantidadKits,
+            estado: "espera",
             fecha: serverTimestamp()
           });
+
+          // Si se carga directamente como "Entregado" (o "Cancelado"), se
+          // aplica el mismo circuito de Producción/Finanzas que si el cambio
+          // se hiciera después desde la tabla.
+          if (status !== "espera") {
+            await cambiarEstadoPedido(newRef.id, status);
+          }
         }
         closeModal();
       } catch (err) {
         console.error("Error al guardar cliente:", err);
+        modalError.textContent = err.message || "No se pudo guardar. Intentá de nuevo.";
         modalError.style.display = "block";
       }
 
