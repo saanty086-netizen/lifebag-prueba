@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Life Bag | Kit de Emergencia</title>
-<meta name="description" content="Life Bag: kit de emergencia escolar hecho por alumnos de 5° año en Mendoza. Conocé qué incluye, armá el tuyo en casa y reservá el tuyo.">
+<title>Armá tu propio kit | Life Bag</title>
+<meta name="description" content="Guía paso a paso y checklist para armar tu propio kit de emergencia en casa, pensado para una familia de 4 personas.">
 <link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,6 +71,7 @@ nav a.cta:hover{background:var(--rescue);color:#fff}
 .item p{font-size:.93rem;color:var(--text-muted)}
 
 /* Armá tu kit */
+#arma{background:var(--cream-deep)}
 .steps{display:grid;gap:1rem;counter-reset:s}
 .step{display:grid;grid-template-columns:76px 1fr;gap:1.2rem;background:var(--surface);border-radius:var(--radius-md);padding:1.4rem 1.6rem;border:1px solid var(--border)}
 .step .num{font-family:'Fraunces',serif;font-weight:700;font-size:2.6rem;color:var(--rescue);line-height:1}
@@ -153,115 +154,93 @@ footer{background:var(--forest-deep);color:#c5d3c8;padding:2.5rem 0;font-size:.9
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#inicio"><img src="assets/logo.png" alt="Logo de Life Bag"><span>Life Bag</span></a>
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="Logo de Life Bag"><span>Life Bag</span></a>
     <nav aria-label="Principal">
       <ul>
-        <li><a href="#incluye">¿Qué incluye?</a></li>
-        <li><a href="armar-kit.html">Armá tu kit</a></li>
-        <li><a class="cta" href="#reservar">Reservar</a></li>
+        <li><a href="index.html#incluye">¿Qué incluye?</a></li>
+        <li><a href="armar-kit.html" aria-current="page">Armá tu kit</a></li>
+        <li><a class="cta" href="index.html#reservar">Reservar</a></li>
       </ul>
     </nav>
   </div>
 </header>
 
 <main>
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow"><i data-lucide="heart-handshake" class="i"></i> Proyecto de 5° año · Mendoza</span>
-      <h1>Un kit de emergencia listo para cuando lo necesites.</h1>
-      <p class="lead">Life Bag es un bolso reutilizado con lo esencial para las primeras horas después de un sismo o una emergencia en casa. Lo armamos los alumnos de 5° año.</p>
-      <div class="hero-actions">
-        <a class="btn" href="#reservar"><i data-lucide="shopping-bag" class="i"></i> Reservar mi Life Bag</a>
-        <a class="btn ghost" href="armar-kit.html"><i data-lucide="clipboard-list" class="i"></i> Armá el tuyo en casa</a>
-      </div>
-    </div>
-    <div class="hero-photos">
-      <img class="p1" src="assets/kit-foto-1.jpg" alt="Life Bag con botiquín, guía de emergencias, manta, agua y alimentos" fetchpriority="high">
-      <img class="p2" src="assets/kit-foto-2.jpg" alt="Bolso Life Bag hecho con material reutilizado" loading="lazy">
-    </div>
+<section class="hero" style="padding:3rem 0 1rem">
+  <div class="wrap">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:.4rem;font-weight:600;text-decoration:none;color:var(--text-muted);margin-bottom:1.2rem"><i data-lucide="arrow-left" class="i"></i> Volver al inicio</a>
   </div>
 </section>
-
-<!-- 1. QUÉ INCLUYE -->
-<section id="incluye">
+<!-- 2. ARMÁ TU KIT -->
+<section id="arma">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow"><i data-lucide="package-open" class="i"></i> Contenido del kit</span>
-      <h2>¿Qué incluye el Life Bag?</h2>
-      <p>Lo justo y necesario, pensado para resolver las primeras horas con calma. Sin velas ni fósforos: en un sismo pueden provocar incendios si hay fugas de gas.</p>
+      <span class="eyebrow"><i data-lucide="hammer" class="i"></i> Guía para 4 personas</span>
+      <h2>¿Querés armar tu propio kit?</h2>
+      <p>No necesitás comprar un kit completo. Podés preparar uno en casa con elementos que ya tengas y adaptarlo a las necesidades de tu familia.</p>
     </div>
-    <div class="items">
-      <article class="item"><div class="ico"><i data-lucide="shopping-bag" class="i"></i></div><h3>Bolso reutilizado</h3><p>Resistente, con asas firmes y fácil de cargar. Hecho con material reutilizado.</p></article>
-      <article class="item"><div class="ico"><i data-lucide="droplets" class="i"></i></div><h3>Agua</h3><p>Botellas compactas para la autonomía inicial.</p></article>
-      <article class="item"><div class="ico"><i data-lucide="utensils" class="i"></i></div><h3>Alimentos</h3><p>No perecederos y listos para consumir, como atún y golosinas energéticas.</p></article>
-      <article class="item"><div class="ico"><i data-lucide="briefcase-medical" class="i"></i></div><h3>Botiquín</h3><p>Botiquín compacto de primeros auxilios.</p></article>
-      <article class="item"><div class="ico"><i data-lucide="layers" class="i"></i></div><h3>Manta de abrigo</h3><p>Manta tejida para mantener el calor corporal.</p></article>
-      <article class="item"><div class="ico"><i data-lucide="clipboard-list" class="i"></i></div><h3>Guía rápida de emergencias</h3><p>Números útiles y cómo actuar: mantené la calma, pensá, actuá.</p></article>
+    <div class="steps">
+      <article class="step"><div class="num">01</div><div>
+        <h3>Conseguí el bolso</h3>
+        <ul>
+          <li>Una mochila resistente, que permita repartir el peso.</li>
+          <li>Un bolso con asas firmes.</li>
+          <li>Una bolsa de tela reforzada, hecha en casa.</li>
+        </ul>
+        <p style="margin-top:.5rem">Tiene que estar en un lugar visible y de fácil salida.</p>
+      </div></article>
+      <article class="step"><div class="num">02</div><div>
+        <h3>Organizá por categorías</h3>
+        <p>Agrupá todo para encontrarlo rápido, incluso con poca luz.</p>
+        <div class="tags">
+          <span><i data-lucide="droplets" class="i"></i>Agua</span>
+          <span><i data-lucide="utensils" class="i"></i>Alimentos</span>
+          <span><i data-lucide="briefcase-medical" class="i"></i>Salud</span>
+          <span><i data-lucide="flashlight" class="i"></i>Luz</span>
+          <span><i data-lucide="file-text" class="i"></i>Documentación</span>
+          <span><i data-lucide="sparkles" class="i"></i>Higiene</span>
+          <span><i data-lucide="layers" class="i"></i>Abrigo</span>
+          <span><i data-lucide="smartphone" class="i"></i>Comunicación</span>
+          <span><i data-lucide="key" class="i"></i>Otros</span>
+        </div>
+      </div></article>
+      <article class="step"><div class="num">03</div><div>
+        <h3>Adaptalo a tu familia</h3>
+        <p>Pensá en 2 adultos y 2 niños: medicación específica de cada uno y, si corresponde, pañales o algún elemento de contención para los más chicos (un juguete, un librito).</p>
+      </div></article>
+      <article class="step"><div class="num">04</div><div>
+        <h3>Guardalo en un lugar accesible</h3>
+        <p>Que todos los miembros de la casa sepan dónde está y puedan alcanzarlo sin ayuda.</p>
+      </div></article>
+      <article class="step"><div class="num">05</div><div>
+        <h3>Revisalo periódicamente</h3>
+        <p>Cada seis meses rotá los alimentos y el agua, y revisá pilas y fechas de vencimiento.</p>
+      </div></article>
     </div>
   </div>
 </section>
 
-<!-- 4. SEGURIDAD -->
-<section id="seguridad">
+<!-- 3. CHECKLIST -->
+<section id="checklist">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow"><i data-lucide="shield-check" class="i"></i> Prevención</span>
-      <h2>Consejos de seguridad sísmica</h2>
-      <p>Mendoza es zona sísmica. Prepararse antes hace la diferencia durante y después.</p>
+      <span class="eyebrow"><i data-lucide="list-checks" class="i"></i> Checklist interactivo</span>
+      <h2>Checklist para una familia de 4 personas</h2>
+      <p>Tildá lo que ya tenés preparado. Tu avance queda guardado en este dispositivo.</p>
     </div>
-    <div class="tips">
-      <article class="tip"><i data-lucide="shield" class="i"></i><h3>Durante el sismo</h3><p>Mantené la calma. Protegete debajo de una mesa firme o junto a un muro interno, lejos de ventanas y objetos que puedan caer.</p></article>
-      <article class="tip"><i data-lucide="door-open" class="i"></i><h3>Después</h3><p>Salí con cuidado por la ruta de evacuación. No uses ascensores y ponete calzado antes de caminar.</p></article>
-      <article class="tip"><i data-lucide="flame-kindling" class="i"></i><h3>Revisá gas y electricidad</h3><p>Si sentís olor a gas, ventilá y cerrá la llave. No enciendas nada que produzca chispa o llama.</p></article>
-      <article class="tip"><i data-lucide="users" class="i"></i><h3>Punto de encuentro</h3><p>Acordá con tu familia un lugar seguro donde reencontrarse y practicá el recorrido.</p></article>
-      <article class="tip"><i data-lucide="phone-call" class="i"></i><h3>Comunicación</h3><p>Usá mensajes de texto para no saturar las líneas. Tené los números importantes anotados en papel.</p></article>
+    <div class="cl-bar">
+      <div class="cl-top"><span id="clText">0 de 0 listo</span><button class="reset" id="clReset" type="button">Reiniciar</button></div>
+      <div class="progress" role="progressbar" aria-label="Avance del checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="clBar"></div></div>
     </div>
-    <div class="warn">
-      <i data-lucide="octagon-alert" class="i"></i>
-      <p><strong>Nunca uses velas, fósforos ni encendedores después de un sismo.</strong> Pueden haberse producido fugas de gas. Para iluminar, usá una linterna LED con pilas de repuesto.</p>
-    </div>
+    <div class="cards" id="clCards"></div>
   </div>
 </section>
 
-<!-- 5. INSTITUCIONAL -->
-<section id="institucional">
+<section style="background:var(--cream-deep);text-align:center">
   <div class="wrap">
-    <div class="inst">
-      <div class="logo-box"><img src="assets/colegio-logo.png" alt="Escudo del Colegio Nuestra Señora del Santísimo Rosario" width="128" height="128" loading="lazy"></div>
-      <div>
-        <p class="kicker">Proyecto educativo y microemprendimiento de 5° año</p>
-        <h2>Colegio Nuestra Señora del Santísimo Rosario</h2>
-        <p class="proj"><i data-lucide="backpack" class="i"></i> Life Bag | Kit de Emergencia</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. RESERVA -->
-<section id="reservar">
-  <div class="wrap reserve">
-    <div class="side">
-      <span class="eyebrow"><i data-lucide="calendar-check" class="i"></i> Lista de espera</span>
-      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:.8rem">Reservá tu Life Bag</h2>
-      <p>Anotate y te contactamos por WhatsApp cuando tu kit esté listo. Los pedidos se atienden por orden de llegada.</p>
-      <ul>
-        <li><i data-lucide="check-circle-2" class="i"></i> Sin compromiso de compra al anotarte</li>
-        <li><i data-lucide="check-circle-2" class="i"></i> Hecho por alumnos de 5° año en Mendoza</li>
-        <li><i data-lucide="check-circle-2" class="i"></i> Bolso reutilizado</li>
-      </ul>
-    </div>
-    <form id="reservaForm" novalidate>
-      <div class="field"><label for="nombre">Nombre y apellido</label><input id="nombre" name="nombre" required autocomplete="name" maxlength="80"></div>
-      <div class="field"><label for="telefono">WhatsApp</label><input id="telefono" name="telefono" type="tel" required autocomplete="tel" inputmode="tel" placeholder="Ej: 261 555 1234" maxlength="25"></div>
-      <div class="field"><label for="distrito">Distrito o zona</label><input id="distrito" name="distrito" required maxlength="60"></div>
-      <div class="field"><label for="cantidad">Cantidad de kits</label>
-        <select id="cantidad" name="cantidad"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-      <p class="consent">Al enviar aceptás nuestra <a href="privacidad.html">política de privacidad</a>.</p>
-      <button class="btn" type="submit" id="reservaBtn"><i data-lucide="send" class="i"></i> Reservar</button>
-      <div class="msg" id="reservaMsg" role="status" aria-live="polite"></div>
-    </form>
+    <h2 style="font-size:clamp(1.6rem,4vw,2.2rem);margin-bottom:.8rem">¿Preferís que te lo armemos nosotros?</h2>
+    <p style="color:var(--text-muted);max-width:520px;margin:0 auto 1.5rem">Reservá tu Life Bag y te avisamos cuando esté listo.</p>
+    <a class="btn" href="index.html#reservar"><i data-lucide="shopping-bag" class="i"></i> Reservar mi Life Bag</a>
   </div>
 </section>
 </main>
@@ -279,31 +258,50 @@ footer{background:var(--forest-deep);color:#c5d3c8;padding:2.5rem 0;font-size:.9
 </footer>
 
 <script>
-/* ---------- Reserva (Firestore + WhatsApp) ---------- */
-const businessPhone='5492634712606';
-const form=document.getElementById('reservaForm'),btn=document.getElementById('reservaBtn'),msg=document.getElementById('reservaMsg');
-function show(cls,text){msg.className='msg '+cls;msg.textContent=text}
-form.addEventListener('submit',async e=>{
-  e.preventDefault();
-  const nombre=form.nombre.value.trim(),telefono=form.telefono.value.trim(),distrito=form.distrito.value.trim();
-  const cantidadKits=parseInt(form.cantidad.value,10)||1;
-  if(!nombre||!telefono||!distrito){show('err','Completá todos los campos.');return}
-  btn.disabled=true;show('ok','Enviando...');
-  try{
-    const [{db},fs]=await Promise.all([
-      import('./firebase-config.js'),
-      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
-    ]);
-    await fs.addDoc(fs.collection(db,'pedidos_lifebag'),{nombre,telefono,distrito,cantidadKits,estado:'espera',fecha:fs.serverTimestamp()});
-    show('ok','¡Listo! Quedaste en la lista de espera. Abriendo WhatsApp...');
-    const text='Hola Life Bag! Me anoté para reservar '+cantidadKits+' kit(s). Soy '+nombre+' ('+distrito+').';
-    window.open('https://wa.me/'+businessPhone+'?text='+encodeURIComponent(text),'_blank','noopener');
-    form.reset();
-  }catch(err){
-    console.error(err);
-    show('err','No pudimos guardar tu reserva. Probá de nuevo o escribinos por WhatsApp.');
-  }finally{btn.disabled=false}
+/* ---------- Checklist ---------- */
+const CHECKLIST = [
+  {t:'Agua', ic:'droplets', hint:'Autonomía inicial para 4 personas.', items:['Botellas compactas y fáciles de transportar']},
+  {t:'Alimentos', ic:'utensils', hint:'No perecederos.', items:['Barras de cereal','Enlatados con abrelatas fácil','Galletitas']},
+  {t:'Primeros auxilios', ic:'briefcase-medical', hint:'', items:['Botiquín compacto','Medicamentos habituales de la familia']},
+  {t:'Iluminación', ic:'flashlight', hint:'Sin llama abierta: nada de velas ni fósforos.', items:['Linterna frontal o de mano (LED)','Pilas de repuesto']},
+  {t:'Documentación', ic:'file-text', hint:'', items:['Copias de DNI y carnets en bolsa hermética impermeable']},
+  {t:'Comunicación', ic:'smartphone', hint:'', items:['Celular','Cargador / powerbank','Libreta con números telefónicos anotados']},
+  {t:'Higiene', ic:'sparkles', hint:'', items:['Alcohol en gel','Jabón','Papel higiénico','Toallitas']},
+  {t:'Abrigo', ic:'layers', hint:'Una por persona.', items:['Mantas térmicas o ropa de abrigo liviana']},
+  {t:'Otros', ic:'key', hint:'', items:['Copia de llaves de la casa','Silbato para emergencias','Algo de dinero en efectivo']}
+];
+const KEY='lifebag-checklist-v1';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const cards=document.getElementById('clCards');
+CHECKLIST.forEach((c,ci)=>{
+  const el=document.createElement('div');el.className='card';
+  const h=document.createElement('h3');
+  h.innerHTML='<i data-lucide="'+c.ic+'" class="i"></i>';h.append(c.t);el.append(h);
+  if(c.hint){const p=document.createElement('p');p.className='hint';p.textContent=c.hint;el.append(p)}
+  c.items.forEach((txt,ii)=>{
+    const id='c'+ci+'_'+ii;
+    const l=document.createElement('label');
+    const cb=document.createElement('input');cb.type='checkbox';cb.id=id;cb.checked=!!saved[id];
+    const s=document.createElement('span');s.textContent=txt;
+    l.append(cb,s);el.append(l);
+  });
+  cards.append(el);
 });
+const boxes=()=>cards.querySelectorAll('input[type=checkbox]');
+function update(){
+  const all=boxes(),done=[...all].filter(b=>b.checked).length;
+  const pct=Math.round(done/all.length*100);
+  document.getElementById('clText').textContent=done+' de '+all.length+' listo';
+  document.getElementById('clBar').style.width=pct+'%';
+  document.querySelector('.progress').setAttribute('aria-valuenow',pct);
+  const s={};all.forEach(b=>{if(b.checked)s[b.id]=1});
+  try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}
+}
+cards.addEventListener('change',update);
+document.getElementById('clReset').addEventListener('click',()=>{boxes().forEach(b=>b.checked=false);update()});
+update();
+
 
 lucide.createIcons();
 </script>
