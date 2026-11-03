@@ -1,0 +1,21 @@
+{
+  "name": "lifebag",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "playwright test",
+    "check": "node scripts/check.mjs",
+    "test:rules": "npx --yes firebase-tools@15.34.2 emulators:exec --only firestore --project demo-lifebag \"node --test tests/rules/*.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "@playwright/test": "^1.64.1",
+    "firebase": "^13.1.0",
+    "parse5": "^8.0.1"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.7"
+  }
+}

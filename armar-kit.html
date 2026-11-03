@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
+
+
 <link rel="stylesheet" href="style.css">
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/vendor/lucide.min.js"></script>
 <title>Armá tu kit de emergencia | Life Bag</title>
-<meta name="description" content="Guía gratuita para armar tu propio kit de emergencia en casa, checklist para 4 personas y consejos de seguridad sísmica.">
+<meta name="description" content="Guía gratuita para armar tu propio kit de emergencia en casa, checklist para tu familia y consejos de seguridad sísmica.">
 </head>
 <body>
+<a class="skip-link" href="#contenido">Ir al contenido</a>
 <header>
   <div class="wrap nav">
-    <a class="brand" href="index.html"><img src="assets/logo.png" alt="Logo de Life Bag"><span>Life Bag</span></a>
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="Logo de Life Bag"><span>Life Bag<small>HECHO EN MENDOZA</small></span></a>
     <nav aria-label="Principal"><ul>
       <li class="hide-m"><a href="index.html#conocenos">Conocenos</a></li>
       <li><a href="index.html#kit">El Kit</a></li>
@@ -24,18 +26,19 @@
   </div>
 </header>
 
-<main>
-<section class="hero" style="padding:1.5rem 0 1rem">
+<main id="contenido">
+<section class="guide-hero">
   <div class="wrap">
     <a class="back" href="index.html"><i data-lucide="arrow-left" class="i"></i> Volver al inicio</a>
-    <span class="eyebrow" style="display:flex"><i data-lucide="hammer" class="i"></i> Guía para 4 personas</span>
-    <h1 style="font-size:clamp(1.8rem,5vw,3rem);margin-bottom:.6rem">¿Querés armar tu propio kit de emergencia?</h1>
+    <span class="eyebrow"><i data-lucide="hammer" class="i"></i> Guía gratuita · Para tu familia</span>
+    <h1>Tu primer paso para estar <em>más preparados.</em></h1>
     <p class="lead">No necesitás comprar un kit completo. Podés preparar uno en casa con elementos que ya tengas.</p>
+    <div class="guide-actions"><a class="btn" href="#checklist">Empezar mi lista <i data-lucide="arrow-down" class="i"></i></a><a class="text-link" href="#pasos">Ver el paso a paso</a></div>
   </div>
 </section>
 
 <!-- PASO A PASO -->
-<section id="pasos" style="padding-top:1.5rem">
+<section id="pasos">
   <div class="wrap"><div class="steps">
     <article class="step"><div class="num">01</div><div><h3>Conseguí el bolso</h3>
       <ul><li>Mochila cómoda, para repartir el peso.</li><li>Bolso firme con asas resistentes.</li><li>Bolsa casera de tela reforzada.</li></ul>
@@ -58,18 +61,20 @@
 </section>
 
 <!-- CHECKLIST: acordeones generados por app.js, estado en localStorage -->
-<section id="checklist" style="padding-top:0">
+<section id="checklist">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow"><i data-lucide="list-checks" class="i"></i> Checklist interactivo</span>
-      <h2>Lista para 4 personas</h2>
-      <p>Tildá lo que ya tenés. Tu avance se guarda en este dispositivo.</p>
+      <h2>Tu lista, paso a paso</h2>
+      <p>Tildá lo que ya tenés y ajustá las cantidades a tu familia. Esta lista es un punto de partida, no un inventario completo.</p>
     </div>
     <div class="cl-bar">
       <div class="cl-top"><span id="clText">0 de 0 listo</span><button class="reset" id="clReset" type="button">Reiniciar</button></div>
       <div class="progress" role="progressbar" aria-label="Avance del checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="clBar"></div></div>
     </div>
     <div class="cards" id="clCards"></div>
+    <p class="storage-note" id="clStorage" role="status">Tu avance se guarda en este navegador.</p>
+    <noscript>Activá JavaScript para usar la lista interactiva. Podés consultar el paso a paso de arriba igualmente.</noscript>
   </div>
 </section>
 
@@ -82,11 +87,12 @@
       <p>Pautas generales de Defensa Civil. Consultá siempre la información oficial vigente.</p>
     </div>
     <div class="tips">
-      <article class="tip"><i data-lucide="shield" class="i"></i><h3>Durante el sismo</h3><p>Mantené la calma. Protegete bajo una mesa firme o junto a un muro interno, lejos de ventanas y objetos que caigan.</p></article>
+      <article class="tip"><i data-lucide="shield" class="i"></i><h3>Durante el sismo</h3><p>Mantené la calma. Protegete debajo de una mesa firme, lejos de ventanas y objetos que puedan caer.</p></article>
       <article class="tip"><i data-lucide="door-open" class="i"></i><h3>Después</h3><p>Salí con cuidado, sin ascensores y con calzado puesto. Esperá posibles réplicas.</p></article>
-      <article class="tip"><i data-lucide="plug-zap" class="i"></i><h3>Gas y luz</h3><p>Si hay olor a gas, ventilá y cerrá la llave. Cortá la electricidad si hay daños.</p></article>
+      <article class="tip"><i data-lucide="plug-zap" class="i"></i><h3>Gas y luz</h3><p>No enciendas llamas ni acciones interruptores eléctricos. Seguí el plan familiar para cortar los suministros y las indicaciones de las autoridades.</p></article>
       <article class="tip"><i data-lucide="users" class="i"></i><h3>Punto de encuentro</h3><p>Acordá un lugar seguro con tu familia y practicá el recorrido.</p></article>
     </div>
+    <p class="source-note">Fuentes: <a href="https://www.argentina.gob.ar/inpres/recomendaciones-basicas-tener-en-cuenta-antes-durante-y-despues-de-un-sismo" target="_blank" rel="noopener noreferrer">INPRES</a> y <a href="https://www.mendoza.gov.ar/prensa/sismo-como-armar-la-mochila-de-emergencia-2/" target="_blank" rel="noopener noreferrer">Defensa Civil de Mendoza</a>.</p>
     <div class="warn">
       <i data-lucide="octagon-alert" class="i"></i>
       <p><strong>No uses velas, fósforos ni encendedores.</strong> Puede haber fugas de gas. Iluminá solo con linterna LED y pilas de repuesto.</p>
@@ -96,9 +102,9 @@
 
 <section class="cta-final">
   <div class="wrap">
-    <h2 style="font-size:clamp(1.4rem,4vw,2rem)">¿Preferís tenerlo listo sin complicaciones?</h2>
+    <h2 >¿Preferís tenerlo listo sin complicaciones?</h2>
     <p>Conocé el kit oficial de Life Bag.</p>
-    <a class="btn" href="index.html#reserva"><i data-lucide="shopping-bag" class="i"></i> Conocer el kit oficial</a>
+    <a class="btn" href="index.html#reservar"><i data-lucide="shopping-bag" class="i"></i> Conocer el kit oficial</a>
   </div>
 </section>
 </main>

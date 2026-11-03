@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel de Administración | Life Bag</title>
 <link rel="icon" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
+
+
+
 
 <style>
   :root{
@@ -304,8 +305,9 @@
   .checkbox-field label{margin-bottom:0;}
   .modal-box.wide{max-width:480px;}
 </style>
+<link rel="stylesheet" href="panel-ui.css">
 </head>
-<body>
+<body class="dashboard-page">
 
   <div id="authGate">
     <div class="spinner"></div>
@@ -323,6 +325,7 @@
           </div>
         </div>
         <div class="top-actions">
+          <a id="teamAccess" href="admin-solicitudes.html" hidden>Equipo y permisos</a>
           <span id="userEmail"></span>
           <button class="btn-logout" id="logoutBtn">Cerrar sesión</button>
         </div>
@@ -336,7 +339,8 @@
       <button class="tab-btn" data-tab="configuracion">⚙️ Configuración</button>
     </div>
 
-    <main>
+    <p id="panelNotice" role="alert" hidden></p>
+  <main>
 
       <!-- ===================== PRODUCCIÓN ===================== -->
       <section id="view-produccion" class="view active">
@@ -606,7 +610,7 @@
             <div class="cap-sub">Suma de todas las ventas: pedidos entregados + ventas manuales</div>
           </div>
           <div class="cap-card">
-            <div class="cap-label">Ganancia acumulada</div>
+            <div class="cap-label">Ganancia estimada acumulada</div>
             <div class="cap-value" id="finGananciaAcumulada">$0</div>
             <div class="cap-sub">Ingresos totales − (costo actual del Life Bag × kits vendidos)</div>
           </div>
@@ -694,7 +698,7 @@
   </div>
 
   <!-- ===================== MODAL AGREGAR / EDITAR CLIENTE ===================== -->
-  <div class="modal-overlay" id="clientModal">
+  <div class="modal-overlay" id="clientModal" role="dialog" aria-modal="true" aria-label="Editar o agregar cliente">
     <div class="modal-box">
       <h3 id="modalTitle">Agregar cliente</h3>
       <p class="modal-sub" id="modalSub">Se suma a la lista de espera igual que una reserva desde la web.</p>
@@ -702,7 +706,7 @@
         💰 Esta venta ya fue registrada en Finanzas (stock e ingresos actualizados). Si cambiás el estado a "En espera" o "Cancelado" se revertirá automáticamente.
       </p>
 
-      <div class="modal-error" id="modalError">No se pudo guardar. Intentá de nuevo.</div>
+      <div class="modal-error" role="alert" id="modalError">No se pudo guardar. Intentá de nuevo.</div>
 
       <form id="clientForm">
         <div class="modal-field">
@@ -739,12 +743,12 @@
   </div>
 
   <!-- ===================== MODAL AGREGAR / EDITAR PRODUCTO (INVENTARIO) ===================== -->
-  <div class="modal-overlay" id="invModal">
+  <div class="modal-overlay" id="invModal" role="dialog" aria-modal="true" aria-label="Editar o agregar producto">
     <div class="modal-box wide">
       <h3 id="invModalTitle">Agregar producto</h3>
       <p class="modal-sub">Insumo o material que se usa para producir los kits.</p>
 
-      <div class="modal-error" id="invModalError">No se pudo guardar. Intentá de nuevo.</div>
+      <div class="modal-error" role="alert" id="invModalError">No se pudo guardar. Intentá de nuevo.</div>
 
       <form id="invForm">
         <div class="modal-field">
@@ -797,12 +801,12 @@
   </div>
 
   <!-- ===================== MODAL REGISTRAR COMPRA ===================== -->
-  <div class="modal-overlay" id="compraModal">
+  <div class="modal-overlay" id="compraModal" role="dialog" aria-modal="true" aria-label="Registrar compra">
     <div class="modal-box">
       <h3>Registrar compra</h3>
       <p class="modal-sub" id="compraModalSub">Sumá la cantidad comprada al stock actual.</p>
 
-      <div class="modal-error" id="compraModalError">No se pudo registrar la compra.</div>
+      <div class="modal-error" role="alert" id="compraModalError">No se pudo registrar la compra.</div>
 
       <form id="compraForm">
         <div class="modal-field">
@@ -819,12 +823,12 @@
   </div>
 
   <!-- ===================== MODAL ARMAR KITS ===================== -->
-  <div class="modal-overlay" id="armarKitsModal">
+  <div class="modal-overlay" id="armarKitsModal" role="dialog" aria-modal="true" aria-label="Armar kits">
     <div class="modal-box">
       <h3>Armar kits</h3>
       <p class="modal-sub" id="armarKitsSub">Descuenta del inventario lo necesario para armar los kits e incrementa los kits disponibles para vender.</p>
 
-      <div class="modal-error" id="armarKitsError">No se pudieron armar los kits.</div>
+      <div class="modal-error" role="alert" id="armarKitsError">No se pudieron armar los kits.</div>
 
       <form id="armarKitsForm">
         <div class="modal-field">
@@ -841,12 +845,12 @@
   </div>
 
   <!-- ===================== MODAL VENDER KITS ===================== -->
-  <div class="modal-overlay" id="venderKitsModal">
+  <div class="modal-overlay" id="venderKitsModal" role="dialog" aria-modal="true" aria-label="Vender kits">
     <div class="modal-box">
       <h3>Vender kits</h3>
       <p class="modal-sub" id="venderKitsSub">Descuenta de los kits armados disponibles y queda registrada la venta con fecha y hora. No vuelve a tocar el inventario de insumos.</p>
 
-      <div class="modal-error" id="venderKitsError">No se pudo registrar la venta.</div>
+      <div class="modal-error" role="alert" id="venderKitsError">No se pudo registrar la venta.</div>
 
       <form id="venderKitsForm">
         <div class="modal-field">
@@ -864,10 +868,11 @@
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
+    import { isAdmin, hasAccess, canEdit, normalizePhone, escapeHtml } from "./access.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       collection, onSnapshot, query, orderBy,
-      doc, updateDoc, deleteDoc, setDoc, getDoc, increment,
+      doc, updateDoc, deleteDoc, setDoc, increment,
       addDoc, serverTimestamp, runTransaction
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -875,20 +880,91 @@
     const authGate = document.getElementById('authGate');
     const app = document.getElementById('app');
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login";
-        return;
+    let profileUnsubscribe = null;
+    const dataSubscriptions = [];
+    let currentProfile = null;
+    function reportError(error) {
+      console.error('Error del panel:', error);
+      const notice = document.getElementById('panelNotice');
+      notice.hidden = false;
+      notice.textContent = 'No se pudieron cargar o guardar algunos datos. Revisá la conexión y los permisos, y recargá la página.';
+    }
+    function listen(reference, callback) {
+      const unsubscribe = onSnapshot(reference, callback, reportError);
+      dataSubscriptions.push(unsubscribe);
+      return unsubscribe;
+    }
+    const permissionDisabled = new WeakMap();
+    function applyPermissions(user, profile) {
+      currentProfile = profile;
+      for (const area of ['produccion', 'pedidos', 'finanzas', 'configuracion']) {
+        const editable = area === 'configuracion' ? isAdmin(user) : canEdit(user, profile, area);
+        const view = document.getElementById('view-' + area);
+        view.dataset.readonly = String(!editable);
+        view.querySelectorAll('input, select, button').forEach(control => {
+          // Los filtros siguen disponibles para quienes solo consultan.
+          if (['searchInput', 'statusFilter', 'invShowInactive'].includes(control.id)) return;
+          const allowed = editable && (control.id !== 'finPrecioVenta' || isAdmin(user));
+          if (!allowed) {
+            if (!permissionDisabled.has(control)) permissionDisabled.set(control, control.disabled);
+            control.disabled = true;
+          } else if (permissionDisabled.has(control)) {
+            control.disabled = permissionDisabled.get(control);
+            permissionDisabled.delete(control);
+          }
+        });
       }
+      document.getElementById('teamAccess').hidden = !isAdmin(user);
+    }
+    function showPanel(user, profile) {
+      applyPermissions(user, profile);
       document.getElementById('userEmail').textContent = user.email;
-      authGate.style.display = "none";
-      app.style.display = "block";
+      authGate.style.display = 'none';
+      app.style.display = 'block';
       startListeners();
+    }
+    function denyAccess() {
+      app.style.display = 'none';
+      dataSubscriptions.splice(0).forEach(unsubscribe => unsubscribe());
+      profileUnsubscribe?.();
+      signOut(auth).catch(console.error);
+      window.location.replace('login.html');
+    }
+    onAuthStateChanged(auth, user => {
+      profileUnsubscribe?.();
+      if (!user) { denyAccess(); return; }
+      if (isAdmin(user)) { showPanel(user, null); return; }
+      profileUnsubscribe = onSnapshot(doc(db, 'usuarios', user.uid), snapshot => {
+        const profile = snapshot.data();
+        if (!hasAccess(user, profile)) { denyAccess(); return; }
+        if (currentProfile && JSON.stringify(profile.permisos) !== JSON.stringify(currentProfile.permisos)) { window.location.reload(); return; }
+        showPanel(user, profile);
+      }, error => {
+        console.error('No se pudo verificar el acceso:', error);
+        denyAccess();
+      });
     });
+    // También protege controles que se regeneran después de cada actualización.
+    function areaForControl(target) {
+      const view = target.closest('.view');
+      if (view) return view.id.replace('view-', '');
+      const modal = target.closest('.modal-overlay');
+      return modal ? (modal.id === 'clientModal' ? 'pedidos' : 'produccion') : null;
+    }
+    for (const eventName of ['click', 'input', 'change', 'submit']) {
+      document.addEventListener(eventName, event => {
+        const control = event.target.closest('button, input, select, form');
+        if (!control || ['searchInput', 'statusFilter', 'invShowInactive'].includes(control.id)) return;
+        const area = areaForControl(control);
+        if (!area) return;
+        const allowed = area === 'configuracion' || control.id === 'finPrecioVenta'
+          ? isAdmin(auth.currentUser) : canEdit(auth.currentUser, currentProfile, area);
+        if (!allowed) { event.preventDefault(); event.stopImmediatePropagation(); }
+      }, true);
+    }
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = "login";
+      try { await signOut(auth); window.location.href = 'login.html'; } catch (error) { reportError(error); }
     });
 
     // ---------------- TABS ----------------
@@ -905,8 +981,8 @@
     function startListeners() {
       if (listenersStarted) return;
       listenersStarted = true;
-      startConfigListener();
-      startProductionListener();
+      startConfigListener().catch(reportError);
+      startProductionListener().catch(reportError);
       startOrdersListener();
       startFinanzasListener();
       startInventoryListener();
@@ -927,29 +1003,22 @@
     };
 
     async function startConfigListener() {
-      const snap = await getDoc(configRef);
-      if (!snap.exists()) {
-        // Si ya había una "lana por manta" cargada en Producción (versión anterior),
-        // la migramos acá para no perder el dato.
-        const prodSnap = await getDoc(prodRef);
-        const lanaPorMantaPrevia = prodSnap.exists() ? Number(prodSnap.data().lanaPorManta) || 0 : 0;
-
-        // Si ya había un precio de venta cargado en Finanzas (versión anterior,
-        // guardado en finanzas/configuracion), lo migramos acá para que quede
-        // en un solo lugar y no se dupliquen los datos.
-        const finSnapPrevio = await getDoc(doc(db, "finanzas", "configuracion"));
-        const precioVentaPrevio = finSnapPrevio.exists() ? Number(finSnapPrevio.data().precioVentaKit) || 0 : 0;
-
-        await setDoc(configRef, {
-          precioVentaLifeBag: precioVentaPrevio,
-          costoLana: 0,
-          costoCuadrito: 0,
-          cuadritosPorManta: 16,
-          lanaPorManta: lanaPorMantaPrevia
+      if (isAdmin(auth.currentUser)) {
+        await runTransaction(db, async transaction => {
+          const existing = await transaction.get(configRef);
+          if (existing.exists()) return;
+          const production = await transaction.get(prodRef);
+          const previous = await transaction.get(doc(db, 'finanzas', 'configuracion'));
+          const oldValues = previous.data() || {};
+          transaction.set(configRef, {
+            precioVentaLifeBag: Number(oldValues.precioVentaLifeBag ?? oldValues.precioVentaKit) || 0,
+            costoLana: 0, costoCuadrito: 0, cuadritosPorManta: 16,
+            lanaPorManta: Number(production.data()?.lanaPorManta) || 0
+          });
         });
       }
 
-      onSnapshot(configRef, (docSnap) => {
+      listen(configRef, (docSnap) => {
         configCache = docSnap.data() || {};
 
         Object.entries(configInputs).forEach(([field, el]) => {
@@ -960,6 +1029,7 @@
 
         actualizarMantasPosibles();
         renderFinTable();
+        applyPermissions(auth.currentUser, currentProfile);
       });
     }
 
@@ -973,7 +1043,7 @@
           try {
             await setDoc(configRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
           } catch (err) {
-            console.error("Error al guardar configuración:", err);
+            reportError(err);
           }
         }, 500);
       });
@@ -1016,18 +1086,15 @@
     };
 
     async function startProductionListener() {
-      // Crear el documento si no existe, o completar los campos nuevos si faltan
-      const snap = await getDoc(prodRef);
-      if (!snap.exists()) {
-        await setDoc(prodRef, { cuadraditos: 0, mantas: 0, bolsas: 0, lanaDisponible: 0 });
-      } else {
-        const data = snap.data() || {};
-        if (data.lanaDisponible === undefined) {
-          await setDoc(prodRef, { lanaDisponible: 0 }, { merge: true });
-        }
+      if (canEdit(auth.currentUser, currentProfile, 'produccion')) {
+        await runTransaction(db, async transaction => {
+          const snapshot = await transaction.get(prodRef);
+          if (!snapshot.exists()) transaction.set(prodRef, { cuadraditos: 0, mantas: 0, bolsas: 0, lanaDisponible: 0 });
+          else if (snapshot.data().lanaDisponible === undefined) transaction.update(prodRef, { lanaDisponible: 0 });
+        });
       }
 
-      onSnapshot(prodRef, (docSnap) => {
+      listen(prodRef, (docSnap) => {
         const data = docSnap.data() || {};
         prodCache = data;
 
@@ -1061,6 +1128,7 @@
         // kits se pueden armar, así que hay que volver a calcular esa capacidad.
         renderKitCapacity();
         renderFinTable();
+        applyPermissions(auth.currentUser, currentProfile);
       });
     }
 
@@ -1076,7 +1144,7 @@
           try {
             await setDoc(prodRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
           } catch (err) {
-            console.error("Error al guardar producción:", err);
+            reportError(err);
           }
         }, 500);
       });
@@ -1089,10 +1157,15 @@
         const delta = parseInt(btn.dataset.delta, 10);
         btn.disabled = true;
         try {
-          await setDoc(prodRef, { [field]: increment(delta) }, { merge: true });
+          await runTransaction(db, async transaction => {
+            const snapshot = await transaction.get(prodRef);
+            const current = Number(snapshot.data()?.[field]) || 0;
+            if (current + delta < 0) throw new Error('El stock no puede ser negativo.');
+            transaction.set(prodRef, { [field]: current + delta }, { merge: true });
+          });
         } catch (err) {
           console.error("Error al actualizar producción:", err);
-          alert("No se pudo actualizar el contador.");
+          alert(err.message || "No se pudo actualizar el contador.");
         }
         btn.disabled = false;
       });
@@ -1110,12 +1183,13 @@
     function startOrdersListener() {
       // Orden ascendente = orden de llegada (el primero en anotarse es el #1)
       const q = query(collection(db, "pedidos_lifebag"), orderBy("fecha", "asc"));
-      onSnapshot(q, (snapshot) => {
+      listen(q, (snapshot) => {
         ordersCache = [];
         snapshot.forEach((docSnap) => {
           ordersCache.push({ id: docSnap.id, ...docSnap.data() });
         });
         applyFilters();
+        applyPermissions(auth.currentUser, currentProfile);
       });
     }
 
@@ -1124,9 +1198,9 @@
       const status = statusFilter.value;
       const filtered = ordersCache.filter(o => {
         const matchesTerm = !term ||
-          (o.nombre && o.nombre.toLowerCase().includes(term)) ||
-          (o.telefono && o.telefono.includes(term)) ||
-          (o.distrito && o.distrito.toLowerCase().includes(term));
+          String(o.nombre || '').toLowerCase().includes(term) ||
+          String(o.telefono || '').includes(term) ||
+          String(o.distrito || '').toLowerCase().includes(term);
         const matchesStatus = !status || (o.estado || "espera") === status;
         return matchesTerm && matchesStatus;
       });
@@ -1147,7 +1221,7 @@
       }
 
       tableBody.innerHTML = orders.map(order => {
-        const estado = order.estado || "espera";
+        const estado = ["espera", "entregado", "cancelado"].includes(order.estado) ? order.estado : "espera";
         // La posición en la fila refleja el orden de llegada dentro de la lista completa
         const position = ordersCache.findIndex(o => o.id === order.id) + 1;
 
@@ -1155,7 +1229,7 @@
           day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
         }) : "Reciente";
 
-        const cleanPhone = (order.telefono || "").replace(/\D/g, "");
+        const cleanPhone = normalizePhone(order.telefono);
         const cantidadKits = Math.max(1, parseInt(order.cantidadKits, 10) || 1);
         const ventaRegistrada = order.ventaRegistrada === true;
 
@@ -1168,7 +1242,7 @@
             <td>${escapeHtml(order.distrito || '-')}</td>
             <td style="text-align:center; font-weight:700;">${cantidadKits}</td>
             <td>
-              <select class="status-select status-${estado}" data-id="${order.id}">
+              <select class="status-select status-${estado}" data-id="${escapeHtml(order.id)}">
                 <option value="espera" ${estado === 'espera' ? 'selected' : ''}>⏳ En espera</option>
                 <option value="entregado" ${estado === 'entregado' ? 'selected' : ''}>✅ Entregado</option>
                 <option value="cancelado" ${estado === 'cancelado' ? 'selected' : ''}>❌ Cancelado</option>
@@ -1177,9 +1251,9 @@
             </td>
             <td>
               <div style="display:flex; gap:8px; align-items:center;">
-                <a class="btn-wa" href="https://wa.me/${cleanPhone}" target="_blank">Chat</a>
-                <button class="btn-edit" data-id="${order.id}">Editar</button>
-                <button class="btn-delete" data-id="${order.id}">Eliminar</button>
+                <a class="btn-wa" href="https://wa.me/${cleanPhone}" target="_blank" rel="noopener noreferrer">Chat</a>
+                <button class="btn-edit" data-id="${escapeHtml(order.id)}">Editar</button>
+                <button class="btn-delete" data-id="${escapeHtml(order.id)}">Eliminar</button>
               </div>
             </td>
           </tr>
@@ -1198,11 +1272,6 @@
       });
     }
 
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
 
     // Cambia el estado de un pedido y, cuando corresponde, aplica (o revierte)
     // su impacto en Producción y Finanzas dentro de una única transacción de
@@ -1210,10 +1279,11 @@
     // registre dos veces, incluso si se recarga la página o se reintenta:
     // Firestore es la única fuente de verdad y el indicador "ventaRegistrada",
     // guardado en el propio pedido, es lo que se consulta antes de aplicar algo.
-    async function cambiarEstadoPedido(id, newStatus) {
+    async function cambiarEstadoPedido(id, newStatus, changes = null) {
       const pedidoRef = doc(db, "pedidos_lifebag", id);
       // Se genera acá afuera (no cuesta una lectura al servidor) para poder
       // usarlo tanto en la escritura de la venta como en la del pedido.
+      if (!['espera', 'entregado', 'cancelado'].includes(newStatus)) throw new Error('Estado de pedido inválido.');
       const ventaRef = doc(collection(db, "ventas_kits"));
 
       await runTransaction(db, async (transaction) => {
@@ -1222,7 +1292,11 @@
         if (!pedidoSnap.exists()) {
           throw new Error("El pedido ya no existe.");
         }
-        const pedido = pedidoSnap.data();
+        const original = pedidoSnap.data();
+        if (changes && original.ventaRegistrada && changes.cantidadKits !== Number(original.cantidadKitsVendidos || original.cantidadKits)) {
+          throw new Error('Para cambiar la cantidad de una venta, primero pasá el pedido a cancelado y guardá.');
+        }
+        const pedido = { ...original, ...changes };
         const yaAplicada = pedido.ventaRegistrada === true;
 
         const prodSnap = await transaction.get(prodRef);
@@ -1262,6 +1336,7 @@
           });
 
           transaction.update(pedidoRef, {
+            ...changes,
             estado: newStatus,
             ventaRegistrada: true,
             ventaId: ventaRef.id,
@@ -1291,6 +1366,7 @@
           }
 
           transaction.update(pedidoRef, {
+            ...changes,
             estado: newStatus,
             ventaRegistrada: false
           });
@@ -1299,7 +1375,7 @@
 
         // ---- Caso C: sin impacto financiero que aplicar ni revertir
         // (espera <-> cancelado, o ya estaba entregado y sigue entregado) ----
-        transaction.update(pedidoRef, { estado: newStatus });
+        transaction.update(pedidoRef, { ...changes, estado: newStatus });
       });
     }
 
@@ -1319,10 +1395,15 @@
     async function deleteOrder(id) {
       if (confirm("¿Seguro que deseas eliminar este pedido de la lista?")) {
         try {
-          await deleteDoc(doc(db, "pedidos_lifebag", id));
+          await runTransaction(db, async transaction => {
+            const ref = doc(db, 'pedidos_lifebag', id);
+            const snapshot = await transaction.get(ref);
+            if (snapshot.data()?.ventaRegistrada) throw new Error('Este pedido tiene una venta registrada. Cambialo a cancelado para revertirla antes de eliminarlo.');
+            transaction.delete(ref);
+          });
         } catch (err) {
           console.error("Error al eliminar:", err);
-          alert("No se pudo eliminar el registro.");
+          alert(err.message || "No se pudo eliminar el registro.");
         }
       }
     }
@@ -1430,12 +1511,13 @@
 
     function startVentasListener() {
       const q = query(collection(db, "ventas_kits"), orderBy("fecha", "desc"));
-      onSnapshot(q, (snapshot) => {
+      listen(q, (snapshot) => {
         ventasCache = [];
         snapshot.forEach((docSnap) => {
           ventasCache.push({ id: docSnap.id, ...docSnap.data() });
         });
         renderFinTable();
+        applyPermissions(auth.currentUser, currentProfile);
       });
     }
 
@@ -1503,15 +1585,15 @@
         const cantidadPorKit = Number(p.cantidadPorKit) || 0;
         const costoEnKit = esKit ? costoUnitario * cantidadPorKit : 0;
         return `
-          <tr data-id="${p.id}">
+          <tr data-id="${escapeHtml(p.id)}">
             <td style="font-weight:700;">${escapeHtml(p.nombre || '')} <span style="font-weight:400; color:var(--text-muted); font-size:0.78rem;">(${escapeHtml(p.unidad || 'unidades')})</span></td>
             <td><span class="fin-readonly" style="text-align:left; display:inline;">${stockActual}</span></td>
-            <td><input type="number" step="0.01" min="0" class="fin-input" data-field="costoUnitario" data-id="${p.id}" value="${costoUnitario}"></td>
+            <td><input type="number" step="0.01" min="0" class="fin-input" data-field="costoUnitario" data-id="${escapeHtml(p.id)}" value="${costoUnitario}"></td>
             <td style="text-align:center;">
-              <input type="checkbox" data-field="esKit" data-id="${p.id}" ${esKit ? 'checked' : ''} style="width:18px; height:18px; cursor:pointer;">
+              <input type="checkbox" data-field="esKit" data-id="${escapeHtml(p.id)}" ${esKit ? 'checked' : ''} style="width:18px; height:18px; cursor:pointer;">
             </td>
             <td>
-              <input type="number" step="0.01" min="0" class="fin-input" data-field="cantidadPorKit" data-id="${p.id}"
+              <input type="number" step="0.01" min="0" class="fin-input" data-field="cantidadPorKit" data-id="${escapeHtml(p.id)}"
                 value="${cantidadPorKit}" ${esKit ? '' : 'disabled'} style="${esKit ? '' : 'opacity:0.4;'}">
             </td>
             <td><span class="fin-readonly">${fmtMoney(costoEnKit)}</span></td>
@@ -1566,13 +1648,14 @@
 
     function startInventoryListener() {
       const q = query(collection(db, "inventario_productos"), orderBy("orden", "asc"));
-      onSnapshot(q, (snapshot) => {
+      listen(q, (snapshot) => {
         invCache = [];
         snapshot.forEach((docSnap) => {
           invCache.push({ id: docSnap.id, ...docSnap.data() });
         });
         renderInvTable();
         renderFinTable();
+        applyPermissions(auth.currentUser, currentProfile);
       });
     }
 
@@ -1612,7 +1695,7 @@
 
       // Cada Life Bag lleva 1 manta terminada: el stock de mantas (dato de
       // Producción) también limita cuántos kits se pueden armar hoy.
-      const mantasTerminadas = Number(prodCache.mantas) || 0;
+      const mantasTerminadas = Math.max(0, Math.floor(Number(prodCache.mantas) || 0));
       if (mantasTerminadas < kits) {
         kits = mantasTerminadas;
         limitanteNombre = "Mantas terminadas";
@@ -1653,7 +1736,7 @@
         const isLow = stockActual <= stockMinimo;
         const activo = p.activo !== false;
         return `
-          <tr data-id="${p.id}" class="${activo ? '' : 'inv-inactive'}">
+          <tr data-id="${escapeHtml(p.id)}" class="${activo ? '' : 'inv-inactive'}">
             <td>${escapeHtml(p.nombre || '')}</td>
             <td>${escapeHtml(p.marca || '-')}</td>
             <td>${fmtMoney(p.costoUnitario)}</td>
@@ -1663,10 +1746,10 @@
             <td>${p.esKit ? `<span class="badge-kit">Kit x${Number(p.cantidadPorKit) || 0}</span>` : '-'}</td>
             <td><span class="badge-status ${activo ? 'activo' : 'inactivo'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
             <td class="inv-row-actions">
-              <button type="button" class="btn-buy" data-id="${p.id}">Comprar</button>
-              <button type="button" class="btn-edit" data-id="${p.id}">Editar</button>
-              <button type="button" class="btn-edit" data-id="${p.id}" data-toggle="1">${activo ? 'Desactivar' : 'Activar'}</button>
-              <button type="button" class="btn-delete" data-id="${p.id}">Eliminar</button>
+              <button type="button" class="btn-buy" data-id="${escapeHtml(p.id)}">Comprar</button>
+              <button type="button" class="btn-edit" data-id="${escapeHtml(p.id)}">Editar</button>
+              <button type="button" class="btn-edit" data-id="${escapeHtml(p.id)}" data-toggle="1">${activo ? 'Desactivar' : 'Activar'}</button>
+              <button type="button" class="btn-delete" data-id="${escapeHtml(p.id)}">Eliminar</button>
             </td>
           </tr>
         `;
@@ -1730,6 +1813,8 @@
 
     function toggleCantidadKitField() {
       invCantidadKitField.style.display = invEsKit.checked ? "block" : "none";
+      invCantidadPorKit.required = invEsKit.checked;
+      invCantidadPorKit.min = invEsKit.checked ? '0.01' : '0';
     }
     invEsKit.addEventListener('change', toggleCantidadKitField);
 
@@ -1765,6 +1850,7 @@
 
     function closeInvModal() {
       invModal.classList.remove("show");
+      lastModalTrigger?.focus();
       invEditingId = null;
     }
 
@@ -1785,6 +1871,11 @@
         cantidadPorKit: invEsKit.checked ? (parseFloat(invCantidadPorKit.value) || 0) : 0
       };
 
+      if (!payload.nombre || (payload.esKit && !(payload.cantidadPorKit > 0))) {
+        invModalError.textContent = 'Completá el nombre y una cantidad por kit mayor que cero.';
+        invModalError.style.display = 'block';
+        return;
+      }
       invModalSave.disabled = true;
       invModalSave.textContent = "Guardando...";
       invModalError.style.display = "none";
@@ -1834,6 +1925,7 @@
 
     function closeCompraModal() {
       compraModal.classList.remove("show");
+      lastModalTrigger?.focus();
       compraProductoId = null;
     }
 
@@ -1884,14 +1976,16 @@
       if (kitProducts.length === 0) {
         armarKitsSub.textContent = "Todavía no marcaste ningún producto como \"parte del kit\".";
         armarKitsCantidad.disabled = true;
+        armarKitsSave.disabled = true;
       } else {
-        let maxKits = Infinity;
+        let maxKits = Math.max(0, Math.floor(Number(prodCache.mantas) || 0));
         kitProducts.forEach(p => {
           const posibles = Math.floor((Number(p.stockActual) || 0) / Number(p.cantidadPorKit));
           if (posibles < maxKits) maxKits = posibles;
         });
         armarKitsSub.textContent = `Ahora mismo podés armar hasta ${maxKits} kit(s) con el stock disponible.`;
-        armarKitsCantidad.disabled = false;
+        armarKitsCantidad.disabled = maxKits === 0;
+        armarKitsSave.disabled = maxKits === 0;
         armarKitsCantidad.max = maxKits;
       }
       armarKitsModal.classList.add("show");
@@ -1900,6 +1994,7 @@
 
     function closeArmarKitsModal() {
       armarKitsModal.classList.remove("show");
+      lastModalTrigger?.focus();
     }
 
     armarKitsBtn.addEventListener('click', openArmarKitsModal);
@@ -1907,6 +2002,7 @@
     armarKitsModal.addEventListener('click', (e) => { if (e.target === armarKitsModal) closeArmarKitsModal(); });
 
     async function armarKits(cantidad) {
+      if (!Number.isSafeInteger(cantidad) || cantidad <= 0) throw new Error('Ingresá una cantidad entera positiva.');
       const kitProducts = getKitProducts();
       if (kitProducts.length === 0) {
         throw new Error("No hay productos marcados como parte del kit.");
@@ -1926,15 +2022,21 @@
             throw new Error(`El producto "${item.nombreFallback}" ya no existe.`);
           }
           const data = snap.data();
+          if (data.activo === false || !data.esKit || !(Number(data.cantidadPorKit) > 0)) {
+            throw new Error('La composición del kit cambió. Cerrá y volvé a abrir el formulario.');
+          }
           reads.push({
             ref: item.ref,
             nombre: data.nombre || item.nombreFallback,
             stockActual: Number(data.stockActual) || 0,
-            cantidadPorKit: Number(data.cantidadPorKit) || item.cantidadPorKitFallback
+            cantidadPorKit: Number(data.cantidadPorKit)
           });
         }
         const prodSnap = await transaction.get(prodRef);
         const bolsasActuales = prodSnap.exists() ? (Number(prodSnap.data().bolsas) || 0) : 0;
+
+        const mantasActuales = Number(prodSnap.data()?.mantas) || 0;
+        if (cantidad > mantasActuales) throw new Error(`No hay suficientes mantas terminadas: hay ${mantasActuales}.`);
 
         // 2) Validar que alcance el stock de TODOS los productos antes de tocar nada
         for (const r of reads) {
@@ -1951,9 +2053,9 @@
         });
 
         if (prodSnap.exists()) {
-          transaction.update(prodRef, { bolsas: bolsasActuales + cantidad });
+          transaction.update(prodRef, { bolsas: bolsasActuales + cantidad, mantas: mantasActuales - cantidad });
         } else {
-          transaction.set(prodRef, { cuadraditos: 0, mantas: 0, bolsas: cantidad });
+          transaction.set(prodRef, { cuadraditos: 0, mantas: mantasActuales - cantidad, bolsas: cantidad });
         }
       });
     }
@@ -2000,6 +2102,7 @@
 
     function closeVenderKitsModal() {
       venderKitsModal.classList.remove("show");
+      lastModalTrigger?.focus();
     }
 
     venderKitsBtn.addEventListener('click', openVenderKitsModal);
@@ -2007,6 +2110,7 @@
     venderKitsModal.addEventListener('click', (e) => { if (e.target === venderKitsModal) closeVenderKitsModal(); });
 
     async function venderKits(cantidad) {
+      if (!Number.isSafeInteger(cantidad) || cantidad <= 0) throw new Error('Ingresá una cantidad entera positiva.');
       const ventaRef = doc(collection(db, "ventas_kits"));
       await runTransaction(db, async (transaction) => {
         // 1) Lectura
@@ -2056,6 +2160,25 @@
 
       venderKitsSave.disabled = false;
       venderKitsSave.textContent = "Vender";
+    });
+
+    let lastModalTrigger = null;
+    document.addEventListener('click', event => {
+      if (!document.querySelector('.modal-overlay.show')) lastModalTrigger = event.target.closest('button, a');
+    }, true);
+    document.addEventListener('keydown', event => {
+      const modal = document.querySelector('.modal-overlay.show');
+      if (!modal) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        modal.querySelector('.modal-cancel').click();
+        lastModalTrigger?.focus();
+      } else if (event.key === 'Tab') {
+        const controls = [...modal.querySelectorAll('button, input, select, a[href]')].filter(control => !control.disabled && control.getClientRects().length);
+        const first = controls[0], last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
     });
 
     // ---------------- MODAL AGREGAR / EDITAR CLIENTE ----------------
@@ -2111,6 +2234,7 @@
 
     function closeModal() {
       clientModal.classList.remove("show");
+      lastModalTrigger?.focus();
       editingId = null;
     }
 
@@ -2134,22 +2258,9 @@
 
       try {
         if (editingId) {
-          // Datos básicos del pedido: esto nunca toca stock ni ingresos.
-          await updateDoc(doc(db, "pedidos_lifebag", editingId), {
-            nombre: name,
-            telefono: phone,
-            distrito: district,
-            cantidadKits
+          await cambiarEstadoPedido(editingId, status, {
+            nombre: name, telefono: phone, distrito: district, cantidadKits
           });
-
-          // El cambio de estado (si lo hubo) pasa por la misma función
-          // transaccional que usa el selector de la tabla, así nunca se
-          // duplica ni se pierde el registro de una venta.
-          const order = ordersCache.find(o => o.id === editingId);
-          const estadoActual = order ? (order.estado || "espera") : "espera";
-          if (status !== estadoActual) {
-            await cambiarEstadoPedido(editingId, status);
-          }
         } else {
           const newRef = doc(collection(db, "pedidos_lifebag"));
           await setDoc(newRef, {
@@ -2160,6 +2271,8 @@
             estado: "espera",
             fecha: serverTimestamp()
           });
+
+          editingId = newRef.id;
 
           // Si se carga directamente como "Entregado" (o "Cancelado"), se
           // aplica el mismo circuito de Producción/Finanzas que si el cambio

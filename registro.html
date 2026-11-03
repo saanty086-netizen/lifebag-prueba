@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crear cuenta | Panel Life Bag</title>
 <link rel="icon" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
+
+
+
 <style>
 :root{
 --cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
@@ -71,15 +72,16 @@ font-size:0.78rem; color:var(--text-muted); text-align:left; margin-bottom:1rem;
 .back{display:inline-block; margin-top:1.4rem; font-size:0.8rem; color:var(--text-muted); text-decoration:none;}
 .back:hover{color:var(--forest);}
 </style>
+<link rel="stylesheet" href="panel-ui.css">
 </head>
-<body>
+<body class="auth-page">
 <div class="card">
 <img src="assets/logo.png" alt="Life Bag">
 <h1>Sumate al equipo</h1>
 <p class="sub">Creá tu cuenta con Google o con tu correo. Un administrador va a revisar tu solicitud antes de que puedas ingresar al panel.</p>
 
-<div class="error" id="errorMsg"></div>
-<div class="success" id="successMsg"></div>
+<div class="error" id="errorMsg" role="alert"></div>
+<div class="success" id="successMsg" role="status"></div>
 
 <!-- Paso único con Google, o formulario con correo -->
 <div id="paso1">
@@ -93,7 +95,7 @@ font-size:0.78rem; color:var(--text-muted); text-align:left; margin-bottom:1rem;
   <form id="registroForm">
     <div class="form-group">
       <label for="nombre">Nombre completo</label>
-      <input type="text" id="nombre" placeholder="Tu nombre y apellido" required>
+      <input type="text" id="nombre" maxlength="80" autocomplete="name" placeholder="Tu nombre y apellido" required>
     </div>
     <div class="form-group">
       <label for="email">Correo electrónico</label>
@@ -116,7 +118,7 @@ font-size:0.78rem; color:var(--text-muted); text-align:left; margin-bottom:1rem;
   <p class="google-note">Ya validamos tu cuenta de Google. Ahora poné un nombre y una contraseña para tu perfil — así después vas a poder entrar tanto con Google como con tu correo y contraseña.</p>
   <div class="form-group">
     <label for="gNombre">Nombre completo</label>
-    <input type="text" id="gNombre" placeholder="Tu nombre y apellido" required>
+    <input type="text" id="gNombre" maxlength="80" autocomplete="name" placeholder="Tu nombre y apellido" required>
   </div>
   <div class="form-group">
     <label for="gPassword">Creá una contraseña</label>
@@ -129,13 +131,14 @@ font-size:0.78rem; color:var(--text-muted); text-align:left; margin-bottom:1rem;
   <button type="submit" id="googleFormBtn">Finalizar registro</button>
 </form>
 
-<a href="login" class="back">← Ya tengo cuenta, volver a ingresar</a>
+<a href="login.html" class="back">← Ya tengo cuenta, volver a ingresar</a>
 </div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
@@ -193,11 +196,25 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  btn.disabled = true;
+  if (!nombre) { mostrarError('Completá tu nombre.'); return; }
+  btn.disabled = googleBtn.disabled = true;
   btn.textContent = "Creando cuenta...";
 
   try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    let cred;
+    try {
+      cred = await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      // Si Auth se creó pero falló el perfil, reintentar recupera esa misma cuenta.
+      if (error.code !== 'auth/email-already-in-use') throw error;
+      cred = await signInWithEmailAndPassword(auth, email, password);
+      const existing = await getDoc(doc(db, 'usuarios', cred.user.uid));
+      if (existing.exists()) {
+        await signOut(auth);
+        mostrarError(messages['auth/email-already-in-use']);
+        return;
+      }
+    }
 
     await setDoc(doc(db, "usuarios", cred.user.uid), {
       email: email,
@@ -215,7 +232,7 @@ form.addEventListener('submit', async (e) => {
     console.error(err);
     mostrarError(messages[err.code] || "No se pudo crear la cuenta. Probá de nuevo.");
   } finally {
-    btn.disabled = false;
+    btn.disabled = googleBtn.disabled = false;
     btn.textContent = "Crear cuenta";
   }
 });
@@ -229,6 +246,7 @@ let googleUser = null;
 
 googleBtn.addEventListener('click', async () => {
   ocultarMensajes();
+  googleBtn.disabled = btn.disabled = true;
   const provider = new GoogleAuthProvider();
 
   try {
@@ -251,8 +269,10 @@ googleBtn.addEventListener('click', async () => {
     googleForm.style.display = "block";
   } catch (err) {
     console.error(err);
+    await signOut(auth).catch(console.error);
+    googleUser = null;
     mostrarError("No se pudo continuar con Google. Probá de nuevo.");
-  }
+  } finally { googleBtn.disabled = btn.disabled = false; }
 });
 
 googleForm.addEventListener('submit', async (e) => {
@@ -268,13 +288,16 @@ googleForm.addEventListener('submit', async (e) => {
     return;
   }
 
+  if (!nombre) { mostrarError('Completá tu nombre.'); return; }
   googleFormBtn.disabled = true;
   googleFormBtn.textContent = "Guardando...";
 
   try {
     // Vinculamos correo + contraseña a la misma cuenta de Google
     const credential = EmailAuthProvider.credential(googleUser.email, password);
-    await linkWithCredential(googleUser, credential);
+    if (!googleUser.providerData.some(provider => provider.providerId === 'password')) {
+      await linkWithCredential(googleUser, credential);
+    }
 
     await setDoc(doc(db, "usuarios", googleUser.uid), {
       email: googleUser.email,

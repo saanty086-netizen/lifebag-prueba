@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function admin() {
+      return signedIn() && request.auth.token.get('email_verified', false) == true
+        && request.auth.token.get('email', '') in ['saanty086@gmail.com', 'lifebag11@gmail.com'];
+    }
+    function approved() {
+      return signedIn() && (admin() ||
+        (exists(/databases/$(database)/documents/usuarios/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.estado == 'aprobado'));
+    }
+    function edits(area) {
+      return admin() || (approved() &&
+        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.get('permisos', {}).get(area, false) == true);
+    }
+    function reservation() {
+      let data = request.resource.data;
+      return data.keys().hasOnly(['nombre', 'telefono', 'distrito', 'cantidadKits', 'estado', 'fecha'])
+        && data.keys().hasAll(['nombre', 'telefono', 'distrito', 'cantidadKits', 'estado', 'fecha'])
+        && data.nombre is string && data.nombre.size() > 0 && data.nombre.size() <= 80
+        && data.telefono is string && data.telefono.size() >= 10 && data.telefono.size() <= 25
+        && data.distrito is string && data.distrito.size() > 0 && data.distrito.size() <= 60
+        && data.cantidadKits is int && data.cantidadKits >= 1 && data.cantidadKits <= 5
+        && data.estado == 'espera' && data.fecha == request.time;
+    }
+    match /usuarios/{uid} {
+      allow get: if admin() || (signedIn() && request.auth.uid == uid);
+      allow list: if admin();
+      allow create: if admin() || (signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['nombre', 'email', 'estado', 'rol', 'creadoEn'])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.estado == 'pendiente' && request.resource.data.rol == 'usuario'
+        && request.resource.data.creadoEn == request.time);
+      allow update, delete: if admin();
+    }
+    match /pedidos_lifebag/{id} {
+      allow create: if reservation() || edits('pedidos');
+      allow read: if approved();
+      allow update: if edits('pedidos');
+      allow delete: if edits('pedidos') && resource.data.get('ventaRegistrada', false) != true;
+    }
+    match /produccion/{id} {
+      allow read: if approved();
+      allow create: if edits('produccion');
+      allow update: if edits('produccion') || (edits('pedidos') &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['bolsas', 'kitsVendidos']));
+      allow delete: if admin();
+    }
+    match /inventario_productos/{id} {
+      allow read: if approved();
+      allow create, update: if edits('produccion') || edits('finanzas');
+      allow delete: if edits('produccion');
+    }
+    match /ventas_kits/{id} {
+      allow read: if approved();
+      allow create, update: if edits('produccion') || edits('pedidos');
+      allow delete: if admin();
+    }
+    match /configuracion/{id} {
+      allow read: if approved();
+      allow write: if admin();
+    }
+    match /finanzas/{id} {
+      allow read: if approved();
+      allow write: if admin();
+    }
+  }
+}

@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ingresar | Panel Life Bag</title>
 <link rel="icon" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
+
+
+
 <style>
 :root{
 --cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
@@ -70,15 +71,16 @@ padding:0.65rem 0.85rem; border-radius:var(--radius-sm); margin-bottom:1rem; fon
 .crear-cuenta{display:block; margin-top:0.6rem; font-size:0.8rem; color:var(--forest); text-decoration:none; font-weight:700;}
 .crear-cuenta:hover{text-decoration:underline;}
 </style>
+<link rel="stylesheet" href="panel-ui.css">
 </head>
-<body>
+<body class="auth-page">
 <div class="card">
 <img src="assets/logo.png" alt="Life Bag">
 <h1>Panel interno</h1>
 <p class="sub">Ingresá con tu cuenta para ver pedidos y producción.</p>
 
-<div class="error" id="errorMsg"></div>
-<div class="info" id="infoMsg"></div>
+<div class="error" id="errorMsg" role="alert"></div>
+<div class="info" id="infoMsg" role="status"></div>
 
 <button type="button" id="googleBtn" class="google-btn">
 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
@@ -99,140 +101,84 @@ Ingresar con Google
 <button type="submit" id="loginBtn">Ingresar</button>
 </form>
 
-<a href="registro" class="crear-cuenta">¿No tenés cuenta? Registrate acá</a>
-<a href="/" class="back">← Volver al sitio</a>
+<a href="registro.html" class="crear-cuenta">¿No tenés cuenta? Registrate acá</a>
+<a href="index.html" class="back">← Volver al sitio</a>
 </div>
 
 <script type="module">
-import { auth, db } from "./firebase-config.js";
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// Correos con acceso total garantizado (developer/dueños del panel).
-// Además de pasar el chequeo de Firestore, estos correos se auto-aprueban.
-const ADMINS_PERMITIDOS = [
-  "saanty086@gmail.com",
-  "lifebag11@gmail.com"
-];
+import { auth, db } from './firebase-config.js';
+import { ADMIN_EMAILS, isAdmin, hasAccess } from './access.js';
+import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const errorMsg = document.getElementById('errorMsg');
 const infoMsg = document.getElementById('infoMsg');
-
-function mostrarError(html) {
-  infoMsg.style.display = "none";
-  errorMsg.innerHTML = html;
-  errorMsg.style.display = "block";
-}
-
-function ocultarMensajes() {
-  errorMsg.style.display = "none";
-  infoMsg.style.display = "none";
-}
-
-// Revisa el estado del usuario en Firestore y decide si lo deja pasar.
-// Si el usuario es un admin permitido y todavía no tiene documento, se lo crea ya aprobado.
-async function verificarAccesoYRedirigir(user) {
-  const ref = doc(db, "usuarios", user.uid);
-  const snap = await getDoc(ref);
-
-  if (!snap.exists()) {
-    if (ADMINS_PERMITIDOS.includes(user.email)) {
-      await setDoc(ref, {
-        email: user.email,
-        estado: "aprobado",
-        rol: "admin",
-        creadoEn: serverTimestamp()
-      });
-      window.location.href = "admin";
-      return;
-    }
-
-    await signOut(auth);
-    mostrarError('Todavía no formás parte del equipo. <a href="registro">Registrate para entrar al equipo de Life Bag</a>.');
-    return;
-  }
-
-  const datos = snap.data();
-
-  if (datos.estado === "aprobado") {
-    window.location.href = "admin";
-    return;
-  }
-
-  if (datos.estado === "rechazado") {
-    await signOut(auth);
-    mostrarError('Tu acceso al panel fue rechazado. Si creés que es un error, contactá a un administrador.');
-    return;
-  }
-
-  // estado === "pendiente" (o cualquier otro valor inesperado)
-  await signOut(auth);
-  mostrarError('Tu cuenta está pendiente de aprobación por un administrador. Te avisamos apenas se revise.');
-}
-
-// Si ya hay una sesión activa, revisar su estado antes de decidir a dónde mandarlo
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    verificarAccesoYRedirigir(user);
-  }
-});
-
-// --- Login con email y contraseña ---
 const form = document.getElementById('loginForm');
 const btn = document.getElementById('loginBtn');
-
+const googleBtn = document.getElementById('googleBtn');
+function mostrarError(text) {
+  infoMsg.style.display = 'none';
+  errorMsg.textContent = text;
+  errorMsg.style.display = 'block';
+}
+function busy(value) {
+  btn.disabled = googleBtn.disabled = value;
+  btn.textContent = value ? 'Verificando acceso…' : 'Ingresar';
+}
 const messages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',
-  'auth/user-not-found': 'No existe una cuenta con ese correo.',
-  'auth/wrong-password': 'La contraseña es incorrecta.',
+  'auth/user-not-found': 'Correo o contraseña incorrectos.',
+  'auth/wrong-password': 'Correo o contraseña incorrectos.',
   'auth/invalid-credential': 'Correo o contraseña incorrectos.',
-  'auth/too-many-requests': 'Demasiados intentos. Probá de nuevo en unos minutos.'
+  'auth/too-many-requests': 'Demasiados intentos. Probá de nuevo en unos minutos.',
+  'auth/network-request-failed': 'No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.'
 };
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  ocultarMensajes();
-  btn.disabled = true;
-  btn.textContent = "Ingresando...";
-
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-
+// Un único lugar verifica el acceso: evita duplicar lecturas y redirecciones al iniciar sesión.
+onAuthStateChanged(auth, async user => {
+  if (!user) return;
+  busy(true);
   try {
-    const cred = await signInWithEmailAndPassword(auth, email, password);
-    await verificarAccesoYRedirigir(cred.user);
-  } catch (err) {
-    console.error(err);
-    mostrarError(messages[err.code] || "No se pudo iniciar sesión. Intentá de nuevo.");
+    if (ADMIN_EMAILS.includes((user.email || '').toLowerCase()) && !user.emailVerified) {
+      await signOut(auth);
+      mostrarError('Verificá el correo de tu cuenta de administrador o ingresá con Google usando ese mismo correo.');
+      return;
+    }
+    const profile = isAdmin(user) ? null : (await getDoc(doc(db, 'usuarios', user.uid))).data();
+    if (auth.currentUser?.uid !== user.uid) return;
+    if (hasAccess(user, profile)) {
+      window.location.replace('admin.html');
+      return;
+    }
+    await signOut(auth);
+    mostrarError(!profile ? 'Todavía no formás parte del equipo. Registrate con el enlace de abajo.' : profile.estado === 'rechazado' ? 'Tu solicitud fue rechazada. Contactá a un administrador.' : 'Tu cuenta está pendiente de aprobación por un administrador.');
+  } catch (error) {
+    console.error('Error al verificar el acceso:', error);
+    await signOut(auth).catch(console.error);
+    mostrarError('No pudimos verificar tu acceso. Intentá de nuevo en unos minutos.');
   } finally {
-    btn.disabled = false;
-    btn.textContent = "Ingresar";
+    busy(false);
   }
 });
-
-// --- Login con Google ---
-const googleBtn = document.getElementById('googleBtn');
-
-googleBtn.addEventListener('click', async () => {
-  ocultarMensajes();
-  const provider = new GoogleAuthProvider();
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (btn.disabled) return;
+  errorMsg.style.display = 'none';
+  busy(true);
   try {
-    const result = await signInWithPopup(auth, provider);
-    await verificarAccesoYRedirigir(result.user);
-  } catch (err) {
-    console.error(err);
-    mostrarError("No se pudo iniciar sesión con Google.");
+    await signInWithEmailAndPassword(auth, form.elements.email.value.trim(), form.elements.password.value);
+  } catch (error) {
+    mostrarError(messages[error.code] || 'No se pudo iniciar sesión. Intentá de nuevo.');
+    busy(false);
+  }
+});
+googleBtn.addEventListener('click', async () => {
+  errorMsg.style.display = 'none';
+  busy(true);
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  } catch (error) {
+    mostrarError(error.code === 'auth/popup-closed-by-user' ? 'Se cerró la ventana de Google. Podés volver a intentarlo.' : 'No se pudo iniciar sesión con Google.');
+    busy(false);
   }
 });
 </script>

@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solicitudes y permisos | Life Bag</title>
 <link rel="icon" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
+
+
+
 <style>
 :root{
 --cream:#f6f1e6; --forest:#1b4332; --forest-deep:#0f2a1f;
@@ -67,10 +68,13 @@ margin-left:6px;
 }
 .guardado.show{opacity:1;}
 </style>
+<link rel="stylesheet" href="panel-ui.css">
 </head>
-<body>
+<body class="team-page">
 
 <div class="wrap" id="app" style="display:none;">
+  <a class="back-panel" href="admin.html">← Volver al panel</a>
+  <p id="teamError" class="team-error" role="alert" hidden></p>
   <h1>Equipo Life Bag</h1>
   <p class="sub">Aprobá solicitudes y asigná qué área puede editar cada persona</p>
 
@@ -78,6 +82,9 @@ margin-left:6px;
   <div class="panel">
     <div id="listaPendientes"></div>
   </div>
+
+  <h2>Solicitudes rechazadas</h2>
+  <div class="panel"><div id="listaRechazados"></div></div>
 
   <h2>Usuarios aprobados</h2>
   <div class="panel">
@@ -87,177 +94,84 @@ margin-left:6px;
 
 <div id="bloqueado" class="bloqueado" style="display:none;">
   Esta sección es solo para administradores.<br>
-  <a href="login">← Volver a ingresar</a>
+  <a href="login.html">← Volver a ingresar</a>
 </div>
 
 <script type="module">
-import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// Solo estas cuentas pueden aprobar, rechazar y asignar permisos
-const ADMINS = ["saanty086@gmail.com", "lifebag11@gmail.com"];
-
-// Áreas disponibles: clave interna -> etiqueta visible
-const AREAS = {
-  pedidos: "Lista de espera",
-  produccion: "Producción",
-  finanzas: "Finanzas"
-};
+import { auth, db } from './firebase-config.js';
+import { ADMIN_EMAILS, isAdmin, escapeHtml } from './access.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { collection, query, where, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app = document.getElementById('app');
-const bloqueado = document.getElementById('bloqueado');
-const listaPendientes = document.getElementById('listaPendientes');
-const listaAprobados = document.getElementById('listaAprobados');
-
-onAuthStateChanged(auth, (user) => {
-  if (!user || !ADMINS.includes(user.email)) {
-    bloqueado.style.display = "block";
-    return;
-  }
-  app.style.display = "block";
-  cargarPendientes();
-  cargarAprobados();
+const blocked = document.getElementById('bloqueado');
+const errorMessage = document.getElementById('teamError');
+const areas = { pedidos: 'Lista de espera', produccion: 'Producción', finanzas: 'Finanzas' };
+function showError(error) {
+  console.error('No se pudo actualizar el equipo:', error);
+  errorMessage.hidden = false;
+  errorMessage.textContent = 'No se pudo completar la operación. Revisá la conexión y los permisos e intentá de nuevo.';
+}
+onAuthStateChanged(auth, user => {
+  app.style.display = isAdmin(user) ? 'block' : 'none';
+  blocked.style.display = isAdmin(user) ? 'none' : 'block';
+  if (isAdmin(user)) reload();
 });
-
-// ---------- Pendientes ----------
-async function cargarPendientes() {
-  listaPendientes.innerHTML = '<div class="vacio">Cargando...</div>';
-
-  const q = query(collection(db, "usuarios"), where("estado", "==", "pendiente"));
-  const snap = await getDocs(q);
-
-  if (snap.empty) {
-    listaPendientes.innerHTML = '<div class="vacio">No hay solicitudes pendientes.</div>';
-    return;
+async function reload() {
+  errorMessage.hidden = true;
+  await Promise.all(['pendiente', 'rechazado', 'aprobado'].map(loadUsers));
+}
+async function loadUsers(state) {
+  const target = document.getElementById({ pendiente: 'listaPendientes', rechazado: 'listaRechazados', aprobado: 'listaAprobados' }[state]);
+  target.innerHTML = '<div class="vacio">Cargando…</div>';
+  try {
+    const result = await getDocs(query(collection(db, 'usuarios'), where('estado', '==', state)));
+    if (!isAdmin(auth.currentUser)) return;
+    const users = result.docs.filter(item => !ADMIN_EMAILS.includes(String(item.data().email || '').toLowerCase()));
+    if (!users.length) {
+      target.innerHTML = '<div class="vacio">No hay cuentas en esta sección.</div>';
+      return;
+    }
+    target.innerHTML = users.map(item => {
+      const data = item.data();
+      const id = escapeHtml(item.id);
+      const email = escapeHtml(data.email);
+      const name = escapeHtml(data.nombre || data.email);
+      const date = data.creadoEn?.toDate ? data.creadoEn.toDate().toLocaleDateString('es-AR') : '';
+      const permissions = Object.entries(areas).map(([area, label]) => `<label class="permiso-item"><input type="checkbox" data-uid="${id}" data-area="${area}" ${data.permisos?.[area] === true ? 'checked' : ''}>${label}</label>`).join('');
+      return `<div class="fila"><div><div class="correo">${name}</div><div class="fecha">${email}${date ? ' · ' + escapeHtml(date) : ''}</div></div><div class="${state === 'aprobado' ? 'permisos' : 'botones'}">${state === 'aprobado' ? permissions : `<button class="aprobar" data-id="${id}" data-state="aprobado">Aprobar</button>${state === 'pendiente' ? `<button class="rechazar" data-id="${id}" data-state="rechazado">Rechazar</button>` : ''}`}<button class="eliminar" data-id="${id}" data-correo="${email}">Eliminar</button></div></div>`;
+    }).join('');
+  } catch (error) {
+    target.innerHTML = '<div class="vacio">No pudimos cargar las cuentas. <button type="button" class="retry">Reintentar</button></div>';
+    target.querySelector('.retry').addEventListener('click', () => loadUsers(state));
+    showError(error);
   }
-
-  listaPendientes.innerHTML = '';
-  snap.forEach((docSnap) => {
-    const data = docSnap.data();
-    const fecha = data.creadoEn ? data.creadoEn.toDate().toLocaleDateString('es-AR') : '';
-
-    const fila = document.createElement('div');
-    fila.className = 'fila';
-    fila.innerHTML = `
-      <div>
-        <div class="correo">${data.nombre || data.email}</div>
-        <div class="fecha">${data.nombre ? data.email + ' · ' : ''}${fecha}</div>
-      </div>
-      <div class="botones">
-        <button class="aprobar" data-id="${docSnap.id}">Aprobar</button>
-        <button class="rechazar" data-id="${docSnap.id}">Rechazar</button>
-        <button class="eliminar" data-id="${docSnap.id}" data-correo="${data.email}">Eliminar</button>
-      </div>
-    `;
-    listaPendientes.appendChild(fila);
-  });
-
-  listaPendientes.querySelectorAll('.aprobar').forEach(btn => {
-    btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'aprobado'));
-  });
-  listaPendientes.querySelectorAll('.rechazar').forEach(btn => {
-    btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'rechazado'));
-  });
-  listaPendientes.querySelectorAll('.eliminar').forEach(btn => {
-    btn.addEventListener('click', () => eliminarUsuario(btn.dataset.id, btn.dataset.correo, cargarPendientes));
-  });
 }
-
-async function cambiarEstado(uid, estado) {
-  await updateDoc(doc(db, "usuarios", uid), {
-    estado: estado,
-    revisadoPor: auth.currentUser.email,
-    revisadoEn: serverTimestamp()
-  });
-  cargarPendientes();
-  cargarAprobados();
-}
-
-// ---------- Aprobados: asignar permisos por área ----------
-async function cargarAprobados() {
-  listaAprobados.innerHTML = '<div class="vacio">Cargando...</div>';
-
-  const q = query(collection(db, "usuarios"), where("estado", "==", "aprobado"));
-  const snap = await getDocs(q);
-
-  // No mostramos a los admins acá: ya tienen acceso total a todo
-  const usuarios = snap.docs.filter(d => !ADMINS.includes(d.data().email));
-
-  if (usuarios.length === 0) {
-    listaAprobados.innerHTML = '<div class="vacio">Todavía no hay usuarios aprobados (aparte de los administradores).</div>';
-    return;
-  }
-
-  listaAprobados.innerHTML = '';
-  usuarios.forEach((docSnap) => {
-    const data = docSnap.data();
-    const permisos = data.permisos || {};
-
-    const fila = document.createElement('div');
-    fila.className = 'fila';
-
-    const checkboxesHtml = Object.entries(AREAS).map(([clave, etiqueta]) => `
-      <label class="permiso-item">
-        <input type="checkbox" data-uid="${docSnap.id}" data-area="${clave}" ${permisos[clave] ? 'checked' : ''}>
-        ${etiqueta}
-      </label>
-    `).join('');
-
-    fila.innerHTML = `
-      <div>
-        <div class="correo">${data.nombre || data.email}</div>
-        <div class="fecha">${data.nombre ? data.email : ''}</div>
-      </div>
-      <div class="permisos">
-        ${checkboxesHtml}
-        <span class="guardado" data-guardado-de="${docSnap.id}">Guardado ✓</span>
-        <button class="eliminar" data-id="${docSnap.id}" data-correo="${data.email}">Eliminar</button>
-      </div>
-    `;
-    listaAprobados.appendChild(fila);
-  });
-
-  listaAprobados.querySelectorAll('.eliminar').forEach(btn => {
-    btn.addEventListener('click', () => eliminarUsuario(btn.dataset.id, btn.dataset.correo, cargarAprobados));
-  });
-
-  listaAprobados.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-    chk.addEventListener('change', async () => {
-      const uid = chk.dataset.uid;
-      const area = chk.dataset.area;
-      await updateDoc(doc(db, "usuarios", uid), {
-        [`permisos.${area}`]: chk.checked
-      });
-
-      const aviso = listaAprobados.querySelector(`[data-guardado-de="${uid}"]`);
-      if (aviso) {
-        aviso.classList.add('show');
-        setTimeout(() => aviso.classList.remove('show'), 1500);
-      }
-    });
-  });
-}
-
-// ---------- Eliminar usuario (pendiente o aprobado) ----------
-async function eliminarUsuario(uid, correo, recargar) {
-  const confirmado = confirm(
-    `¿Eliminar a ${correo}?\n\nEsto le saca el acceso al panel de inmediato (ya no va a poder entrar). Su cuenta de acceso (usuario/contraseña o Google) sigue existiendo en Firebase Authentication; si querés borrarla por completo, hacelo aparte desde Firebase Console → Authentication → Users.`
-  );
-  if (!confirmado) return;
-
-  await deleteDoc(doc(db, "usuarios", uid));
-  recargar();
-}
+app.addEventListener('click', async event => {
+  const button = event.target.closest('button[data-id]');
+  if (!button || !isAdmin(auth.currentUser)) return;
+  if (button.classList.contains('eliminar') && !confirm(`¿Quitarle el acceso al panel a ${button.dataset.correo}? Su cuenta de Firebase Authentication seguirá existiendo.`)) return;
+  button.disabled = true;
+  try {
+    const ref = doc(db, 'usuarios', button.dataset.id);
+    if (button.classList.contains('eliminar')) await deleteDoc(ref);
+    else await updateDoc(ref, { estado: button.dataset.state, revisadoPor: auth.currentUser.email, revisadoEn: serverTimestamp() });
+    await reload();
+  } catch (error) { showError(error); }
+  finally { button.disabled = false; }
+});
+app.addEventListener('change', async event => {
+  const checkbox = event.target.closest('input[data-area]');
+  if (!checkbox || !isAdmin(auth.currentUser)) return;
+  checkbox.disabled = true;
+  errorMessage.hidden = true;
+  try {
+    await updateDoc(doc(db, 'usuarios', checkbox.dataset.uid), { [`permisos.${checkbox.dataset.area}`]: checkbox.checked });
+  } catch (error) {
+    checkbox.checked = !checkbox.checked;
+    showError(error);
+  } finally { checkbox.disabled = false; }
+});
 </script>
 </body>
 </html>
