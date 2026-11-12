@@ -361,7 +361,7 @@
             <div class="ic">🧵</div>
             <h3>Lana disponible</h3>
             <p class="hint">En la unidad que uses habitualmente (ovillos, madejas, etc.)</p>
-            <input type="number" class="prod-input" id="input-lanaDisponible" min="0" step="0.01" value="0">
+            <input type="number" class="prod-input" id="input-lanaDisponible" min="0" step="1" value="0">
           </div>
 
           <div class="prod-card">
@@ -684,7 +684,7 @@
             <div class="ic">🧶</div>
             <h3>Lana por manta</h3>
             <p class="hint">Cuánta lana (misma unidad de Producción) usa cada manta</p>
-            <input type="number" class="prod-input" id="cfg-lanaPorManta" min="0" step="0.01" value="0" placeholder="Ej: 150">
+            <input type="number" class="prod-input" id="cfg-lanaPorManta" min="0" step="1" value="0" placeholder="Ej: 150">
           </div>
         </div>
 
@@ -765,11 +765,11 @@
         </div>
         <div class="modal-field">
           <label for="invStockActual">Stock actual</label>
-          <input type="number" id="invStockActual" step="0.01" min="0" value="0">
+          <input type="number" id="invStockActual" step="1" min="0" value="0">
         </div>
         <div class="modal-field">
           <label for="invStockMinimo">Stock mínimo</label>
-          <input type="number" id="invStockMinimo" step="0.01" min="0" value="0">
+          <input type="number" id="invStockMinimo" step="1" min="0" value="0">
         </div>
         <div class="modal-field">
           <label for="invUnidad">Unidad</label>
@@ -789,7 +789,7 @@
         </div>
         <div class="modal-field" id="invCantidadKitField" style="display:none;">
           <label for="invCantidadPorKit">Cantidad necesaria por kit</label>
-          <input type="number" id="invCantidadPorKit" step="0.01" min="0" value="0">
+          <input type="number" id="invCantidadPorKit" step="1" min="0" value="0">
         </div>
 
         <div class="modal-actions">
@@ -811,7 +811,7 @@
       <form id="compraForm">
         <div class="modal-field">
           <label for="compraCantidad">Cantidad comprada</label>
-          <input type="number" id="compraCantidad" step="0.01" min="0.01" required autocomplete="off">
+          <input type="number" id="compraCantidad" step="1" min="1" required autocomplete="off">
         </div>
 
         <div class="modal-actions">
@@ -1040,6 +1040,7 @@
         clearTimeout(configDebounce[field]);
         configDebounce[field] = setTimeout(async () => {
           const valor = parseFloat(el.value);
+          if (!el.reportValidity()) return;
           try {
             await setDoc(configRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
           } catch (err) {
@@ -1140,7 +1141,11 @@
       el.addEventListener('input', () => {
         clearTimeout(prodInputDebounce[field]);
         prodInputDebounce[field] = setTimeout(async () => {
-          const valor = parseFloat(el.value);
+          const valor = Number(el.value);
+          if (!Number.isSafeInteger(valor) || valor < 0) {
+            el.reportValidity();
+            return;
+          }
           try {
             await setDoc(prodRef, { [field]: isNaN(valor) || valor < 0 ? 0 : valor }, { merge: true });
           } catch (err) {
@@ -1593,7 +1598,7 @@
               <input type="checkbox" data-field="esKit" data-id="${escapeHtml(p.id)}" ${esKit ? 'checked' : ''} style="width:18px; height:18px; cursor:pointer;">
             </td>
             <td>
-              <input type="number" step="0.01" min="0" class="fin-input" data-field="cantidadPorKit" data-id="${escapeHtml(p.id)}"
+              <input type="number" step="1" min="0" class="fin-input" data-field="cantidadPorKit" data-id="${escapeHtml(p.id)}"
                 value="${cantidadPorKit}" ${esKit ? '' : 'disabled'} style="${esKit ? '' : 'opacity:0.4;'}">
             </td>
             <td><span class="fin-readonly">${fmtMoney(costoEnKit)}</span></td>
@@ -1631,6 +1636,7 @@
           value = parseFloat(rawValue);
           if (isNaN(value) || value < 0) value = 0;
         }
+        if (field === "cantidadPorKit" && (!Number.isSafeInteger(value) || value < 0)) return;
         await updateDoc(doc(db, "inventario_productos", id), { [field]: value });
       } catch (err) {
         console.error("Error al guardar finanzas:", err);
@@ -1864,13 +1870,18 @@
         nombre: invNombre.value.trim(),
         marca: invMarca.value.trim(),
         costoUnitario: parseFloat(invCostoUnitario.value) || 0,
-        stockActual: parseFloat(invStockActual.value) || 0,
-        stockMinimo: parseFloat(invStockMinimo.value) || 0,
+        stockActual: Number(invStockActual.value),
+        stockMinimo: Number(invStockMinimo.value),
         unidad: invUnidad.value,
         esKit: invEsKit.checked,
-        cantidadPorKit: invEsKit.checked ? (parseFloat(invCantidadPorKit.value) || 0) : 0
+        cantidadPorKit: invEsKit.checked ? Number(invCantidadPorKit.value) : 0
       };
 
+      if (![payload.stockActual, payload.stockMinimo, payload.cantidadPorKit].every(value => Number.isSafeInteger(value) && value >= 0)) {
+        invModalError.textContent = 'Las cantidades deben ser números enteros mayores o iguales a cero.';
+        invModalError.style.display = 'block';
+        return;
+      }
       if (!payload.nombre || (payload.esKit && !(payload.cantidadPorKit > 0))) {
         invModalError.textContent = 'Completá el nombre y una cantidad por kit mayor que cero.';
         invModalError.style.display = 'block';
@@ -1934,8 +1945,8 @@
 
     compraForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const cantidad = parseFloat(compraCantidad.value);
-      if (isNaN(cantidad) || cantidad <= 0) return;
+      const cantidad = Number(compraCantidad.value);
+      if (!Number.isSafeInteger(cantidad) || cantidad <= 0) return;
 
       compraModalSave.disabled = true;
       compraModalSave.textContent = "Registrando...";

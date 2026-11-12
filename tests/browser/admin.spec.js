@@ -138,3 +138,16 @@ test('un guardado automático fallido se informa en el panel', async ({ page, se
   await expect(page.locator('#panelNotice')).toBeVisible();
   expect(await page.evaluate(() => window.__db['produccion/contadores'].mantas)).toBe(2);
 });
+
+test('inventario rechaza compras fraccionarias y registra cantidades enteras', async ({ page, setup }) => {
+  await openAdmin(page, setup);
+  await page.locator('#invTableBody tr[data-id="agua"] .btn-buy').click();
+  await page.locator('#compraCantidad').fill('1.5');
+  await page.locator('#compraModalSave').click();
+  await expect(page.locator('#compraCantidad:invalid')).toHaveCount(1);
+  expect(await page.evaluate(() => window.__db['inventario_productos/agua'].stockActual)).toBe(10);
+  await page.locator('#compraCantidad').fill('2');
+  await page.locator('#compraModalSave').click();
+  await expect(page.locator('#compraModal')).not.toHaveClass(/show/);
+  expect(await page.evaluate(() => window.__db['inventario_productos/agua'].stockActual)).toBe(12);
+});

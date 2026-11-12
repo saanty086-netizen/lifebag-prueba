@@ -177,8 +177,11 @@ details.card[open] summary>.chev{transform:rotate(180deg)}
 .tip>.i{margin-bottom:20px}
 .tip h3{font-size:21px;margin-bottom:12px}
 .tip p{font-size:11px;line-height:1.9}
-.warn{display:flex;gap:12px;background:#ffffff09;border:1px solid #ffffff30;border-radius:10px;padding:20px;margin-top:24px;font-size:12px}
-.warn>.i{color:#d6d1a6}
+.warn{display:flex;align-items:flex-start;gap:16px;background:#fff1f2;color:#881b25;border:1px solid #e58b94;border-left:5px solid #c6283b;border-radius:10px;padding:24px;margin-top:28px;font-size:16px;line-height:1.65;animation:warning-pulse 2.4s ease-in-out infinite}
+.warn>.i{color:#c6283b;width:28px;height:28px;flex-shrink:0;margin-top:2px}
+@keyframes warning-pulse{0%,100%{background-color:#fff1f2;box-shadow:0 0 0 0 rgba(198,40,59,0)}50%{background-color:#ffe0e4;box-shadow:0 0 0 6px rgba(198,40,59,.22)}}
+.warn p{margin:0}
+.warn strong{display:block;margin-bottom:6px;font-size:18px;font-weight:800;line-height:1.4}
 .source-note{font-size:10px;color:#d1dcd2;margin-top:18px}
 .source-note a{text-underline-offset:3px}
 .cta-final{text-align:center;background:var(--cream-deep)}
